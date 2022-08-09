@@ -1,0 +1,22 @@
+.primary-button {
+    background-color: #0d473b;
+    color: #fff;
+    border-style: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    font-size: 14px;
+    letter-spacing: 0.03rem;
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background-color: #F2F4F8;
+    border: 1px solid #0d473b;
+    color: #009879;
+}

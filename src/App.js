@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import { store } from './store'
+import { Onboarding, PageNotFound } from './views';
+import { Footer, Header } from './components';
+import DateFilter from './components/associate/DateFilter';
+import AddNewAssociate from './components/associate/AddNewAssociate';
+import OnBoardingCheckList from './components/associate-useful/OnBoardingCheckList';
+import UploadDocument from './components/document/UploadDocument';
+import TrainingLinks from './components/associate-useful/TrainingLinks';
+import AllAssociate from './components/associate/AllAssociates';
+import Welcome from './views/Welcome';
+import './styles/app.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app-container'>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Onboarding />}>
+              <Route path="/" element={<Welcome />} />
+              <Route path="newAssociate" element={<AddNewAssociate />} />
+              <Route path="dateFilter" element={<DateFilter />} />
+              <Route path="allAssociates" element={<AllAssociate />} />
+              <Route path="onBoardingCheckList" element={<OnBoardingCheckList />} />
+              <Route path="uploadDocuments" element={<UploadDocument />} />
+              <Route path="trainingLinks" element={<TrainingLinks />} />
+            </Route>
+            {/* <Route path="sample" element={<Sample />} /> */}
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </Provider>
     </div>
   );
 }
