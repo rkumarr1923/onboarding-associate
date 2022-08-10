@@ -24,9 +24,9 @@ const CommentComponent = () => {
   const [comment, setComment] = useState("");
   const [error, setError] = useState(false);
   const empId = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("empId="))
-    .split("=")[1];
+    ?.split("; ")
+    ?.find((row) => row.startsWith("empId="))
+    ?.split("=")[1];
 
   useEffect(() => {
     axios.get("http://localhost:9094/comment/" + empId).then((result) => {
@@ -122,8 +122,8 @@ const CommentComponent = () => {
             <List>
               {allComments.map((data, index) => {
                 return (
-                  <>
-                    <ListItem alignItems="flex-start" key={index}>
+                  <div key={`comments-${index}`}>
+                    <ListItem alignItems="flex-start">
                       <ListItemText
                         primary={
                           <>
@@ -157,7 +157,7 @@ const CommentComponent = () => {
                       />
                     </ListItem>
                     <Divider variant="li" />
-                  </>
+                  </div>
                 );
               })}
             </List>

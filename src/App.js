@@ -7,13 +7,13 @@ import OnBoardingCheckList from "./components/associate-useful/On-BoardingCheckL
 import UploadDocument from "./components/document/UploadDocument";
 import TrainingLinks from "./components/associate-useful/TrainingLinks";
 import AllAssociate from "./components/associate/AllAssociates";
+import CommentComponent from "./components/Comment/CommentComponent";
 import Welcome from "./components/home/Welcome";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Onboarding from "./views/Onboarding";
 import PageNotFound from "./views/PageNotFound";
 import "./styles/app.css";
-import CommentComponent from "./components/Comment/CommentComponent";
 
 function App() {
   return (
