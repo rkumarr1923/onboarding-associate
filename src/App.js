@@ -1,15 +1,17 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import { store } from './store'
-import { Onboarding, PageNotFound } from './views';
-import { Footer, Header } from './components';
 import DateFilter from './components/associate/DateFilter';
 import AddNewAssociate from './components/associate/AddNewAssociate';
 import OnBoardingCheckList from './components/associate-useful/OnBoardingCheckList';
 import UploadDocument from './components/document/UploadDocument';
 import TrainingLinks from './components/associate-useful/TrainingLinks';
 import AllAssociate from './components/associate/AllAssociates';
-import Welcome from './views/Welcome';
+import Welcome from './components/home/Welcome';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import Onboarding from './views/Onboarding';
+import PageNotFound from './views/PageNotFound';
 import './styles/app.css';
 
 function App() {
