@@ -19,6 +19,7 @@ body {
   justify-content: center;
   align-items: center;
   align-content: center;
+  padding-top: 60px;
 }
 
 .nav-links {
@@ -29,6 +30,8 @@ body {
   list-style: none;
   background: #009879;
   padding: 10px 0px;
+  position: fixed;
+  width: 100%;
 }
 
 .page-not-found {
