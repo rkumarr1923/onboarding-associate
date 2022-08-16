@@ -7,7 +7,7 @@ ul {
 }
 
 body {
-  background-color: #F2F4F8;
+  background-color: #f2f4f8;
 }
 
 .app-container {
@@ -32,6 +32,7 @@ body {
   padding: 10px 0px;
   position: fixed;
   width: 100%;
+  z-index: 999;
 }
 
 .page-not-found {
