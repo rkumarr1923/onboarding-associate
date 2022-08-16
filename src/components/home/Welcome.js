@@ -1,9 +1,18 @@
-import React from 'react';
+import { useSelector } from "react-redux";
+import { userDetails } from "../../store";
 
-const Welcome = ({ }) => {
-    return (
-        <div>Welcome to Onboarding Application.</div>
-    )
-}
+const Welcome = () => {
+  const user = useSelector(userDetails);
+  return (
+    <>
+      <div>Welcome to Onboarding Application...</div>
+      {user && (
+        <div>
+          {user.name} with role {user.role}
+        </div>
+      )}
+    </>
+  );
+};
 
 export default Welcome;

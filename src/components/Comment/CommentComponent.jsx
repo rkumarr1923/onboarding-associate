@@ -1,5 +1,6 @@
 import { AddCircleOutline } from "@mui/icons-material";
 import {
+  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -11,28 +12,34 @@ import {
   ListItem,
   ListItemText,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { Fragment, useState } from "react";
 import moment from "moment/moment.js";
 import axios from "axios";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { comments, userComments, userDetails } from "../../store";
 
 const CommentComponent = () => {
   const [open, setOpen] = useState(false);
-  const [allComments, setAllComments] = useState([]);
   const [comment, setComment] = useState("");
   const [error, setError] = useState(false);
-  const empId = document.cookie
-    ?.split("; ")
-    ?.find((row) => row.startsWith("empId="))
-    ?.split("=")[1];
+  const dispatch = useDispatch();
+  const user = useSelector(userDetails);
+  const allComments = useSelector(userComments);
+  const empId = "000GM1";
 
   useEffect(() => {
     axios.get("http://localhost:9094/comment/" + empId).then((result) => {
-      if (result.data.comments)
-        setAllComments(JSON.parse(result.data.comments));
-    });
+      if (result.data)
+        dispatch(
+          comments({
+            comments: result.data,
+          })
+        );
+    }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [empId]);
 
   const handleClickOpen = () => {
@@ -68,25 +75,23 @@ const CommentComponent = () => {
   const handleAddComments = () => {
     if (comment === null || comment === "") setError(true);
     else {
-      let comments = [
-        {
-          who: "You",
-          comment: comment,
-          date: moment(new Date()).format(),
-        },
-        ...allComments,
-      ];
+      let updatedComments = {
+        empId: empId,
+        who: user.name,
+        role: user.role,
+        comments: comment,
+        date: moment(new Date()).format(),
+      };
       axios
-        .post("http://localhost:9094/comment/add-comment", {
-          empId: empId,
-          comments: JSON.stringify(comments),
-        })
+        .post("http://localhost:9094/comment/add-comment", updatedComments)
         .then((result) => {
-          if (result.data.comments)
-            // setAllComments(JSON.parse(result.data.comments));
-            console.log(result.data.comments);
+          if (result.data)
+            dispatch(
+              comments({
+                comments: [result.data, ...allComments],
+              })
+            );
         });
-      setAllComments(comments);
       setError(false);
       setOpen(false);
     }
@@ -95,10 +100,18 @@ const CommentComponent = () => {
   return (
     <>
       <Grid container direction="row" style={{ backgroundColor: "white" }}>
-        <Grid item xs={12}>
-          <Grid container direction="row">
+        <Grid item xs={12} position="fixed" style={{ zIndex: "998" }}>
+          <Grid
+            container
+            direction="row"
+            position="fixed"
+            style={{ backgroundColor: "black" }}
+          >
             <Grid item xs={6}>
-              <Typography variant="h6" style={{ margin: "10px" }}>
+              <Typography
+                variant="h6"
+                style={{ margin: "10px", color: "white" }}
+              >
                 <strong>Comments</strong>
               </Typography>
             </Grid>
@@ -115,15 +128,14 @@ const CommentComponent = () => {
               </Button>
             </Grid>
           </Grid>
-          <Divider />
         </Grid>
-        <Grid item xs={12}>
-          {allComments && (
+        <Grid item xs={12} style={{ marginTop: "2.7rem" }}>
+          {allComments.length !== 0 ? (
             <List>
               {allComments.map((data, index) => {
                 return (
-                  <div key={`comments-${index}`}>
-                    <ListItem alignItems="flex-start">
+                  <Fragment key={`comments-${index}`}>
+                    <ListItem alignItems="flex-start" key={index}>
                       <ListItemText
                         primary={
                           <>
@@ -134,7 +146,38 @@ const CommentComponent = () => {
                             >
                               <Grid container direction="row">
                                 <Grid item xs={6}>
-                                  <strong>{data.who}:</strong>
+                                  {user.role === data.role ? (
+                                    <strong>You</strong>
+                                  ) : (
+                                    <>
+                                      <Grid
+                                        container
+                                        textAlign="center"
+                                        alignItems="center"
+                                      >
+                                        <Grid item xs="auto">
+                                          <strong>{data.who}:</strong>
+                                        </Grid>
+                                        <Grid item xs>
+                                          <Tooltip
+                                            title={data.role}
+                                            placement="right"
+                                          >
+                                            <Avatar
+                                              alt="Role Information"
+                                              style={{
+                                                width: "15px",
+                                                height: "15px",
+                                                fontSize: "0.5rem",
+                                              }}
+                                            >
+                                              {data.role.charAt(0)}
+                                            </Avatar>
+                                          </Tooltip>
+                                        </Grid>
+                                      </Grid>
+                                    </>
+                                  )}
                                 </Grid>
                                 <Grid item xs={6} style={{ textAlign: "end" }}>
                                   <span style={{ fontSize: "10px" }}>
@@ -151,16 +194,18 @@ const CommentComponent = () => {
                             variant="span"
                             color="black"
                           >
-                            {data.comment}
+                            {data.comments}
                           </Typography>
                         }
                       />
                     </ListItem>
                     <Divider variant="li" />
-                  </div>
+                  </Fragment>
                 );
               })}
             </List>
+          ) : (
+            "No comments"
           )}
         </Grid>
       </Grid>
