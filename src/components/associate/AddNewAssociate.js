@@ -121,7 +121,8 @@ class AddNewAssociate extends Component {
   render() {
     return (
       <Form noValidate onSubmit={this.onSubmit} className="associate-form" >
-        <h1>Associate Information</h1>
+        <h2>Associate Information</h2>
+        <hr />
         <Row>
           <FormInputField
             md="4"

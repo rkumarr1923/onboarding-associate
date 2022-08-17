@@ -3,8 +3,14 @@ import Button from "../core/Button";
 import AddNewAssociate from './AddNewAssociate';
 import AllAssociates from './AllAssociates';
 import ExportAssociates from '../associate/AssociatesData/ExportAssociates';
-import '../styles/associate.css';
 import ImportAssociates from './AssociatesData/ImportAssociates';
+import '../styles/associate.css';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import "ag-grid-community/dist/styles/ag-theme-balham.css";
+import "flatpickr/dist/flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/dark.css";
 
 const Associates = ({ }) => {
 

@@ -38,8 +38,6 @@ export const allAssociates = [
           "riskMitigationComments": "yiu",
           "planInCaseOfExtensionAmendmentRejection": "hij",
           "skillset": ""
-      
-  
       },
       {
         "associateName":"Aritra Bairagya",
@@ -47,11 +45,11 @@ export const allAssociates = [
         "emailIBM":"aritra@ibm.com",
         "location":"Kolkata",
         "role":"Engineer",
+        "primaryContact": "8341498605",
         "itExpDate":"2020-04-23T20:21:55Z",
         "engagementName":"Engineer",
         "emailClient":"ayu@pru.com",
         "xid":"123487"
-  
       },
       {
         "associateName":"Keshav Kumar",
@@ -59,11 +57,11 @@ export const allAssociates = [
         "emailIBM":"keshav@ibm.com",
         "location":"Pune",
         "role":"Engineer",
+        "primaryContact": "4145986083",
         "itExpDate":"2020-05-01T16:16:38Z",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
-  
       },
       {
         "associateName":"Waseem Hasan",
@@ -71,11 +69,11 @@ export const allAssociates = [
         "emailIBM":"Waseem@ibm.com",
         "location":"Mumbai",
         "role":"Team lead",
+        "primaryContact": "9864508341",
         "itExpDate":"2020-11-24T22:10:03Z",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
-  
       },
       {
         "associateName":"Shanmugh Priya",
@@ -83,11 +81,11 @@ export const allAssociates = [
         "emailIBM":"priya@ibm.com",
         "location":"Kolkata",
         "role":"Engineer",
+        "primaryContact": "9088634145",
         "itExpDate":"2020-08-10T13:52:03Z",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
-  
       },
       {
         "associateName":"Vijay Gupta",
@@ -95,11 +93,11 @@ export const allAssociates = [
         "emailIBM":"vijay@ibm.com",
         "location":"Hyderabad",
         "role":"Engineer",
+        "primaryContact": "8608349145",
         "itExpDate":"2020-10-18T18:49:19Z",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
-  
       },
       {
         "associateName":"Nivedita M",
@@ -107,10 +105,10 @@ export const allAssociates = [
         "emailIBM":"nivedita@ibm.com",
         "location":"Banglore",
         "role":"Engineer",
+        "primaryContact": "9834145860",
         "itExpDate":"2020-11-30T00:51:26Z",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
-  
       }
     ];
