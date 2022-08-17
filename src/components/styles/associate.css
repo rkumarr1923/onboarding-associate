@@ -1,0 +1,91 @@
+.associate-form {
+    padding: 20px;
+}
+
+.all-associate-container {
+    width: 100%;
+    display: block;
+}
+
+.all-associate-body {
+    display: flex;
+    justify-content: center;
+}
+
+.all-associate-links {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 20px;
+    cursor: pointer;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+.download-icon {
+    padding-top: 20px;
+    font-size: 30px;
+    color: #009879;
+    cursor: pointer;
+    padding-right: 10px;
+}
+  
+.submit-btn {
+    background-color: #0d473b;
+    color: #fff;
+    border-style: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    font-size: 14px;
+    letter-spacing: 0.03rem;
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.submit-btn:focus {
+    background-color: #0d473b;
+    box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%);
+}
+
+.submit-btn:active {
+    background-color: #0d473b;
+    box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%);
+}
+
+.submit-btn:hover {
+    background-color: #F2F4F8;
+    border: 1px solid #0d473b;
+    color: #009879;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.import-style {
+    display: flex;
+    justify-content: center;
+}
+
+.import-associate-container {
+    padding-top: 45px;
+}
+
+.file-container {
+    display: flex;
+    justify-content: center;
+    padding: 25px;
+}
+
+.top-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}

@@ -20,3 +20,13 @@
     border: 1px solid #0d473b;
     color: #009879;
 }
+
+.form-style {
+    color: #009879;
+    box-shadow: 1px 1px #009879;
+}
+
+.form-style:focus {
+    color: #009879;
+    box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%);
+}

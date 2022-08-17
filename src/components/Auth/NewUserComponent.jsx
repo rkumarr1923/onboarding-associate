@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import '../styles/login.css';
 
 const NewUserComponent = () => {
   const [email, setEmail] = useState("");
@@ -38,6 +39,7 @@ const NewUserComponent = () => {
           <Card>
             <CardContent>
               <TextField
+                className="btn-color"
                 autoFocus
                 margin="dense"
                 label="Employee id"

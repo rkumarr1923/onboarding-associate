@@ -14,6 +14,7 @@ import { assosiateAuth } from "../../json/assosiateAuth";
 import { managerAuth } from "../../json/managerAuth";
 import { reviewerAuth } from "../../json/reviewerAuth";
 import { login } from "../../store";
+import '../styles/login.css';
 
 const LoginComponent = () => {
   const navigate = useNavigate();
@@ -86,6 +87,7 @@ const LoginComponent = () => {
           <Card>
             <CardContent>
               <TextField
+                className="btn-color"
                 autoFocus
                 margin="dense"
                 label="Employee id"
@@ -100,7 +102,7 @@ const LoginComponent = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button fullWidth variant="contained" onClick={handleLogin}>
+              <Button fullWidth variant="contained" className="login-btn" onClick={handleLogin}>
                 Login
               </Button>
             </CardActions>

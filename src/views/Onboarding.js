@@ -21,18 +21,8 @@ export default function Onboarding() {
               </Link>
             </li>
             <li>
-              <Link to="/newAssociate">
-                <Button label="Add New Associate" />
-              </Link>
-            </li>
-            <li>
               <Link to="/trainingLinks">
                 <Button label="Taining Links" />
-              </Link>
-            </li>
-            <li>
-              <Link to="/dateFilter">
-                <Button label="Date Filter" />
               </Link>
             </li>
             <li>
@@ -52,11 +42,6 @@ export default function Onboarding() {
             <li>
               <Link to="/uploadDocuments">
                 <Button label="Upload Documents" />
-              </Link>
-            </li>
-            <li>
-              <Link to="/dateFilter">
-                <Button label="Date Filter" />
               </Link>
             </li>
             <li>
