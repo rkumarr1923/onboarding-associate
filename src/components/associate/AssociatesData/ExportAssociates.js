@@ -4,7 +4,6 @@ import { saveAs } from 'file-saver';
 import { allAssociates } from "../DatePicker/all-associates-data";
 import '../../styles/associate.css';
 
-
 const columns = [
   { header: 'Associate Name', key: 'associateName' },
   { header: 'IBM Emp Id', key: 'ibmId' },
@@ -86,6 +85,7 @@ const ExportAssociates = ({ }) => {
       <>
         <div className="download-icon">
           <i
+            title="Export Associates"
             className="fa fa-download"
             onClick={() => exportIntoExcel()}
             aria-hidden="true"

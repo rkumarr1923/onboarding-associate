@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // import MaterialTable from 'material-table';
-// import XLSX from 'xlsx';
+import {read, utils} from 'xlsx';
 import CustomButton from '../../core/Button';
 import '../../styles/associate.css';
 
@@ -35,53 +35,52 @@ const ImportAssociates = (props) => {
     reader.onload = (event) => {
       //parse data
 
-      // const bstr = event.target.result
-      // const workBook = XLSX.read(bstr, { type: "binary" })
+      const bstr = event.target.result
+      const workBook = read(bstr, { type: "binary" })
 
-      // //get first sheet
-      // const workSheetName = workBook.SheetNames[0]
-      // const workSheet = workBook.Sheets[workSheetName]
-      // //convert to array
-      // const fileData = XLSX.utils.sheet_to_json(workSheet, { header: 1 })
-      // // console.log(fileData)
-      // const headers = fileData[0]
-      // const heads = headers.map(head => ({ title: head, field: head }))
-      // setColDefs(heads)
+      //get first sheet
+      const workSheetName = workBook.SheetNames[0]
+      const workSheet = workBook.Sheets[workSheetName]
+      //convert to array
+      const fileData = utils.sheet_to_json(workSheet, { header: 1 })
+      // console.log(fileData)
+      const headers = fileData[0]
+      const heads = headers.map(head => ({ title: head, field: head }))
+      setColDefs(heads)
 
-      // //removing header
-      // fileData.splice(0, 1)
+      //removing header
+      fileData.splice(0, 1)
 
 
-      // setData(convertToJson(headers, fileData))
+      setData(convertToJson(headers, fileData))
     }
 
     if (file) {
-      // if (getExention(file)) {
-      //   reader.readAsBinaryString(file)
-      // }
-      // else {
-      //   alert("Invalid file input, Select Excel, CSV file")
-      // }
+      if (getExention(file)) {
+        reader.readAsBinaryString(file)
+      }
+      else {
+        alert("Invalid file input, Select Excel, CSV file")
+      }
     } else {
-      // setData([])
-      // setColDefs([])
+      setData([])
+      setColDefs([])
     }
   }
 
   return (
     <div className='import-associate-container'>
       <div className="import-style">
-        <h4 align='center'>Import Data from Excel, CSV in Material Table</h4>
+        <h4 align='center'>Import Data from Excel, CSV in Table</h4>
       </div>
       <div className='file-container'>
         <input type="file" onChange={importExcel} />
-        {/* <MaterialTable title=" Roaster Data" data={data} columns={colDefs} /> */}
-      </div> 
+        {/* <MaterialTable title="Associate Data" data={data} columns={colDefs} /> */}
+      </div>
       <div className='form-buttons'>
-      <CustomButton clickHandler={() => props.setImportAssociateVisiblity(false)} label="Cancel" />
-      {/* <Button type="button">Cancel</Button> */}
+        <CustomButton clickHandler={() => props.setImportAssociateVisiblity(false)} label="Cancel" />
+      </div>
     </div>
-   </div>
   );
 }
 
