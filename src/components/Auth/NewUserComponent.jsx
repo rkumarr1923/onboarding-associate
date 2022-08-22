@@ -29,13 +29,14 @@ const NewUserComponent = () => {
         direction="column"
         justifyContent="center"
         alignItems="center"
+        className="pt-3"
       >
         <Grid item xs={12}>
           <Typography variant="h6">
             <strong>Add New User</strong>
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} className="pt-2">
           <Card>
             <CardContent>
               <TextField

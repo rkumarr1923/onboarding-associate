@@ -3,6 +3,7 @@ const slice = createSlice({
   name: "count",
   initialState: {
     count: 0,
+    activeTab: 'Default',
     token: null,
     userDetails: null,
     comments: [],
@@ -13,6 +14,9 @@ const slice = createSlice({
     },
     decrement: (state) => {
       state.count -= 1;
+    },
+    tabSelected: (state, action) => {
+      state.activeTab = action.payload.tab;
     },
     login: (state, action) => {
       state.token = action.payload.token;
@@ -29,8 +33,9 @@ const slice = createSlice({
   },
 });
 
-export const selector = (state) => state.count;
-export const { increment, decrement, login, logout, comments } = slice.actions;
+export const appStore = (state) => state;
+export const { increment, decrement, tabSelected, login, logout, comments } = slice.actions;
+export const selectedTab = (state) => state.activeTab;
 export const userDetails = (state) => state.userDetails;
 export const token = (state) => state.token;
 export const userComments = (state) => state.comments;

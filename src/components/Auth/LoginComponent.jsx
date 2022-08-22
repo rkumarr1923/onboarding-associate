@@ -71,15 +71,16 @@ const LoginComponent = () => {
   };
 
   return (
-    <>
+    <div className="login-wrapper">
       <Grid
+        className=""
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
       >
         <Grid item xs={12}>
-          <Typography variant="h6">
+          <Typography variant="h6" color="#fff">
             <strong>Prudential Retirement</strong>
           </Typography>
         </Grid>
@@ -109,7 +110,7 @@ const LoginComponent = () => {
           </Card>
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 };
 

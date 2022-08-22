@@ -5,6 +5,7 @@
 .all-associate-container {
     width: 100%;
     display: block;
+    padding-bottom: 80px;
 }
 
 .all-associate-body {
@@ -26,13 +27,13 @@
 .download-icon {
     padding-top: 20px;
     font-size: 30px;
-    color: #009879;
+    color: #1976d2;
     cursor: pointer;
     padding-right: 10px;
 }
 
 .submit-btn {
-    background-color: #0d473b;
+    background-color: #002d9c;
     color: #fff;
     border-style: none;
     padding: 8px 10px;
@@ -49,19 +50,34 @@
 }
 
 .submit-btn:focus {
-    background-color: #0d473b;
-    box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%);
+    background-color: #002d9c;
+    /* box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%); */
 }
 
 .submit-btn:active {
-    background-color: #0d473b;
-    box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%);
+    background-color: #002d9c;
+    /* box-shadow: 0 0 0 0.25rem rgb(0 152 121 / 50%); */
 }
 
 .submit-btn:hover {
     background-color: #F2F4F8;
-    border: 1px solid #0d473b;
-    color: #009879;
+    border: 1px solid #002d9c;
+    color: #1976d2;
+}
+
+.form-field-1 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.form-field-2 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.form-field-3 {
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 
 .form-buttons {
@@ -102,12 +118,12 @@
 }
 
 .reset-filter {
-    background-color: #0d473b !important;
+    background-color: #002d9c !important;
     color: white !important;
 }
 
 .reset-filter:hover {
     background-color: #F2F4F8 !important;
-    border: 1px solid #0d473b !important;
-    color: #009879 !important;
+    border: 1px solid #002d9c !important;
+    color: #1976d2 !important;
 }

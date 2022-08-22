@@ -15,11 +15,11 @@
 .app-title,
 .logout {
   cursor: pointer;
-  color: #009879;
+  color: #1976d2;
   font-weight: bold;
 }
 
 .app-title:hover,
 .logout:hover {
-  color: black;
+  color: #002d9c;
 }
