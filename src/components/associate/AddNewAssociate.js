@@ -526,7 +526,7 @@ class AddNewAssociate extends Component {
           </Row>
         </div>
         <hr />
-        <div className='form-buttons'>
+        <div className='d-flex-center'>
           <Button type="submit" className='submit-btn' >Submit</Button>
           <CustomButton clickHandler={() => { this.props.setFormVisiblity(false) }} label="Cancel" />
         </div>

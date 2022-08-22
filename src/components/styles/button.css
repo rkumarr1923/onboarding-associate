@@ -42,16 +42,3 @@
     font-size: 25px;
     color: #1976d2;
 }
-
-.form-skill-box {
-    display: flex;
-}
-
-.form-skill-field {
-    display: flex;
-    margin-bottom: 10px;
-}
-
-.add-remove-btn {
-    display: flex;
-}

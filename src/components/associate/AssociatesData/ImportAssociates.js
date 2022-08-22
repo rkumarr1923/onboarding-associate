@@ -70,14 +70,14 @@ const ImportAssociates = (props) => {
 
   return (
     <div className='import-associate-container'>
-      <div className="import-style">
+      <div className="d-flex-center">
         <h4 align='center'>Import Data from Excel, CSV in Table</h4>
       </div>
-      <div className='file-container'>
+      <div className='d-flex-center pt-3'>
         <input type="file" onChange={importExcel} />
         {/* <MaterialTable title="Associate Data" data={data} columns={colDefs} /> */}
       </div>
-      <div className='form-buttons'>
+      <div className='d-flex-center'>
         <CustomButton clickHandler={() => props.setImportAssociateVisiblity(false)} label="Cancel" />
       </div>
     </div>

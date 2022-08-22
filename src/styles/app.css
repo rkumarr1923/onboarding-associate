@@ -67,3 +67,8 @@ body {
   color: #1976d2;
   margin-left: 10px;
 }
+
+.d-flex-center {
+  display: flex;
+  justify-content: center;
+}

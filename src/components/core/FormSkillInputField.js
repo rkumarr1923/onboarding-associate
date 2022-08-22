@@ -33,8 +33,8 @@ function FormSkillInputField(props) {
                 return (
                     <>
                         <Form.Label>{label} - {i}</Form.Label>
-                        <div className="form-skill-box">
-                            <Form.Group as={Col} md={md} controlId={controlId} className="form-skill-field">
+                        <div className="d-flex">
+                            <Form.Group as={Col} md={md} controlId={controlId} className="d-flex mb-2">
                                 <Form.Control
                                     type="text"
                                     name="skillName"
@@ -50,7 +50,7 @@ function FormSkillInputField(props) {
                                     onChange={e => handleInputChange(e, i)}
                                 />
                             </Form.Group>
-                            <div className="add-remove-btn">
+                            <div className="d-flex">
                                 {inputList.length !== 1 && <Button
                                     className="remove-btn"
                                     label="Remove"
