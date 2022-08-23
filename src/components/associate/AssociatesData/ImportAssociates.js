@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-// import MaterialTable from 'material-table';
-import {read, utils} from 'xlsx';
+import MaterialTable from 'material-table';
+import { read, utils } from 'xlsx';
 import CustomButton from '../../core/Button';
 import '../../styles/associate.css';
 
@@ -70,14 +70,19 @@ const ImportAssociates = (props) => {
 
   return (
     <div className='import-associate-container'>
-      <div className="d-flex-center">
-        <h4 align='center'>Import Data from Excel, CSV in Table</h4>
+      <div className='d-flex-space import-top'>
+        <div className="import-header">
+          <h4>Import Data from Excel, CSV in Table</h4>
+        </div>
+        <div className='import-file'>
+          <input className="primary-button" type="file" onChange={importExcel} />
+        </div>
       </div>
-      <div className='d-flex-center pt-3'>
-        <input type="file" onChange={importExcel} />
-        {/* <MaterialTable title="Associate Data" data={data} columns={colDefs} /> */}
+      <hr/>
+      <div className='import-table'>
+        {data && colDefs && <MaterialTable title="Associate Data" data={data} columns={colDefs} />}
       </div>
-      <div className='d-flex-center'>
+      <div className='import-bottom'>
         <CustomButton clickHandler={() => props.setImportAssociateVisiblity(false)} label="Cancel" />
       </div>
     </div>

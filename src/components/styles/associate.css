@@ -5,7 +5,7 @@
 .all-associate-container {
     width: 100%;
     display: block;
-    padding-bottom: 80px;
+    padding-bottom: 100px;
 }
 
 .all-associate-links {
@@ -97,4 +97,33 @@
     background-color: #F2F4F8 !important;
     border: 1px solid #002d9c !important;
     color: #1976d2 !important;
+}
+
+.import-top {
+    margin-left: 20px;
+}
+
+.import-file {
+    padding-right: 15px;
+}
+
+.import-table {
+    padding: 0px 20px 20px 20px;
+    overflow: auto;
+}
+
+.import-bottom {
+    margin-left: 20px;
+}
+
+.checklist-container {
+    padding: 20px 20px 130px 20px;
+}
+
+.form-label-style {
+    margin-bottom: 0px !important;
+}
+
+.form-group-style {
+    margin-bottom: 20px!important;
 }

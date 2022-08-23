@@ -33,8 +33,8 @@ function FormSkillInputField(props) {
                 return (
                     <>
                         <Form.Label>{label} - {i}</Form.Label>
-                        <div className="d-flex">
-                            <Form.Group as={Col} md={md} controlId={controlId} className="d-flex mb-2">
+                        <div className="d-flex mb-2">
+                            <Form.Group as={Col} md={md} controlId={controlId} className="d-flex">
                                 <Form.Control
                                     type="text"
                                     name="skillName"

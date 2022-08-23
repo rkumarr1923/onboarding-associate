@@ -54,11 +54,12 @@ class AddNewAssociate extends Component {
   };
 
   validators = {
-    firstName: (str) => str === '' ? 'Cannot be blank' : '',
-    lastName: (str) => str === '' ? 'Cannot be blank' : '',
+    firstName: (str) => str === '' ? 'Firstname is required' : '',
+    lastName: (str) => str === '' ? 'Lastname is required' : '',
+    ibmId: (str) => str === '' ? 'IBM Id is required' : '',
     ibmEmail: (str) => !/.+@.+\..+/.test(str) ? 'Invalid email address' : '',
-    location: () => '',
-    role: () => '',
+    location: (str) => str === '' ? 'Location is required' : '',
+    role: (str) => str === '' ? 'Role is required' : '',
     engagementName: () => '',
     primaryContact: () => '',
     projectId: () => '',
@@ -68,7 +69,7 @@ class AddNewAssociate extends Component {
     clientEmail: () => '',
     xid: () => '',
     endDate: () => '',
-    city: () => '',
+    city: () => (str) => str === '' ? 'City is required' : '',
     billType: () => '',
     billCode: () => '',
     asOnDate: () => '',

@@ -4,8 +4,8 @@ import Form from 'react-bootstrap/Form';
 
 const FormInputField = (props) => {
     const { label, fieldName, value, handleChange, placeHolder, validationErrors, controlId, md } = props;
-    return <Form.Group as={Col} md={md} controlId={controlId}>
-      <Form.Label>{label}</Form.Label>
+    return <Form.Group as={Col} md={md} controlId={controlId} className='form-group-style'>
+      <Form.Label className='form-label-style'>{label}</Form.Label>
       <Form.Control
         className='form-style'
         type="text"
@@ -14,7 +14,13 @@ const FormInputField = (props) => {
         placeholder={placeHolder}
         onChange={handleChange}
       />
-      <Form.Control.Feedback type="invalid" className="col-md-6 d-inline-block px-0">{validationErrors[fieldName]}</Form.Control.Feedback>
+      {validationErrors[fieldName] && <Form.Control.Feedback 
+        type="invalid" 
+        className="d-inline-block">
+        <i class="fa fa-exclamation-circle" 
+        aria-hidden="true"></i>
+        {validationErrors[fieldName]}
+      </Form.Control.Feedback>}
     </Form.Group>
   }
   
