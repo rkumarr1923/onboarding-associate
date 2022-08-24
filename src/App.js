@@ -10,9 +10,9 @@ import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Onboarding from "./views/Onboarding";
 import PageNotFound from "./views/PageNotFound";
-import CommentComponent from "./components/Comment/CommentComponent";
-import LoginComponent from "./components/Auth/LoginComponent";
-import NewUserComponent from "./components/Auth/NewUserComponent";
+import CommentComponent from "./components/comment/CommentComponent";
+import LoginComponent from "./components/auth/LoginComponent";
+import NewUserComponent from "./components/auth/NewUserComponent";
 import Associates from './components/associate/Associates';
 import "./styles/app.css";
 
