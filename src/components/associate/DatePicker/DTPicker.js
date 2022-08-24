@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from "react";
 import flatpickr from 'flatpickr';
-import { any } from "prop-types";
 
 export default forwardRef((props, ref) => {
-    const [date, setDate] = useState < any | [] > (null);
-    const [picker, setPicker] = useState < any | [] > (null);
-    const refFlatPickr = useRef < any | [] > (null);
-    const refInput = useRef < any | [] > (null);
+    const [date, setDate] = useState(null);
+    const [picker, setPicker] = useState(null);
+    const refFlatPickr = useRef(null);
+    const refInput = useRef(null);
 
     const onDateChanged = (selectedDates) => {
         setDate(selectedDates[0]);
