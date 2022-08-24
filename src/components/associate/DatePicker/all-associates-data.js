@@ -7,6 +7,7 @@ export const allAssociates = [
           "role": "Engineer",
           "itExpDate": "2020-10-25T04:34:21Z",
           "primaryContact": "9860834145",
+          "onBoardingAssociateStatus":"Yet to be started",
           "projectId": "234456",
           "engagementName": "yuty",
           "majorFunction": "test",
@@ -47,6 +48,7 @@ export const allAssociates = [
         "role":"Engineer",
         "primaryContact": "8341498605",
         "itExpDate":"2020-04-23T20:21:55Z",
+        "onBoardingAssociateStatus":"In progress",
         "engagementName":"Engineer",
         "emailClient":"ayu@pru.com",
         "xid":"123487"
@@ -59,6 +61,7 @@ export const allAssociates = [
         "role":"Engineer",
         "primaryContact": "4145986083",
         "itExpDate":"2020-05-01T16:16:38Z",
+        "onBoardingAssociateStatus":"Under review",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
@@ -71,6 +74,7 @@ export const allAssociates = [
         "role":"Team lead",
         "primaryContact": "9864508341",
         "itExpDate":"2020-11-24T22:10:03Z",
+        "onBoardingAssociateStatus":"Back in progress",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
@@ -83,6 +87,7 @@ export const allAssociates = [
         "role":"Engineer",
         "primaryContact": "9088634145",
         "itExpDate":"2020-08-10T13:52:03Z",
+        "onBoardingAssociateStatus":"Completed",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
@@ -95,6 +100,7 @@ export const allAssociates = [
         "role":"Engineer",
         "primaryContact": "8608349145",
         "itExpDate":"2020-10-18T18:49:19Z",
+        "onBoardingAssociateStatus":"Waiting",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"
@@ -107,6 +113,7 @@ export const allAssociates = [
         "role":"Engineer",
         "primaryContact": "9834145860",
         "itExpDate":"2020-11-30T00:51:26Z",
+        "onBoardingAssociateStatus":"Blocked",
         "engagementName":"Engineer",
         "emailClient":"kesh@pru.com",
         "xid":"341234"

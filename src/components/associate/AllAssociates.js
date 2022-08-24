@@ -59,7 +59,8 @@ const AllAssociates = () => {
                 location: data.location,
                 role: data.role,
                 primaryContact: data.primaryContact,
-                itExpDate: new Date(data.itExpDate)
+                itExpDate: new Date(data.itExpDate),
+                status: data.onBoardingAssociateStatus
             };
         });
         console.log("Formatted Data", formattedData)
@@ -78,51 +79,51 @@ const AllAssociates = () => {
         {
             field: "associateName",
             headerName: "Associate Name",
-            cellStyle: { textAlign: 'center' },
+            cellStyle: { textAlign: '' },
             minWidth: 100,
             maxWidth: 150
         },
         {
             field: "ibmId",
             headerName: "IBM  Id",
-            cellStyle: { textAlign: 'center' },
-            minWidth: 100,
-            maxWidth: 150
+            cellStyle: { textAlign: '' },
+            minWidth: 75,
+            maxWidth: 120
         },
         {
             field: "emailIBM",
             headerName: "Email IBM",
-            cellStyle: { textAlign: 'center' },
+            cellStyle: { textAlign: '' },
             minWidth: 100,
-            maxWidth: 150
+            maxWidth: 170
         },
         {
             field: "location",
             headerName: "Location",
-            cellStyle: { textAlign: 'center' },
+            cellStyle: { textAlign: '' },
             minWidth: 100,
-            maxWidth: 150
+            maxWidth: 120
         },
         {
             field: "role",
             headerName: "Role",
-            cellStyle: { textAlign: 'center' },
+            cellStyle: { textAlign: '' },
             minWidth: 100,
-            maxWidth: 150
+            maxWidth: 100
         },
         {
             field: "primaryContact",
             headerName: "Primary Contact",
-            cellStyle: { textAlign: 'center' },
+            cellStyle: { textAlign: '' },
             minWidth: 100,
-            maxWidth: 175
+            maxWidth: 155
         },
         {
             field: "itExpDate",
             headerName: "IT Exp Date",
-            cellStyle: { textAlign: 'center' },
+            cellStyle: { textAlign: '' },
             minWidth: 250,
-            maxWidth: 300,
+            maxWidth: 250,
             filter: "agDateColumnFilter",
             filterParams: {
                 defaultOption: "inRange",
@@ -143,7 +144,14 @@ const AllAssociates = () => {
                     else { return }
                 }
             }
-        }
+        },
+        {
+            field: "status",
+            headerName: "Status",
+            cellStyle: { textAlign: '' },
+            minWidth: 100,
+            maxWidth: 175
+        },
     ];
 
     const onGridReady = (params) => {
