@@ -60,7 +60,25 @@ const UploadDocument = () => {
         //  fetch(`http://localhost:9003/delete/${name}`, { method: 'DELETE', mode: 'no-cors' })
         //  .then(result => console.log(result));
     }
-
+    const download = (id,name) => {
+        axios.get(`http://localhost:9003/files/${id}`,{responseType : 'blob'})
+            .then(result => {
+                
+                console.log(result)
+                if(result){
+                const file = new Blob([result.data], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                var a         = document.createElement('a');
+                a.href        = fileURL; 
+                a.download    = name;
+                document.body.appendChild(a);
+                a.click();
+                }
+            })
+            .catch(error => {
+                console.error('There was an error!', error);
+            });
+    }
 
     const fileUpload = (event) => {
         //let changedFile = event.target.files[0];
@@ -85,6 +103,9 @@ const UploadDocument = () => {
                                 <td style={{ textAlign: "left" }}>{doc.name} :</td>
                                 <td>
                                     <button onClick={() => deleteDocs(doc.id)}>Delete</button>
+                                    { !doc.deleted ?  (
+                                    <button onClick={() => download(doc.id,doc.name)}>Download</button>
+                                    ) : null}
                                 </td>
                             </tr>
                         })}
