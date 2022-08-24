@@ -22,12 +22,16 @@ const UploadDocument = () => {
             body: formdata,
             redirect: 'follow'
         };
-        axios.post("http://localhost:9003/uploadFile", formdata, {
+        axios.post("http://localhost:9003/files", formdata, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
         })
-            .then(result => console.log(result))
+            .then(result => {
+                document.getElementById('myfile').value = '';
+                fetchDocuments();
+                console.log(result)
+            })
 
     }
 
