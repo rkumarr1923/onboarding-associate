@@ -110,9 +110,9 @@ const UploadDocument = () => {
   };
 
   return (
-    <div className="mar-left-10">
+    <div className="main">
       <h2>Upload Documents</h2>
-      <div className="file-upload-wrapper" data-text="Select your file!">
+      <div>
         <input
           type="file"
           id="myfile"
@@ -122,7 +122,7 @@ const UploadDocument = () => {
         />
         <button onClick={() => callUploadAPI()}>Upload</button>
       </div>
-      <h3 className="bold">Uploaded Documents:</h3>
+      <h3>Documents:</h3>
       {documents.length > 0 ? (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
