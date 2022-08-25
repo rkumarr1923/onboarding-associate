@@ -13,8 +13,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import "./UploadDocument.css";
 import { Typography } from "@mui/material";
+import "./UploadDocument.css";
 
 const UploadDocument = () => {
   const [documents, setDocuments] = useState([]);
@@ -110,17 +110,18 @@ const UploadDocument = () => {
   };
 
   return (
-    <div className="main">
+    <div className="upload-doc-container">
       <h2>Upload Documents</h2>
-      <div>
+      <div className="upload-doc-wrapper">
         <input
+          className="primary-button"
           type="file"
           id="myfile"
           name="myfile"
           onChange={fileUpload}
           multiple
         />
-        <button onClick={() => callUploadAPI()}>Upload</button>
+        <button className="primary-button" onClick={() => callUploadAPI()}>Upload</button>
       </div>
       <h3>Documents:</h3>
       {documents.length > 0 ? (
@@ -165,7 +166,7 @@ const UploadDocument = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Typography>No Records Exist</Typography>
+        <Typography>No records found</Typography>
       )}
       <Dialog
         open={open}
