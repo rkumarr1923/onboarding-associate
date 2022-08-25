@@ -81,7 +81,25 @@ const UploadDocument = () => {
     //  fetch(`http://localhost:9003/delete/${name}`, { method: 'DELETE', mode: 'no-cors' })
     //  .then(result => console.log(result));
   };
-
+  const download = (id, name) => {
+    axios
+      .get(`http://localhost:9003/files/${id}`, { responseType: "blob" })
+      .then((result) => {
+        console.log(result);
+        if (result) {
+          const file = new Blob([result.data], { type: "application/pdf" });
+          const fileURL = URL.createObjectURL(file);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.download = name;
+          document.body.appendChild(a);
+          a.click();
+        }
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  };
   const fileUpload = (event) => {
     //let changedFile = event.target.files[0];
     let uploadedFiles = event.target.files;
@@ -112,7 +130,8 @@ const UploadDocument = () => {
               <TableRow>
                 <TableCell>S.No.</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell>Delete</TableCell>
+                <TableCell>Download</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -130,6 +149,14 @@ const UploadDocument = () => {
                   <TableCell>
                     <Button color="secondary" onClick={() => openDialog(doc)}>
                       Delete
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      color="primary"
+                      onClick={() => download(doc.id, doc.name)}
+                    >
+                      Download
                     </Button>
                   </TableCell>
                 </TableRow>
