@@ -127,3 +127,38 @@
 .form-group-style {
     margin-bottom: 20px!important;
 }
+
+.associate-yet-to-be-started {
+    color: gray;
+    font-weight: bold;
+}
+
+.associate-in-progress {
+    color: green;
+    font-weight: bold;
+}
+
+.associate-under-review {
+    color: yellowgreen;
+    font-weight: bold;
+}
+
+.associate-back-in-progress {
+    color: green;
+    font-weight: bold;
+}
+
+.associate-completed {
+    color: blue;
+    font-weight: bold;
+}
+
+.associate-waiting {
+    color: #ff7e00;
+    font-weight: bold;
+}
+
+.associate-blocked {
+    color: red;
+    font-weight: bold;
+}
