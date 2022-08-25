@@ -48,6 +48,7 @@ const UploadDocument = () => {
       })
       .then((result) => {
         setSnakBarOpen(true);
+        setUploadStatus(true);
         document.getElementById("myfile").value = "";
         fetchDocuments();
         console.log(result);
