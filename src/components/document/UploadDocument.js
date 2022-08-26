@@ -12,6 +12,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import axios from "axios";
 import "./UploadDocument.css";
 import { Typography } from "@mui/material";
@@ -20,6 +22,8 @@ const UploadDocument = () => {
   const [documents, setDocuments] = useState([]);
   const [open, setDialogStatus] = useState(false);
   const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
+  const [openSnakBar, setSnakBarOpen] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
   //const [state, setState] = useState([]);
   useEffect(() => {
     fetchDocuments();
@@ -43,9 +47,16 @@ const UploadDocument = () => {
         },
       })
       .then((result) => {
+        setSnakBarOpen(true);
+        setUploadStatus(true);
         document.getElementById("myfile").value = "";
         fetchDocuments();
         console.log(result);
+      })
+      .catch((error) => {
+        setSnakBarOpen(true);
+        setUploadStatus(false);
+        console.log("Error while uploading", error);
       });
   };
 
@@ -103,24 +114,33 @@ const UploadDocument = () => {
   const fileUpload = (event) => {
     //let changedFile = event.target.files[0];
     let uploadedFiles = event.target.files;
+    callUploadAPI();
   };
 
   const handleClose = () => {
     setDialogStatus(false);
   };
 
+  const handleSnackClose = () => {
+    setSnakBarOpen(false);
+  };
+
   return (
     <div className="main">
       <h2>Upload Documents</h2>
-      <div>
-        <input
-          type="file"
-          id="myfile"
-          name="myfile"
-          onChange={fileUpload}
-          multiple
-        />
-        <button onClick={() => callUploadAPI()}>Upload</button>
+      <div className="file-upload-wrapper" data-text="Select your file!">
+        <label htmlFor="myfile">
+          <input
+            style={{ display: "none" }}
+            onChange={fileUpload}
+            id="myfile"
+            name="myfile"
+            type="file"
+          />
+          <Button color="primary" variant="contained" component="span">
+            Upload
+          </Button>
+        </label>
       </div>
       <h3>Documents:</h3>
       {documents.length > 0 ? (
@@ -188,6 +208,24 @@ const UploadDocument = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={openSnakBar}
+        autoHideDuration={3000}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={handleSnackClose}
+          severity={uploadStatus ? "success" : "error"}
+          sx={{ width: "100%" }}
+        >
+          {uploadStatus ? "File uploaded successfully!" : "File upload failed!"}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
