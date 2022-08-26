@@ -14,6 +14,7 @@ import { assosiateAuth } from "../../json/assosiateAuth";
 import { managerAuth } from "../../json/managerAuth";
 import { reviewerAuth } from "../../json/reviewerAuth";
 import { login } from "../../store";
+import '../styles/login.css';
 
 const LoginComponent = () => {
   const navigate = useNavigate();
@@ -70,15 +71,16 @@ const LoginComponent = () => {
   };
 
   return (
-    <>
+    <div className="login-wrapper">
       <Grid
+        className=""
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
       >
         <Grid item xs={12}>
-          <Typography variant="h6">
+          <Typography variant="h6" color="#fff">
             <strong>Prudential Retirement</strong>
           </Typography>
         </Grid>
@@ -86,6 +88,7 @@ const LoginComponent = () => {
           <Card>
             <CardContent>
               <TextField
+                className="btn-color"
                 autoFocus
                 margin="dense"
                 label="Employee id"
@@ -100,14 +103,14 @@ const LoginComponent = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button fullWidth variant="contained" onClick={handleLogin}>
+              <Button fullWidth variant="contained" className="login-btn" onClick={handleLogin}>
                 Login
               </Button>
             </CardActions>
           </Card>
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 };
 

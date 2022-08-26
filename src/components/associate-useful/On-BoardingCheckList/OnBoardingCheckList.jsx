@@ -5,8 +5,8 @@ import CheckListStepper from "./CheckListStepper";
 
 const OnBoardingCheckList = () => {
   return (
-    <>
-      <Grid container direction="row" style={{ backgroundColor: "white" }}>
+    <div className="checklist-container">
+      <Grid container direction="row" style={{ backgroundColor: "white" }} className="pt-3">
         <Grid item xs={12}>
           <Typography
             style={{ margin: "20px" }}
@@ -36,7 +36,7 @@ const OnBoardingCheckList = () => {
           <CheckListStepper />
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 };
 

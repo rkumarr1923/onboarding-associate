@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { logout, userDetails } from "../../store";
+import { logout, userDetails, tabSelected } from "../../store";
 import "../styles/header.css";
 
 /**
@@ -12,18 +12,23 @@ const Header = () => {
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(tabSelected('Default'));
+  };
+
+  const handleRefresh = () => {
+    dispatch(tabSelected('Default'));
   };
 
   return (
     <header className="app-header">
       <div>
-        <Link to="/">
-          <span className="app-title">Onboarding Application</span>
+        <Link to="/" onClick={handleRefresh}>
+          <span className="app-title">Onboarding Associate</span>
         </Link>
       </div>
       {user ? (
         <div>
-          <Link to="/" onClick={handleLogout}>
+          <Link to="/auth/login" onClick={handleLogout}>
             <span className="logout">Logout</span>
           </Link>
         </div>

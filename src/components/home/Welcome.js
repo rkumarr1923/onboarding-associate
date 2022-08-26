@@ -1,16 +1,18 @@
-import { useSelector } from "react-redux";
-import { userDetails } from "../../store";
+// import { useSelector } from "react-redux";
+// import { userDetails } from "../../store";
+import welcome from './../../images/welcome.png';
+import './../styles/welcome.css'
 
 const Welcome = () => {
-  const user = useSelector(userDetails);
+  // const user = useSelector(userDetails);
   return (
     <>
-      <div>Welcome to Onboarding Application...</div>
-      {user && (
+      <img className="welcome" src={welcome} alt="welcome" />
+      {/* {user && (
         <div>
           {user.name} with role {user.role}
         </div>
-      )}
+      )} */}
     </>
   );
 };

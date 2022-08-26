@@ -15,8 +15,8 @@ import Paper from "@mui/material/Paper";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
-import "./UploadDocument.css";
 import { Typography } from "@mui/material";
+import "./UploadDocument.css";
 
 const UploadDocument = () => {
   const [documents, setDocuments] = useState([]);
@@ -126,23 +126,26 @@ const UploadDocument = () => {
   };
 
   return (
-    <div className="main">
-      <h2>Upload Documents</h2>
-      <div className="file-upload-wrapper" data-text="Select your file!">
-        <label htmlFor="myfile">
-          <input
-            style={{ display: "none" }}
-            onChange={fileUpload}
-            id="myfile"
-            name="myfile"
-            type="file"
-          />
-          <Button color="primary" variant="contained" component="span">
-            Upload
-          </Button>
-        </label>
+    <div className="upload-doc-container">
+      <div className="d-flex-space">
+        <h3>Upload Documents</h3>
+        <div className="upload-doc-wrapper" data-text="Select your file!">
+          <label htmlFor="myfile">
+            <input
+              style={{ display: "none" }}
+              onChange={fileUpload}
+              id="myfile"
+              name="myfile"
+              type="file"
+            />
+            <Button color="primary" variant="contained" component="span">
+              Upload
+            </Button>
+          </label>
+        </div>
       </div>
-      <h3>Documents:</h3>
+      <hr/>
+      <h4 className="mb-3">Documents:</h4>
       {documents.length > 0 ? (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -185,7 +188,7 @@ const UploadDocument = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Typography>No Records Exist</Typography>
+        <Typography>No records found</Typography>
       )}
       <Dialog
         open={open}
