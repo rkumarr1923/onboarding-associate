@@ -1,6 +1,10 @@
-import { AddCircleOutline } from "@mui/icons-material";
 import {
-  Avatar,
+  AddCircleOutline,
+  PeopleAltTwoTone,
+  PreviewTwoTone,
+  SupportAgentTwoTone,
+} from "@mui/icons-material";
+import {
   Button,
   Dialog,
   DialogActions,
@@ -152,7 +156,7 @@ const CommentComponent = () => {
                                     <>
                                       <Grid
                                         container
-                                        textAlign="center"
+                                        textAlign="start"
                                         alignItems="center"
                                       >
                                         <Grid item xs="auto">
@@ -163,16 +167,19 @@ const CommentComponent = () => {
                                             title={data.role}
                                             placement="right"
                                           >
-                                            <Avatar
-                                              alt="Role Information"
-                                              style={{
-                                                width: "15px",
-                                                height: "15px",
-                                                fontSize: "0.5rem",
-                                              }}
-                                            >
-                                              {data.role.charAt(0)}
-                                            </Avatar>
+                                            {data.role === "Reviewer" ? (
+                                              <PreviewTwoTone
+                                                style={{ fontSize: 13 }}
+                                              />
+                                            ) : data.role === "Associate" ? (
+                                              <SupportAgentTwoTone
+                                                style={{ fontSize: 13 }}
+                                              />
+                                            ) : (
+                                              <PeopleAltTwoTone
+                                                style={{ fontSize: 13 }}
+                                              />
+                                            )}
                                           </Tooltip>
                                         </Grid>
                                       </Grid>

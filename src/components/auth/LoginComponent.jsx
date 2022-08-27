@@ -7,67 +7,50 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { assosiateAuth } from "../../json/assosiateAuth";
-import { managerAuth } from "../../json/managerAuth";
-import { reviewerAuth } from "../../json/reviewerAuth";
 import { login } from "../../store";
-import '../styles/login.css';
+import "../styles/login.css";
 
 const LoginComponent = () => {
   const navigate = useNavigate();
   const [empId, setEmpId] = useState("");
+  const [pswd, setPswd] = useState("");
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    setEmpId(e.target.value);
+  const handleChange = (e, type) => {
+    setError(false);
+    if (type === "empId") setEmpId(e.target.value);
+    else if (type === "pswd") setPswd(e.target.value);
   };
 
   const handleLogin = () => {
-    if (empId === "000GM1") {
-      dispatch(
-        login({
-          token: assosiateAuth.Token,
-          userDetails: {
-            name: assosiateAuth.Name,
-            role: assosiateAuth.Roles,
-            reviewer: assosiateAuth.Reviewer,
-            manager: assosiateAuth.Manager,
-            empId: empId,
-          },
-        })
-      );
-      navigate("/");
-    }
-    if (empId === "009YHJ") {
-      dispatch(
-        login({
-          token: reviewerAuth.Token,
-          userDetails: {
-            name: reviewerAuth.Name,
-            role: reviewerAuth.Roles,
-            manager: reviewerAuth.Manager,
-            empId: empId,
-          },
-        })
-      );
-      navigate("/");
-    }
-    if (empId === "123456") {
-      dispatch(
-        login({
-          token: managerAuth.Token,
-          userDetails: {
-            name: managerAuth.Name,
-            role: managerAuth.Roles,
-            empId: empId,
-          },
-        })
-      );
-      navigate("/");
-    }
+    const requestBody = {
+      empId: empId,
+      password: pswd,
+    };
+    axios
+      .post("http://localhost:9099/loginuser/user", requestBody)
+      .then((result) => {
+        if (result.data.token) {
+          dispatch(
+            login({
+              token: result.data.token,
+              userDetails: {
+                name: result.data.name,
+                role: result.data.role,
+                reviewer: result.data.reviewer,
+                manager: result.data.manager,
+                empId: empId,
+              },
+            })
+          );
+          navigate("/");
+        } else setError(true);
+      });
   };
 
   return (
@@ -87,6 +70,9 @@ const LoginComponent = () => {
         <Grid item xs={12}>
           <Card>
             <CardContent>
+              {error && (
+                <p style={{ color: "red" }}>UserName or Password incorrect.</p>
+              )}
               <TextField
                 className="btn-color"
                 autoFocus
@@ -96,14 +82,29 @@ const LoginComponent = () => {
                 fullWidth
                 variant="standard"
                 value={empId}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e, "empId")}
               />
               <Typography variant="body2" color="text.secondary">
                 Please enter your IBM employee ID in 6 character. Eg: xxxxxx
               </Typography>
+              <TextField
+                className="btn-color"
+                margin="dense"
+                label="Password"
+                type="password"
+                fullWidth
+                variant="standard"
+                value={pswd}
+                onChange={(e) => handleChange(e, "pswd")}
+              />
             </CardContent>
             <CardActions>
-              <Button fullWidth variant="contained" className="login-btn" onClick={handleLogin}>
+              <Button
+                fullWidth
+                variant="contained"
+                className="login-btn"
+                onClick={handleLogin}
+              >
                 Login
               </Button>
             </CardActions>
