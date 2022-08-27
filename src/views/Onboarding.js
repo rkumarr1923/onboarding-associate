@@ -14,7 +14,7 @@ export default function Onboarding() {
   const loginFormRender = () => {
     return (
       <ul className="nav-links">
-        {user && (user.role === "Reviewer" || user.role === "Manager") && (
+        {user && (user.role === "REVIEWER" || user.role === "MANAGER") && (
           <>
             <li className={isTabActive('New User')}>
               <Link to="/auth/register">
@@ -38,7 +38,7 @@ export default function Onboarding() {
             </li>
           </>
         )}
-        {user && user.role === "Associate" && (
+        {user && user.role === "ASSOCIATE" && (
           <>
             <li className={isTabActive('On-boarding Checklist')}>
               <Link to="/onBoardingCheckList">
