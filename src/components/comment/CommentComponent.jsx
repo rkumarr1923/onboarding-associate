@@ -103,7 +103,7 @@ const CommentComponent = () => {
 
   return (
     <>
-      <Grid container direction="row" style={{ backgroundColor: "white" }}>
+      <Grid container direction="row" className="comment-container">
         <Grid item xs={12} position="fixed" style={{ zIndex: "998" }}>
           <Grid
             container
