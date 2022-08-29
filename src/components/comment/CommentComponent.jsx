@@ -33,7 +33,7 @@ const CommentComponent = () => {
   const dispatch = useDispatch();
   const user = useSelector(userDetails);
   const allComments = useSelector(userComments);
-  const empId = "000GM1";
+  const empId = user.empId;
 
   useEffect(() => {
     axios.get("http://localhost:9094/comment/" + empId).then((result) => {
@@ -103,7 +103,14 @@ const CommentComponent = () => {
 
   return (
     <>
-      <Grid container direction="row" style={{ backgroundColor: "white" }}>
+      <Grid
+        container
+        direction="row"
+        style={{
+          paddingBottom: allComments.length !== 0 ? "130px" : "0",
+          backgroundColor: "white",
+        }}
+      >
         <Grid item xs={12} position="fixed" style={{ zIndex: "998" }}>
           <Grid
             container
@@ -151,7 +158,7 @@ const CommentComponent = () => {
                               <Grid container direction="row">
                                 <Grid item xs={6}>
                                   {user.role === data.role ? (
-                                    <strong>You</strong>
+                                    <strong>You:</strong>
                                   ) : (
                                     <>
                                       <Grid
@@ -167,11 +174,11 @@ const CommentComponent = () => {
                                             title={data.role}
                                             placement="right"
                                           >
-                                            {data.role === "Reviewer" ? (
+                                            {data.role === "REVIEWER" ? (
                                               <PreviewTwoTone
                                                 style={{ fontSize: 13 }}
                                               />
-                                            ) : data.role === "Associate" ? (
+                                            ) : data.role === "ASSOCIATE" ? (
                                               <SupportAgentTwoTone
                                                 style={{ fontSize: 13 }}
                                               />
