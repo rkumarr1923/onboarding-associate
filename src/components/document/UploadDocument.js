@@ -28,6 +28,9 @@ const UploadDocument = () => {
   const [options, setOptions] = useState([]);
   const [optionselect, setOptionselect] = useState('');
   const [inputfile, setInputfile] = useState(false);
+  const [docTobeUpdate, setDocTobeUpdate] = useState({});
+  const [openUpdate, setUpdateDialogStatus] = useState(false);
+  
   useEffect(() => {
     fetchDocuments();
     fetchDocumentTypes();
@@ -51,6 +54,7 @@ const UploadDocument = () => {
         },
       })
       .then((result) => {
+        updateDialogClose();
         setSnakBarOpen(true);
         setUploadStatus(true);
         //document.getElementById("myfile").value = "";
@@ -152,6 +156,21 @@ const UploadDocument = () => {
     setInputfile(false);
   }
 
+  const openUpdateDialog = () => {
+    const updateFileName = document.getElementById("myfile").files[0].name;
+    const filteredObj = documents.filter(obj => obj.name===updateFileName);
+    if(filteredObj && filteredObj.length>0){
+      setDocTobeUpdate(filteredObj[0]);
+      setUpdateDialogStatus(true);
+    } else {
+      callUploadAPI();
+    }
+  };
+
+  const updateDialogClose = () => {
+    setUpdateDialogStatus(false);
+  };
+
   return (
     <div className="main">
       <h2>Upload Documents</h2>
@@ -167,7 +186,7 @@ const UploadDocument = () => {
             type="file"
           />
         </label>
-        <Button color="primary" variant="contained" component="span" onClick={() => callUploadAPI()} disabled={!((optionselect!=='1') && inputfile)}>
+        <Button color="primary" variant="contained" component="span" onClick={() => openUpdateDialog()} disabled={!((optionselect!=='1') && inputfile)}>
             Upload
           </Button>
       </div>
@@ -237,6 +256,28 @@ const UploadDocument = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={() => deleteDocs(docTobeDeleted.id)} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openUpdate}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`Are you sure you want to update the document ${docTobeUpdate.name}?`}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Once updated canot be reverted.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={updateDialogClose}>Cancel</Button>
+          <Button onClick={() => callUploadAPI()} autoFocus>
             Yes
           </Button>
         </DialogActions>
