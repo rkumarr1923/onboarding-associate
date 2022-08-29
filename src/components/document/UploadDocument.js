@@ -17,6 +17,7 @@ import Alert from "@mui/material/Alert";
 import axios from "axios";
 import "./UploadDocument.css";
 import { Typography } from "@mui/material";
+import SelectBox from "../core/Select";
 
 const UploadDocument = () => {
   const [documents, setDocuments] = useState([]);
@@ -24,17 +25,20 @@ const UploadDocument = () => {
   const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
   const [openSnakBar, setSnakBarOpen] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);
-  //const [state, setState] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [optionselect, setOptionselect] = useState('');
+  const [inputfile, setInputfile] = useState(false);
   useEffect(() => {
     fetchDocuments();
+    fetchDocumentTypes();
   }, []);
 
   const callUploadAPI = () => {
     var input = document.getElementById("myfile");
-    console.log("inputFileElement.value", input.files[0]);
+    //console.log("inputFileElement.value", input.files[0]);
     var formdata = new FormData();
     formdata.append("file", input.files[0], input.files[0].name);
-
+    formdata.append("document_type", optionselect);
     var requestOptions = {
       method: "POST",
       body: formdata,
@@ -49,9 +53,10 @@ const UploadDocument = () => {
       .then((result) => {
         setSnakBarOpen(true);
         setUploadStatus(true);
-        document.getElementById("myfile").value = "";
+        //document.getElementById("myfile").value = "";
         fetchDocuments();
-        console.log(result);
+        resetFields();
+        //console.log(result);
       })
       .catch((error) => {
         setSnakBarOpen(true);
@@ -64,8 +69,8 @@ const UploadDocument = () => {
     axios
       .get("http://localhost:9003/files")
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        //console.log(res);
+        //console.log(res.data);
         setDocuments(res.data);
       })
       .catch((err) => {
@@ -83,7 +88,7 @@ const UploadDocument = () => {
       .delete(`http://localhost:9003/files/delete/${id}`)
       .then((result) => {
         setDialogStatus(false);
-        console.log(result);
+        //console.log(result);
         fetchDocuments();
       })
       .catch((err) => {
@@ -96,7 +101,7 @@ const UploadDocument = () => {
     axios
       .get(`http://localhost:9003/files/${id}`, { responseType: "blob" })
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         if (result) {
           const file = new Blob([result.data], { type: "application/pdf" });
           const fileURL = URL.createObjectURL(file);
@@ -114,7 +119,7 @@ const UploadDocument = () => {
   const fileUpload = (event) => {
     //let changedFile = event.target.files[0];
     let uploadedFiles = event.target.files;
-    callUploadAPI();
+    setInputfile(true);
   };
 
   const handleClose = () => {
@@ -125,22 +130,46 @@ const UploadDocument = () => {
     setSnakBarOpen(false);
   };
 
+  const fetchDocumentTypes = () => {
+    axios
+        .get('http://localhost:9003/document')
+        .then((res) => {
+            setOptions([...res.data]);
+            setOptionselect(1);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+  }
+
+  const optionChanged = (childData) =>{
+    setOptionselect(childData);
+  }
+
+  const resetFields = () =>{
+    document.getElementById("myfile").value = "";
+    setOptionselect('1');
+    setInputfile(false);
+  }
+
   return (
     <div className="main">
       <h2>Upload Documents</h2>
+      <div className="input-select"> Document Type:&nbsp;
+        <SelectBox options={options}  onOptionChanged={optionChanged} optionselect={optionselect} />
+      </div>
       <div className="file-upload-wrapper" data-text="Select your file!">
         <label htmlFor="myfile">
-          <input
-            style={{ display: "none" }}
+          <input className="input-field"
             onChange={fileUpload}
             id="myfile"
             name="myfile"
             type="file"
           />
-          <Button color="primary" variant="contained" component="span">
+        </label>
+        <Button color="primary" variant="contained" component="span" onClick={() => callUploadAPI()} disabled={!((optionselect!=='1') && inputfile)}>
             Upload
           </Button>
-        </label>
       </div>
       <h3>Documents:</h3>
       {documents.length > 0 ? (
@@ -150,6 +179,7 @@ const UploadDocument = () => {
               <TableRow>
                 <TableCell>S.No.</TableCell>
                 <TableCell>Name</TableCell>
+                <TableCell>Document Type</TableCell>
                 <TableCell>Delete</TableCell>
                 <TableCell>Download</TableCell>
               </TableRow>
@@ -165,6 +195,9 @@ const UploadDocument = () => {
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {doc.name}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {doc.documentType.name}
                   </TableCell>
                   <TableCell>
                     <Button color="secondary" onClick={() => openDialog(doc)}>
