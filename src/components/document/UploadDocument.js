@@ -15,8 +15,9 @@ import Paper from "@mui/material/Paper";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
-import { Typography } from "@mui/material";
 import "./UploadDocument.css";
+import { Typography } from "@mui/material";
+import SelectBox from "../core/Select";
 
 const UploadDocument = () => {
   const [documents, setDocuments] = useState([]);
@@ -24,17 +25,23 @@ const UploadDocument = () => {
   const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
   const [openSnakBar, setSnakBarOpen] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);
-  //const [state, setState] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [optionselect, setOptionselect] = useState('');
+  const [inputfile, setInputfile] = useState(false);
+  const [docTobeUpdate, setDocTobeUpdate] = useState({});
+  const [openUpdate, setUpdateDialogStatus] = useState(false);
+  
   useEffect(() => {
     fetchDocuments();
+    fetchDocumentTypes();
   }, []);
 
   const callUploadAPI = () => {
     var input = document.getElementById("myfile");
-    console.log("inputFileElement.value", input.files[0]);
+    //console.log("inputFileElement.value", input.files[0]);
     var formdata = new FormData();
     formdata.append("file", input.files[0], input.files[0].name);
-
+    formdata.append("document_type", optionselect);
     var requestOptions = {
       method: "POST",
       body: formdata,
@@ -47,11 +54,13 @@ const UploadDocument = () => {
         },
       })
       .then((result) => {
+        updateDialogClose();
         setSnakBarOpen(true);
         setUploadStatus(true);
-        document.getElementById("myfile").value = "";
+        //document.getElementById("myfile").value = "";
         fetchDocuments();
-        console.log(result);
+        resetFields();
+        //console.log(result);
       })
       .catch((error) => {
         setSnakBarOpen(true);
@@ -64,8 +73,8 @@ const UploadDocument = () => {
     axios
       .get("http://localhost:9003/files")
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        //console.log(res);
+        //console.log(res.data);
         setDocuments(res.data);
       })
       .catch((err) => {
@@ -83,7 +92,7 @@ const UploadDocument = () => {
       .delete(`http://localhost:9003/files/delete/${id}`)
       .then((result) => {
         setDialogStatus(false);
-        console.log(result);
+        //console.log(result);
         fetchDocuments();
       })
       .catch((err) => {
@@ -96,7 +105,7 @@ const UploadDocument = () => {
     axios
       .get(`http://localhost:9003/files/${id}`, { responseType: "blob" })
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         if (result) {
           const file = new Blob([result.data], { type: "application/pdf" });
           const fileURL = URL.createObjectURL(file);
@@ -114,7 +123,7 @@ const UploadDocument = () => {
   const fileUpload = (event) => {
     //let changedFile = event.target.files[0];
     let uploadedFiles = event.target.files;
-    callUploadAPI();
+    setInputfile(true);
   };
 
   const handleClose = () => {
@@ -125,27 +134,64 @@ const UploadDocument = () => {
     setSnakBarOpen(false);
   };
 
+  const fetchDocumentTypes = () => {
+    axios
+        .get('http://localhost:9003/document')
+        .then((res) => {
+            setOptions([...res.data]);
+            setOptionselect('1');
+
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+  }
+
+  const optionChanged = (childData) =>{
+    setOptionselect(childData);
+  }
+
+  const resetFields = () =>{
+    document.getElementById("myfile").value = "";
+    setOptionselect('1');
+    setInputfile(false);
+  }
+
+  const openUpdateDialog = () => {
+    const updateFileName = document.getElementById("myfile").files[0].name;
+    const filteredObj = documents.filter(obj => obj.name===updateFileName);
+    if(filteredObj && filteredObj.length>0){
+      setDocTobeUpdate(filteredObj[0]);
+      setUpdateDialogStatus(true);
+    } else {
+      callUploadAPI();
+    }
+  };
+
+  const updateDialogClose = () => {
+    setUpdateDialogStatus(false);
+  };
+
   return (
-    <div className="upload-doc-container">
-      <div className="d-flex-space">
-        <h3>Upload Documents</h3>
-        <div className="upload-doc-wrapper" data-text="Select your file!">
-          <label htmlFor="myfile">
-            <input
-              style={{ display: "none" }}
-              onChange={fileUpload}
-              id="myfile"
-              name="myfile"
-              type="file"
-            />
-            <Button color="primary" variant="contained" component="span">
-              Upload
-            </Button>
-          </label>
-        </div>
+    <div className="main">
+      <h2>Upload Documents</h2>
+      <div className="input-select"> Document Type:&nbsp;
+        <SelectBox options={options}  onOptionChanged={optionChanged} optionselect={optionselect} />
       </div>
-      <hr/>
-      <h4 className="mb-3">Documents:</h4>
+      <div className="file-upload-wrapper" data-text="Select your file!">
+        <label htmlFor="myfile">
+          <input className="input-field"
+            onChange={fileUpload}
+            id="myfile"
+            name="myfile"
+            type="file"
+          />
+        </label> &nbsp;
+        <Button color="primary" variant="contained" component="span" onClick={() => openUpdateDialog()} disabled={!((optionselect!=='1') && inputfile)}>
+            Upload
+          </Button>
+      </div>
+      <h3>Documents:</h3>
       {documents.length > 0 ? (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -153,6 +199,7 @@ const UploadDocument = () => {
               <TableRow>
                 <TableCell>S.No.</TableCell>
                 <TableCell>Name</TableCell>
+                <TableCell>Document Type</TableCell>
                 <TableCell>Delete</TableCell>
                 <TableCell>Download</TableCell>
               </TableRow>
@@ -168,6 +215,9 @@ const UploadDocument = () => {
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {doc.name}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {doc.documentType.name}
                   </TableCell>
                   <TableCell>
                     <Button color="secondary" onClick={() => openDialog(doc)}>
@@ -188,7 +238,7 @@ const UploadDocument = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Typography>No records found</Typography>
+        <Typography>No Records Exist</Typography>
       )}
       <Dialog
         open={open}
@@ -207,6 +257,28 @@ const UploadDocument = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={() => deleteDocs(docTobeDeleted.id)} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openUpdate}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`Are you sure you want to update the document ${docTobeUpdate.name}?`}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Once updated canot be reverted.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={updateDialogClose}>Cancel</Button>
+          <Button onClick={() => callUploadAPI()} autoFocus>
             Yes
           </Button>
         </DialogActions>
