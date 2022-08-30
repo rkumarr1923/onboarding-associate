@@ -1,9 +1,9 @@
 import {
-  AddCircleOutline,
   PeopleAltTwoTone,
   PreviewTwoTone,
   SupportAgentTwoTone,
 } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Button,
   Dialog,
@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Fab,
   Grid,
   List,
   ListItem,
@@ -102,127 +103,95 @@ const CommentComponent = () => {
   };
 
   return (
-    <>
-      <Grid
-        container
-        direction="row"
-        style={{
-          paddingBottom: allComments.length !== 0 ? "130px" : "0",
-          backgroundColor: "white",
-        }}
-      >
-        <Grid item xs={12} position="fixed" style={{ zIndex: "998" }}>
-          <Grid
-            container
-            direction="row"
-            position="fixed"
-            style={{ backgroundColor: "black" }}
-          >
-            <Grid item xs={6}>
-              <Typography
-                variant="h6"
-                style={{ margin: "10px", color: "white" }}
-              >
-                <strong>Comments</strong>
-              </Typography>
-            </Grid>
-            <Grid item xs={6} style={{ textAlign: "end" }}>
-              <Button
-                size="small"
-                disableRipple
-                variant="contained"
-                startIcon={<AddCircleOutline />}
-                onClick={handleClickOpen}
-                style={{ margin: "10px" }}
-              >
-                Add
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} style={{ marginTop: "2.7rem" }}>
-          {allComments.length !== 0 ? (
-            <List>
-              {allComments.map((data, index) => {
-                return (
-                  <Fragment key={`comments-${index}`}>
-                    <ListItem alignItems="flex-start" key={index}>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              variant="h6"
-                              color="black"
-                              style={{ margin: 0 }}
-                            >
-                              <Grid container direction="row">
-                                <Grid item xs={6}>
-                                  {user.role === data.role ? (
-                                    <strong>You:</strong>
-                                  ) : (
-                                    <>
-                                      <Grid
-                                        container
-                                        textAlign="start"
-                                        alignItems="center"
+    <div style={{ padding: "20px 20px 130px 20px" }}>
+      {allComments.length !== 0 ? (
+        <List style={{ overflow: "auto", backgroundColor: "white" }}>
+          {allComments.map((data, index) => {
+            return (
+              <Fragment key={`comments-${index}`}>
+                <ListItem alignItems="flex-start" key={index}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <Typography
+                          variant="h6"
+                          color="black"
+                          style={{ margin: 0 }}
+                        >
+                          <Grid container direction="row">
+                            <Grid item xs={6}>
+                              {user.role === data.role ? (
+                                <strong>You:</strong>
+                              ) : (
+                                <>
+                                  <Grid
+                                    container
+                                    textAlign="start"
+                                    alignItems="center"
+                                  >
+                                    <Grid item xs="auto">
+                                      <strong>{data.who}:</strong>
+                                    </Grid>
+                                    <Grid item xs>
+                                      <Tooltip
+                                        title={data.role}
+                                        placement="right"
                                       >
-                                        <Grid item xs="auto">
-                                          <strong>{data.who}:</strong>
-                                        </Grid>
-                                        <Grid item xs>
-                                          <Tooltip
-                                            title={data.role}
-                                            placement="right"
-                                          >
-                                            {data.role === "REVIEWER" ? (
-                                              <PreviewTwoTone
-                                                style={{ fontSize: 13 }}
-                                              />
-                                            ) : data.role === "ASSOCIATE" ? (
-                                              <SupportAgentTwoTone
-                                                style={{ fontSize: 13 }}
-                                              />
-                                            ) : (
-                                              <PeopleAltTwoTone
-                                                style={{ fontSize: 13 }}
-                                              />
-                                            )}
-                                          </Tooltip>
-                                        </Grid>
-                                      </Grid>
-                                    </>
-                                  )}
-                                </Grid>
-                                <Grid item xs={6} style={{ textAlign: "end" }}>
-                                  <span style={{ fontSize: "10px" }}>
-                                    {convertDate(data.date)}
-                                  </span>
-                                </Grid>
-                              </Grid>
-                            </Typography>
-                          </>
-                        }
-                        secondary={
-                          <Typography
-                            sx={{ display: "inline" }}
-                            variant="span"
-                            color="black"
-                          >
-                            {data.comments}
-                          </Typography>
-                        }
-                      />
-                    </ListItem>
-                    <Divider variant="li" />
-                  </Fragment>
-                );
-              })}
-            </List>
-          ) : (
-            "No comments"
-          )}
-        </Grid>
-      </Grid>
+                                        {data.role === "REVIEWER" ? (
+                                          <PreviewTwoTone
+                                            style={{ fontSize: 13 }}
+                                          />
+                                        ) : data.role === "ASSOCIATE" ? (
+                                          <SupportAgentTwoTone
+                                            style={{ fontSize: 13 }}
+                                          />
+                                        ) : (
+                                          <PeopleAltTwoTone
+                                            style={{ fontSize: 13 }}
+                                          />
+                                        )}
+                                      </Tooltip>
+                                    </Grid>
+                                  </Grid>
+                                </>
+                              )}
+                            </Grid>
+                            <Grid item xs={6} style={{ textAlign: "end" }}>
+                              <span style={{ fontSize: "10px" }}>
+                                {convertDate(data.date)}
+                              </span>
+                            </Grid>
+                          </Grid>
+                        </Typography>
+                      </>
+                    }
+                    secondary={
+                      <Typography
+                        sx={{ display: "inline" }}
+                        variant="span"
+                        color="black"
+                      >
+                        {data.comments}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="li" />
+              </Fragment>
+            );
+          })}
+        </List>
+      ) : (
+        "No comments to display."
+      )}
+      <Tooltip
+        title="Add New comment"
+        sx={{ position: "fixed", bottom: 60, right: 50 }}
+      >
+        <Fab color="primary" onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
       <Dialog open={open}>
         <DialogTitle>Add Comment</DialogTitle>
         <DialogContent>
@@ -243,7 +212,7 @@ const CommentComponent = () => {
           <Button onClick={handleAddComments}>Add</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };
 
