@@ -1,29 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/header.css';
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout, userDetails, tabSelected } from "../../store";
+import "../styles/header.css";
 
 /**
  * application header code
  */
 
-const Header = ({ }) => {
-    return (
-        <header className='app-header'>
-            <div>
-                <Link to="/">
-                    <span className='app-title'>
-                        Onboarding Application
-                    </span>
-                </Link>
+const Header = () => {
+  const user = useSelector(userDetails);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(tabSelected('Default'));
+  };
 
-            </div>
-            <div>
-                <span className='logout'>
-                    Logout
-                </span>
-            </div>
-        </header>
-    )
-}
+  const handleRefresh = () => {
+    dispatch(tabSelected('Default'));
+  };
+
+  return (
+    <header className="app-header">
+      <div>
+        <Link to="/" onClick={handleRefresh}>
+          <span className="app-title">Onboarding Associate</span>
+        </Link>
+      </div>
+      {user ? (
+        <div>
+          <Link to="/auth/login" onClick={handleLogout}>
+            <span className="logout">Logout</span>
+          </Link>
+        </div>
+      ) : (
+        <div>
+          <Link to="/auth/login">
+            <span className="logout">Login</span>
+          </Link>
+        </div>
+      )}
+    </header>
+  );
+};
 
 export default Header;
