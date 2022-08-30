@@ -139,7 +139,8 @@ const UploadDocument = () => {
         .get('http://localhost:9003/document')
         .then((res) => {
             setOptions([...res.data]);
-            setOptionselect(1);
+            setOptionselect('1');
+
         })
         .catch((err) => {
             console.log(err);
@@ -185,7 +186,7 @@ const UploadDocument = () => {
             name="myfile"
             type="file"
           />
-        </label>
+        </label> &nbsp;
         <Button color="primary" variant="contained" component="span" onClick={() => openUpdateDialog()} disabled={!((optionselect!=='1') && inputfile)}>
             Upload
           </Button>
