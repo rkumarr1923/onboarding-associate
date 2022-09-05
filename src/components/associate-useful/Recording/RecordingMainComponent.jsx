@@ -58,4 +58,3 @@ const RecordingMainComponent = () => {
         </div>);
 };
 export default RecordingMainComponent;
-//# sourceMappingURL=RecordingMainComponent.jsx.map

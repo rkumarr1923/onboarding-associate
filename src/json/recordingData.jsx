@@ -36,4 +36,3 @@ export const recordingData = [
         "password": "tE3mimG5"
     }
 ];
-//# sourceMappingURL=recordingData.jsx.map

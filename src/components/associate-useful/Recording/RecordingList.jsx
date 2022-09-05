@@ -39,4 +39,3 @@ const RecordingList = (props) => (<TableContainer style={{ margin: "0px" }}>
         </Table>
     </TableContainer>);
 export default RecordingList;
-//# sourceMappingURL=RecordingList.jsx.map
