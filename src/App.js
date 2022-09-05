@@ -5,6 +5,7 @@ import { userDetails } from "./store";
 import OnBoardingCheckList from "./components/associate-useful/On-BoardingCheckList/OnBoardingCheckList";
 import UploadDocument from "./components/document/UploadDocument";
 import TrainingLinks from "./components/associate-useful/TrainingLinks";
+import Recording from "./components/associate-useful/Recording/RecordingMainComponent";
 import Welcome from "./components/home/Welcome";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -31,6 +32,7 @@ function App() {
                 <Route path="onBoardingCheckList" element={<OnBoardingCheckList />}/>
                 <Route path="uploadDocuments" element={<UploadDocument />} />
                 <Route path="trainingLinks" element={<TrainingLinks />} />
+                <Route path="recording" element={<Recording />} />
                 <Route path="comment" element={<CommentComponent />} />
                 <Route path="auth/register" element={<NewUserComponent />} />
               </>
