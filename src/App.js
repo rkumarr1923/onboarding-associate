@@ -16,6 +16,7 @@ import LoginComponent from "./components/auth/LoginComponent";
 import NewUserComponent from "./components/auth/NewUserComponent";
 import Associates from './components/associate/Associates';
 import "./styles/app.css";
+import SampleDocuments from './components/document/SampleDocuments';
 
 function App() {
   const user = useSelector(userDetails);
@@ -31,6 +32,7 @@ function App() {
                 <Route path="allAssociates" element={<Associates />}/>
                 <Route path="onBoardingCheckList" element={<OnBoardingCheckList />}/>
                 <Route path="uploadDocuments" element={<UploadDocument />} />
+                <Route path="sampleDocuments" element={<SampleDocuments />} />
                 <Route path="trainingLinks" element={<TrainingLinks />} />
                 <Route path="recording" element={<Recording />} />
                 <Route path="comment" element={<CommentComponent />} />
