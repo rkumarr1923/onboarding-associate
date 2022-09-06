@@ -165,7 +165,7 @@ const UploadDocument = () => {
 
   const openUpdateDialog = () => {
     const updateFileName = document.getElementById("myfile").files[0].name;
-    const filteredObj = documents.filter(obj => (obj.name===updateFileName && obj.documentType.id===parseInt(optionselect)));
+    const filteredObj = documents.filter(obj => (obj.documentType.id===parseInt(optionselect)));
     if(filteredObj && filteredObj.length>0){
       setDocTobeUpdate(filteredObj[0]);
       setUpdateDialogStatus(true);
@@ -279,7 +279,7 @@ const UploadDocument = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`Are you sure you want to update the document ${docTobeUpdate.name}?`}
+          {`${docTobeUpdate.name} already exists. Do you want to replace it?`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -295,6 +295,7 @@ const UploadDocument = () => {
       </Dialog>
 
       <Snackbar
+        sx={{ height: "10%" }} 
         open={openSnakBar}
         autoHideDuration={3000}
         anchorOrigin={{
