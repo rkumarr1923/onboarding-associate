@@ -45,6 +45,11 @@ export default function Onboarding() {
                 <Button label="On-boarding Checklist" clickHandler={() => tabClicked('On-boarding Checklist')} />
               </Link>
             </li>
+            <li className={isTabActive('Sample Documents')}>
+              <Link to="/sampleDocuments">
+                <Button label="Sample Documents" clickHandler={() => tabClicked('Sample Documents')} />
+              </Link>
+            </li>
             <li className={isTabActive('Upload Documents')}>
               <Link to="/uploadDocuments">
                 <Button label="Upload Documents" clickHandler={() => tabClicked('Upload Documents')} />
