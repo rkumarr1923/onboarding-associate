@@ -1,3 +1,4 @@
+import { Grid, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout, userDetails, tabSelected } from "../../store";
@@ -12,11 +13,11 @@ const Header = () => {
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(tabSelected('Default'));
+    dispatch(tabSelected("Default"));
   };
 
   const handleRefresh = () => {
-    dispatch(tabSelected('Default'));
+    dispatch(tabSelected("Default"));
   };
 
   return (
@@ -27,11 +28,22 @@ const Header = () => {
         </Link>
       </div>
       {user ? (
-        <div>
-          <Link to="/auth/login" onClick={handleLogout}>
-            <span className="logout">Logout</span>
-          </Link>
-        </div>
+        <>
+          <div>
+            <Grid container>
+              <Grid item>
+                <Typography variant="span" style={{ paddingRight: "10px" }}>
+                  Hi, {user.name}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Link to="/auth/login" onClick={handleLogout}>
+                  <span className="logout">Logout</span>
+                </Link>
+              </Grid>
+            </Grid>
+          </div>
+        </>
       ) : (
         <div>
           <Link to="/auth/login">
