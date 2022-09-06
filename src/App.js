@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { userDetails } from "./store";
 import OnBoardingCheckList from "./components/associate-useful/On-BoardingCheckList/OnBoardingCheckList";
 import UploadDocument from "./components/document/UploadDocument";
-import TrainingLinks from "./components/associate-useful/TrainingLinks";
+import TrainingLinks from "./components/associate-useful/TrainingLinks/TrainingMainComponent";
 import Recording from "./components/associate-useful/Recording/RecordingMainComponent";
 import Welcome from "./components/home/Welcome";
 import Header from "./components/header/Header";
