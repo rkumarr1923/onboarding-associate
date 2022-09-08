@@ -1,12 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
+
+const newUserInitState = {
+  email: "",
+  employeeId: "",
+  reviewerName: "",
+  managerName: "",
+  role: "",
+  userName: "",
+  password: "",
+  showPassword: false,
+  error: {
+    errorEmail: false,
+    errorEmployeeId: false,
+    errorReviewerName: false,
+    errorManagerName: false,
+    errorRole: false,
+    errorUserName: false,
+    errorPassword: false,
+  },
+};
+
 const slice = createSlice({
   name: "count",
   initialState: {
     count: 0,
-    activeTab: 'Default',
+    activeTab: "Default",
     token: null,
     userDetails: null,
     comments: [],
+    createNewUserDetailsData: newUserInitState,
   },
   reducers: {
     increment: (state) => {
@@ -17,6 +39,9 @@ const slice = createSlice({
     },
     tabSelected: (state, action) => {
       state.activeTab = action.payload.tab;
+    },
+    createNewUserDetails: (state, action) => {
+      state.createNewUserDetailsData = action.payload.createNewUser;
     },
     login: (state, action) => {
       state.token = action.payload.token;
@@ -30,13 +55,26 @@ const slice = createSlice({
     comments: (state, action) => {
       state.comments = action.payload.comments;
     },
+    resetCreateNewUserDetails: (state) => {
+      state.createNewUserDetailsData = newUserInitState;
+    },
   },
 });
 
 export const appStore = (state) => state;
-export const { increment, decrement, tabSelected, login, logout, comments } = slice.actions;
+export const {
+  increment,
+  decrement,
+  tabSelected,
+  login,
+  logout,
+  comments,
+  createNewUserDetails,
+  resetCreateNewUserDetails,
+} = slice.actions;
 export const selectedTab = (state) => state.activeTab;
 export const userDetails = (state) => state.userDetails;
 export const token = (state) => state.token;
 export const userComments = (state) => state.comments;
+export const createNewUser = (state) => state.createNewUserDetailsData;
 export const { reducer } = slice;
