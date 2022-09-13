@@ -42,3 +42,21 @@
     font-size: 25px;
     color: #1976d2;
 }
+
+.required {
+    color: red;
+}
+
+.error-text {
+    margin-right: 5px;
+}
+
+.form-error {
+    color: red;
+    box-shadow: 2px 2px red;
+}
+
+.form-error:focus {
+    color: red;
+    box-shadow: 1px 1px 5px red;
+}
