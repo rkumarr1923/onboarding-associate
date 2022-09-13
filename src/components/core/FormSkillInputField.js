@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "./Button";
 
 function FormSkillInputField(props) {
-    const { label, controlId, md } = props;
+    const { label, controlId, md, setSkillSet } = props;
     const [inputList, setInputList] = useState([{ skillName: "", skillRating: "" }]);
 
     // handle input change
@@ -24,7 +24,8 @@ function FormSkillInputField(props) {
 
     // handle click event of the Add button
     const handleAddClick = () => {
-        setInputList([...inputList, { firstName: "", lastName: "" }]);
+        setInputList([...inputList, { skillName: "", skillRating: "" }]);
+        setSkillSet([...inputList])
     };
 
     return (

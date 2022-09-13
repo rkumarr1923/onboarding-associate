@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 
 const FormDatePickerField = (props) => {
 
-    const { label, md, controlId } = props;
+    const { label, md, controlId, isRequired, onDateChange } = props;
     const [startDate, setStartDate] = useState(new Date());
     const [valid, setValid] = useState(true);
 
@@ -18,8 +18,9 @@ const FormDatePickerField = (props) => {
                 console.log(moment(value, "MM/DD/YYYY", true).isValid());
                 console.log(new Date(value));
                 if (moment(value, "MM/DD/YYYY", true).isValid()) {
-                setStartDate(value)
-                setValid(true);
+                    setStartDate(value)
+                    onDateChange(controlId, value)
+                    setValid(true);
             } else {
                 setValid(false);
                 setStartDate(null);
@@ -32,7 +33,7 @@ const FormDatePickerField = (props) => {
     };
 
     return <Form.Group as={Col} md={md} controlId={controlId}>
-        <Form.Label>{label}</Form.Label>
+        <Form.Label className="mb-0">{label} {isRequired && <span className='required'>*</span>} </Form.Label>
         <div className="date-picker-element">
             <DatePicker
                 id={controlId}
