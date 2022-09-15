@@ -1,4 +1,4 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { InfoRounded, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -10,6 +10,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -17,18 +18,80 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
+  allManagers,
+  allReviewers,
+  allRoles,
   createNewUser,
   createNewUserDetails,
+  managers,
   resetCreateNewUserDetails,
+  reviewers,
+  roles,
 } from "../../store";
+import { authConstant } from "./AuthConstant";
 import "../styles/login.css";
 
 const NewUserComponent = () => {
   const dispatch = useDispatch();
   const newUserDetails = useSelector(createNewUser);
+  const allRole = useSelector(allRoles);
+  const allManager = useSelector(allManagers).filter(
+    (item) => item.empId !== "N/A"
+  );
+  const allReviewer = useSelector(allReviewers).filter(
+    (item) => item.empId !== "N/A"
+  );
+
   useEffect(() => {
+    axios.get("http://localhost:9099/roles").then((response) => {
+      if (response.data) dispatch(roles({ roles: response.data }));
+      else console.log("No Roles");
+    });
+    axios.get("http://localhost:9099/managers").then((response) => {
+      if (response.data) dispatch(managers({ managers: response.data }));
+      else console.log("No managers");
+    });
+    axios.get("http://localhost:9099/reviewers").then((response) => {
+      if (response.data) dispatch(reviewers({ reviewers: response.data }));
+      else console.log("No Reviewers");
+    });
     return () => dispatch(resetCreateNewUserDetails());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const generatePassword = () => {
+    if (newUserDetails.employeeId !== "" && newUserDetails.userName !== "") {
+      const generatedPassword =
+        newUserDetails.userName.replace(/\s+/g, "").slice(0, 3) +
+        newUserDetails.employeeId;
+      dispatch(
+        createNewUserDetails({
+          createNewUser: {
+            ...newUserDetails,
+            isGeneratedButtonDisabled: true,
+            password: generatedPassword,
+            error: {
+              ...newUserDetails.error,
+              errorPassword: false,
+              errorGeneratebutton: false,
+            },
+          },
+        })
+      );
+    } else {
+      let errorEmployeeId = false;
+      let errorUserName = false;
+      if (newUserDetails.employeeId === "") errorEmployeeId = true;
+      if (newUserDetails.userName === "") errorUserName = true;
+      dispatch(
+        createNewUserDetails({
+          createNewUser: {
+            ...newUserDetails,
+            error: { ...newUserDetails.error, errorEmployeeId, errorUserName },
+          },
+        })
+      );
+    }
+  };
 
   const handleChange = (prop, errorType) => (event) => {
     event.preventDefault();
@@ -37,6 +100,10 @@ const NewUserComponent = () => {
         createNewUser: {
           ...newUserDetails,
           [prop]: event.target.value,
+          isGeneratedButtonDisabled:
+            prop === "userName" || prop === "employeeId"
+              ? false
+              : newUserDetails.isGeneratedButtonDisabled,
           error: { ...newUserDetails.error, [errorType]: false },
         },
       })
@@ -49,11 +116,15 @@ const NewUserComponent = () => {
     if (newUserDetails.email === "") error = { ...error, errorEmail: true };
     if (newUserDetails.employeeId === "")
       error = { ...error, errorEmployeeId: true };
-    if (newUserDetails.reviewerName === "" && newUserDetails.role === "1")
+    if (
+      newUserDetails.reviewerName === "" &&
+      newUserDetails.role === authConstant.assosiateRoleId
+    )
       error = { ...error, errorReviewerName: true };
     if (
       newUserDetails.managerName === "" &&
-      (newUserDetails.role === "1" || newUserDetails.role === "2")
+      (newUserDetails.role === authConstant.assosiateRoleId ||
+        newUserDetails.role === authConstant.reviewerRoleId)
     )
       error = { ...error, errorManagerName: true };
     if (newUserDetails.role === "") error = { ...error, errorRole: true };
@@ -67,26 +138,38 @@ const NewUserComponent = () => {
       })
     );
     if (JSON.stringify(error) === "{}") {
-      const requestData = {
-        id: 4,
-        employeeId: newUserDetails.employeeId,
-        email: newUserDetails.email,
-        userName: newUserDetails.userName,
-        password: newUserDetails.password,
-        roleId: Number(newUserDetails.role),
-        reviewerName:
-          newUserDetails.role === "1" ? newUserDetails.reviewerName : "",
-        managerName:
-          newUserDetails.role === "1" || newUserDetails.role === "2"
-            ? newUserDetails.managerName
-            : "",
-      };
-      console.log(requestData);
-      // axios
-      //   .post("http://localhost:9099/user_add", requestData)
-      //   .then((response) => {
-      //     console.log(response.data);
-      //   });
+      if (!newUserDetails.isGeneratedButtonDisabled) {
+        dispatch(
+          createNewUserDetails({
+            createNewUser: {
+              ...newUserDetails,
+              error: { errorGeneratebutton: true },
+            },
+          })
+        );
+      } else {
+        const requestData = {
+          employeeId: newUserDetails.employeeId,
+          email: newUserDetails.email,
+          userName: newUserDetails.userName,
+          password: newUserDetails.password,
+          roleId: newUserDetails.role,
+          reviewerEmpId:
+            newUserDetails.role === authConstant.assosiateRoleId
+              ? newUserDetails.reviewerName
+              : "N/A",
+          managerEmpId:
+            newUserDetails.role === authConstant.assosiateRoleId ||
+            newUserDetails.role === authConstant.reviewerRoleId
+              ? newUserDetails.managerName
+              : "N/A",
+        };
+        axios
+          .post("http://localhost:9099/user_add", requestData)
+          .then((response) => {
+            console.log(response.data);
+          });
+      }
     } else console.log("Error");
   };
 
@@ -135,7 +218,7 @@ const NewUserComponent = () => {
                 onChange={handleChange("employeeId", "errorEmployeeId")}
               />
               <Typography
-                variant="body2"
+                variant="caption"
                 color={newUserDetails.error.errorEmployeeId ? "red" : "black"}
               >
                 Please enter IBM employee ID in 6 character. Eg: xxxxxx
@@ -151,7 +234,7 @@ const NewUserComponent = () => {
                 onChange={handleChange("email", "errorEmail")}
               />
               <Typography
-                variant="body2"
+                variant="caption"
                 color={newUserDetails.error.errorEmail ? "red" : "black"}
               >
                 Please enter IBM employee mail id
@@ -177,79 +260,179 @@ const NewUserComponent = () => {
                 error={newUserDetails.error.errorPassword}
                 onChange={handleChange("password", "errorPassword")}
                 InputProps={{
+                  readOnly: true,
                   endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        edge="end"
-                      >
-                        {newUserDetails.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
+                    <>
+                      <InputAdornment position="end">
+                        <Tooltip
+                          title="Password will be generated based on EmployeeID and Employee Name.
+  Ex: EmployeeID - 123456, Employee Name - x test
+  Generated Password - xte123456"
+                        >
+                          <IconButton>
+                            <InfoRounded />
+                          </IconButton>
+                        </Tooltip>
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {newUserDetails.showPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    </>
                   ),
                 }}
               />
-              <Select
-                margin="dense"
-                displayEmpty
-                id="role"
-                value={newUserDetails.role}
-                error={newUserDetails.error.errorRole}
-                size="small"
+              <Button
                 fullWidth
-                onChange={handleChange("role", "errorRole")}
-                style={{ marginTop: "1.5rem" }}
-                sx={{
-                  "& legend": { display: "none" },
-                  "& fieldset": { top: 0 },
-                }}
-                //   inputProps={{ "aria-label": "Without label" }}
+                variant="contained"
+                disabled={newUserDetails.isGeneratedButtonDisabled}
+                onClick={generatePassword}
+                style={{ marginTop: "10px" }}
               >
-                <MenuItem disabled value="">
-                  UserRole
-                </MenuItem>
-                <MenuItem value="1">Associate</MenuItem>
-                <MenuItem value="2">Reviewer</MenuItem>
-                <MenuItem value="3">Manager</MenuItem>
-              </Select>
+                Generate Password
+              </Button>
               <Typography
-                variant="body2"
+                variant="caption"
+                color={
+                  newUserDetails.error.errorGeneratebutton ? "red" : "black"
+                }
+              >
+                Please generate password
+              </Typography>
+              {allRole && (
+                <Select
+                  margin="dense"
+                  displayEmpty
+                  id="role"
+                  value={newUserDetails.role}
+                  error={newUserDetails.error.errorRole}
+                  size="small"
+                  fullWidth
+                  onChange={handleChange("role", "errorRole")}
+                  style={{ marginTop: "1.5rem" }}
+                  sx={{
+                    "& legend": { display: "none" },
+                    "& fieldset": { top: 0 },
+                  }}
+                  //   inputProps={{ "aria-label": "Without label" }}
+                >
+                  <MenuItem disabled value="">
+                    UserRole
+                  </MenuItem>
+                  {allRole.map((data) => {
+                    return (
+                      <MenuItem value={data.id} key={data.id}>
+                        {data.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              )}
+              <Typography
+                variant="caption"
                 color={newUserDetails.error.errorRole ? "red" : "black"}
               >
                 Please select the role for the user
               </Typography>
-              {newUserDetails.role === "1" && (
-                <TextField
-                  margin="dense"
-                  label="Reviewer Name"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  value={newUserDetails.reviewerName}
-                  error={newUserDetails.error.errorReviewerName}
-                  onChange={handleChange("reviewerName", "errorReviewerName")}
-                />
-              )}
-              {(newUserDetails.role === "1" || newUserDetails.role === "2") && (
-                <TextField
-                  margin="dense"
-                  label="Manager Name"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  value={newUserDetails.managerName}
-                  error={newUserDetails.error.errorManagerName}
-                  onChange={handleChange("managerName", "errorManagerName")}
-                />
-              )}
+              {newUserDetails.role === authConstant.assosiateRoleId &&
+                allReviewer && (
+                  <>
+                    <Select
+                      margin="dense"
+                      displayEmpty
+                      id="reviewer"
+                      value={newUserDetails.reviewerName}
+                      error={newUserDetails.error.errorReviewerName}
+                      size="small"
+                      fullWidth
+                      onChange={handleChange(
+                        "reviewerName",
+                        "errorReviewerName"
+                      )}
+                      style={{ marginTop: "1.5rem" }}
+                      sx={{
+                        "& legend": { display: "none" },
+                        "& fieldset": { top: 0 },
+                      }}
+                      //   inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem disabled value="">
+                        Reviewer Name
+                      </MenuItem>
+                      {allReviewer.map((data) => {
+                        return (
+                          <MenuItem value={data.empId} key={data.empId}>
+                            {data.reviewerName}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Typography
+                      variant="caption"
+                      color={
+                        newUserDetails.error.errorReviewerName ? "red" : "black"
+                      }
+                    >
+                      Please select the Reviewer Name
+                    </Typography>
+                  </>
+                )}
+              {(newUserDetails.role === authConstant.assosiateRoleId ||
+                newUserDetails.role === authConstant.reviewerRoleId) &&
+                allManager && (
+                  <>
+                    <Select
+                      margin="dense"
+                      displayEmpty
+                      id="manager"
+                      value={newUserDetails.managerName}
+                      error={newUserDetails.error.errorManagerName}
+                      size="small"
+                      fullWidth
+                      onChange={handleChange("managerName", "errorManagerName")}
+                      style={{ marginTop: "1.5rem" }}
+                      sx={{
+                        "& legend": { display: "none" },
+                        "& fieldset": { top: 0 },
+                      }}
+                      //   inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem disabled value="">
+                        Manager Name
+                      </MenuItem>
+                      {allManager.map((data) => {
+                        return (
+                          <MenuItem value={data.empId} key={data.empId}>
+                            {data.managerName}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Typography
+                      variant="caption"
+                      color={
+                        newUserDetails.error.errorManagerName ? "red" : "black"
+                      }
+                    >
+                      Please select the Manager Name
+                    </Typography>
+                  </>
+                )}
             </CardContent>
             <CardActions>
-              <Button fullWidth variant="contained" onClick={handleNewUser}>
+              <Button
+                fullWidth
+                variant="contained"
+                disabled={newUserDetails.isLoginButonDisabled}
+                onClick={handleNewUser}
+              >
                 Login
               </Button>
             </CardActions>

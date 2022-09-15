@@ -58,7 +58,7 @@ export default function Onboarding() {
             </li>
           </>
         )}
-        {user && user.role === "ASSOCIATE" && (
+        {user && user.role === "ROLE_ASSOCIATE" && (
           <>
             <li className={isTabActive("On-boarding Checklist")}>
               <Link to="/onBoardingCheckList">

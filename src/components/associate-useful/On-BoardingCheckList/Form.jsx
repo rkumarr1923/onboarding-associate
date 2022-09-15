@@ -14,8 +14,11 @@ import {
   MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { token } from "../../../store";
 
 const Form = (props) => {
+  const userToken = useSelector(token);
   const sendInfo = props.sendInfo;
   const data = {
     employeeName: sendInfo.employeeName ? sendInfo.employeeName : "",
@@ -57,7 +60,8 @@ const Form = (props) => {
     ) {
       axios
         .get(
-          "http://localhost:9094/onboarding_checklist/get-all-onboarding-checklist"
+          "http://localhost:9094/onboarding_checklist/get-all-onboarding-checklist",
+          { headers: { Authorization: "Bearer " + userToken } }
         )
         .then((result) => {
           props.onInfoSubmit({ info, result: result.data });
