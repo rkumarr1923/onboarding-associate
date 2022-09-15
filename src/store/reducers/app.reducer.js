@@ -9,6 +9,8 @@ const newUserInitState = {
   userName: "",
   password: "",
   showPassword: false,
+  isLoginButonDisabled: false,
+  isGeneratedButtonDisabled: false,
   error: {
     errorEmail: false,
     errorEmployeeId: false,
@@ -17,6 +19,7 @@ const newUserInitState = {
     errorRole: false,
     errorUserName: false,
     errorPassword: false,
+    errorGeneratebutton: false,
   },
 };
 
@@ -29,6 +32,9 @@ const slice = createSlice({
     userDetails: null,
     comments: [],
     createNewUserDetailsData: newUserInitState,
+    managers: [],
+    reviewers: [],
+    roles: [],
   },
   reducers: {
     increment: (state) => {
@@ -58,6 +64,15 @@ const slice = createSlice({
     resetCreateNewUserDetails: (state) => {
       state.createNewUserDetailsData = newUserInitState;
     },
+    roles: (state, action) => {
+      state.roles = action.payload.roles;
+    },
+    managers: (state, action) => {
+      state.managers = action.payload.managers;
+    },
+    reviewers: (state, action) => {
+      state.reviewers = action.payload.reviewers;
+    },
   },
 });
 
@@ -71,10 +86,16 @@ export const {
   comments,
   createNewUserDetails,
   resetCreateNewUserDetails,
+  managers,
+  reviewers,
+  roles,
 } = slice.actions;
 export const selectedTab = (state) => state.activeTab;
 export const userDetails = (state) => state.userDetails;
 export const token = (state) => state.token;
 export const userComments = (state) => state.comments;
 export const createNewUser = (state) => state.createNewUserDetailsData;
+export const allRoles = (state) => state.roles;
+export const allManagers = (state) => state.managers;
+export const allReviewers = (state) => state.reviewers;
 export const { reducer } = slice;
