@@ -125,46 +125,48 @@ class AddNewAssociate extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    let associateInfo = this.state;
     let associatepostReq = {
       associate: {
-        associateName: 'Monte',
-        ibmId: '00RHV8703',
+        associateName: associateInfo.firstName + ' ' + associateInfo.lastName,
+        ibmId: associateInfo.ibmId,
         projectId: 3453,
-        engagementName: 'Test',
-        majorFunction: 'Test',
-        band: 'Test',
-        primaryContact: 'Test',
-        emailIbm: 'Test',
-        emailPru: 'Test',
-        xid: 'X3',
-        prudentialManager: 'Test',
-        endDate: '2022-05-14',
-        location: 'Test',
-        city: 'Test',
-        billType: 'Test',
-        billCode: 'Test',
-        role: 'Test',
-        asOnDate: null,
-        pruExpDate: null,
-        itExpDate: null,
-        ibmDate: null,
-        experienceWithPru: 'Test',
-        careerExperience: 'Test',
-        experienceWithIbm: 'Test',
-        skillset: 'Test',
-        resourceCriticality: 'Test',
-        atImmigrationVisaRisks: 'Test',
-        backupSuccessorResource: 1,
-        keyContingencyGroup: 'Test',
-        additionalContingency: 'Test',
-        visaType: 'Test',
-        workPermitValidUntil: 'Test',
-        extensionUpdates: null,
-        visaMaxOutDate: null,
-        timeLeftInUs: 'Test',
-        h1bNominations: 'Test',
-        riskMitigationComments: 'Test',
-        planInCaseOfExtensionAmendmentRejection: 'Test',
+        engagementName: associateInfo.engagementName,
+        majorFunction: associateInfo.majorFunction,
+        band: associateInfo.band,
+        primaryContact: associateInfo.primaryContact,
+        emailIbm: associateInfo.ibmEmail,
+        emailPru: associateInfo.emailPru,
+        xid: associateInfo.xid,
+        prudentialManager: associateInfo.prudentialManager,
+        endDate: '2022-05-14', //associateInfo.endDate,
+        location: associateInfo.location,
+        city: associateInfo.city,
+        billType: associateInfo.billType,
+        billCode: associateInfo.billCode,
+        role: associateInfo.role,
+        asOnDate: '2022-05-14', //associateInfo.asOnDate,
+        pruExpDate: '2022-05-14', //associateInfo.pruExpDate,
+        itExpDate: '2022-05-14', //associateInfo.itExpDate,
+        ibmDate: '2022-05-14', // associateInfo.ibmDate,
+        experienceWithPru: associateInfo.experienceWithPru,
+        careerExperience: associateInfo.careerExperience,
+        experienceWithIbm: associateInfo.experienceIBM,
+        skillset: associateInfo.skillset,
+        resourceCriticality: associateInfo.resourceCriticality,
+        atImmigrationVisaRisks: associateInfo.atImmigrationVisaRisks,
+        backupSuccessorResource: associateInfo.backupSuccessorResource,
+        keyContingencyGroup: associateInfo.keyContingencyGroup,
+        additionalContingency: associateInfo.additionalContingency,
+        visaType: associateInfo.visaType,
+        workPermitValidUntil: associateInfo.workPermitValidUntil,
+        extensionUpdates: associateInfo.extensionUpdates,
+        visaMaxOutDate: '2022-05-14', // associateInfo.visaMaxOutDate,
+        timeLeftInUs: associateInfo.timeLeftInUs,
+        h1bNominations: associateInfo.h1bNominations,
+        riskMitigationComments: associateInfo.riskMitigationComments,
+        planInCaseOfExtensionAmendmentRejection:
+          associateInfo.planInCaseOfExtensionAmendmentRejection,
       },
       associateSkill: [
         {
@@ -371,6 +373,7 @@ class AddNewAssociate extends Component {
             <FormInputField
               md="4"
               controlId="city"
+              isRequired={true}
               label="City"
               fieldName="city"
               value={this.state.city}
@@ -431,7 +434,7 @@ class AddNewAssociate extends Component {
               controlId="experienceIT"
               label="Total Career Experience"
               fieldName="experienceIT"
-              value={this.state.experienceIT}
+              value={this.state.totalITExperience}
               handleChange={this.handleChange}
               placeHolder="Career experience"
               validationErrors={this.state.validationErrors}
@@ -441,7 +444,7 @@ class AddNewAssociate extends Component {
               controlId="experienceWithClient"
               label="Total Experience With Client"
               fieldName="experienceWithClient"
-              value={this.state.experienceClient}
+              value={this.state.experienceWithClient}
               handleChange={this.handleChange}
               placeHolder="Experience with client"
               validationErrors={this.state.validationErrors}

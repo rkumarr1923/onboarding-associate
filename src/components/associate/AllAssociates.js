@@ -30,7 +30,7 @@ const AllAssociates = () => {
         role: associate.role,
         primaryContact: associate.primaryContact,
         itExpDate: '1', // new Date(associate.itExpDate)
-        status: 'Yet to be started', //associate.onBoardingAssociateStatus,
+        status: associate.activeInactive, //associate.onBoardingAssociateStatus,
       };
     });
     console.log('formatted data ', formattedData);
@@ -40,7 +40,7 @@ const AllAssociates = () => {
   useEffect(() => {
     fetchData();
     console.log('gridApi', gridApi);
-  });
+  }, []);
 
   const resetAppliedFilters = () => {
     gridApi.setFilterModel(null);
