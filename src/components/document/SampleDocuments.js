@@ -144,7 +144,7 @@ const SampleDocuments = () => {
 
     return (
         <div className="upload-doc-container">
-          {user.role==='MANAGER'  && ( 
+          {user.role==='ROLE_ONBOARDING_MANAGER'  && ( 
             <div>
               <h2>Upload Documents</h2>
               <div className="input-fieldbox">
