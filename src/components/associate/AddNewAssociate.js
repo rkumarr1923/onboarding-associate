@@ -57,13 +57,16 @@ class AddNewAssociate extends Component {
   validators = {
     firstName: (str) => (str === '' ? 'Firstname is required' : ''),
     lastName: (str) => (str === '' ? 'Lastname is required' : ''),
-    ibmId: (str) => (str === '' ? 'IBM Id is required' : ''),
+    ibmId: (str) => (str === '' ? 'IBM id is required' : ''),
     ibmEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid email address' : ''),
     location: (str) => (str === '' ? 'Location is required' : ''),
     role: (str) => (str === '' ? 'Role is required' : ''),
     engagementName: () => '',
-    primaryContact: () => '',
-    projectId: () => '',
+    primaryContact: (str) =>
+      str === '' || !/^[0-9]*$/.test(str)
+        ? 'Invalid primary contact, allow number only'
+        : '',
+    projectId: (str) => (!/^[0-9]*$/.test(str) ? 'Invalid project id' : ''),
     majorFunction: () => '',
     band: () => '',
     clientManager: () => '',
@@ -77,19 +80,25 @@ class AddNewAssociate extends Component {
     experienceIT: () => '',
     experienceClient: () => '',
     experienceIBM: () => '',
-    experienceWithClient: () => '',
-    totalExperienceWithIBM: () => '',
-    totalITExperience: () => '',
+    experienceWithClient: (str) =>
+      !/^[0-9]*$/.test(str) ? 'Allow number only' : '',
+    totalExperienceWithIBM: (str) =>
+      !/^[0-9]*$/.test(str) ? 'Allow number only' : '',
+    totalITExperience: (str) =>
+      !/^[0-9]*$/.test(str) ? 'Allow number only' : '',
     resourceCriticality: () => '',
     atImmigrationVisaRisks: () => '',
-    backupSuccessorResource: () => '',
+    backupSuccessorResource: (str) =>
+      !/^[0-9]*$/.test(str)
+        ? 'Invalid backup successor resource, allow number only'
+        : '',
     keyContingencyGroup: () => '',
     additionalContingency: () => '',
     visaType: () => '',
     workPermitValidUntil: () => '',
     extensionUpdates: () => '',
     visaMaxOutDate: () => '',
-    timeLeftInUs: () => '',
+    timeLeftInUs: (str) => (!/^[0-9]*$/.test(str) ? 'Allow number only' : ''),
     visaNominations: () => '',
     riskMitigationComments: () => '',
     planInCaseOfExtensionAmendmentRejection: () => '',
@@ -139,16 +148,16 @@ class AddNewAssociate extends Component {
         emailPru: associateInfo.emailPru,
         xid: associateInfo.xid,
         prudentialManager: associateInfo.prudentialManager,
-        endDate: '2022-05-14', //associateInfo.endDate,
+        endDate: associateInfo.endDate,
         location: associateInfo.location,
         city: associateInfo.city,
         billType: associateInfo.billType,
         billCode: associateInfo.billCode,
         role: associateInfo.role,
-        asOnDate: '2022-05-14', //associateInfo.asOnDate,
-        pruExpDate: '2022-05-14', //associateInfo.pruExpDate,
-        itExpDate: '2022-05-14', //associateInfo.itExpDate,
-        ibmDate: '2022-05-14', // associateInfo.ibmDate,
+        asOnDate: associateInfo.asOnDate,
+        pruExpDate: associateInfo.pruExpDate,
+        itExpDate: associateInfo.itExpDate,
+        ibmDate: associateInfo.ibmDate,
         experienceWithPru: associateInfo.experienceWithPru,
         careerExperience: associateInfo.careerExperience,
         experienceWithIbm: associateInfo.experienceIBM,
@@ -161,7 +170,7 @@ class AddNewAssociate extends Component {
         visaType: associateInfo.visaType,
         workPermitValidUntil: associateInfo.workPermitValidUntil,
         extensionUpdates: associateInfo.extensionUpdates,
-        visaMaxOutDate: '2022-05-14', // associateInfo.visaMaxOutDate,
+        visaMaxOutDate: associateInfo.visaMaxOutDate,
         timeLeftInUs: associateInfo.timeLeftInUs,
         h1bNominations: associateInfo.h1bNominations,
         riskMitigationComments: associateInfo.riskMitigationComments,
@@ -286,6 +295,7 @@ class AddNewAssociate extends Component {
             />
             <FormInputField
               md="4"
+              isRequired={true}
               controlId="primaryContact"
               label="Primary Contact"
               fieldName="primaryContact"
@@ -431,9 +441,9 @@ class AddNewAssociate extends Component {
             />
             <FormInputField
               md="4"
-              controlId="experienceIT"
+              controlId="totalITExperience"
               label="Total Career Experience"
-              fieldName="experienceIT"
+              fieldName="totalITExperience"
               value={this.state.totalITExperience}
               handleChange={this.handleChange}
               placeHolder="Career experience"

@@ -18,21 +18,13 @@ const FormDatePickerField = (props) => {
       console.log(new Date(value));
       if (moment(value, 'MM/DD/YYYY', true).isValid()) {
         setStartDate(value);
-        onDateChange(controlId, value);
+        onDateChange(controlId, moment(value).format('YYYY-MM-DD'));
         setValid(true);
-        console.log(
-          new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          }).format(value)
-        );
+        console.log(moment(value).format('YYYY-MM-DD'));
       } else {
         setValid(false);
         setStartDate(null);
       }
-      let date = moment(value);
-      console.log(' date ', date);
     } else {
       console.log(value);
     }
