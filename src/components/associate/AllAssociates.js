@@ -2,35 +2,29 @@ import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import Button from '@mui/material/Button';
 import DTPicker from '../associate/DatePicker/DTPicker';
-import { allAssociates } from '../associate/DatePicker/all-associates-data';
 import { useState, useEffect } from 'react';
-// import useAssociate from '../../services/hooks/useFetchAssociate';
 import axios from 'axios';
 import '../styles/associate.css';
 
 const AllAssociates = () => {
   const [gridApi, setGridApi] = useState([]);
-  const [tableValues] = useState(allAssociates);
   const [formattedData, setFormattedData] = useState([]);
-  // const { data = [] } = useAssociate();
 
   const fetchData = async () => {
     const response = await axios.get(
       'http://localhost:9092/pru-associate/get-all-associates'
     );
     const { data, error, loading } = response;
-    console.log('response from api', data);
-    // const formattedData = tableValues.map((associate) => {
     let formattedData = data.map((associate) => {
       return {
         associateName: associate.associateName,
         ibmId: associate.ibmId,
-        emailIBM: associate.emailIBM,
+        emailIBM: associate.emailIbm,
         location: associate.location,
         role: associate.role,
         primaryContact: associate.primaryContact,
-        itExpDate: '1', // new Date(associate.itExpDate)
-        status: associate.activeInactive, //associate.onBoardingAssociateStatus,
+        itExpDate: associate.itExpDate, // new Date(associate.itExpDate)
+        status: associate.activeInactive,
       };
     });
     console.log('formatted data ', formattedData);
