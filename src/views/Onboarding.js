@@ -58,6 +58,22 @@ export default function Onboarding() {
                   />
                 </Link>
               </li>
+              <li className={isTabActive("Sample Documents")}>
+              <Link to="/sampleDocuments">
+                <Button
+                  label="Sample Documents"
+                  clickHandler={() => tabClicked("Sample Documents")}
+                />
+              </Link>
+            </li>
+            <li className={isTabActive("Upload Documents")}>
+              <Link to="/uploadDocuments">
+                <Button
+                  label="Upload Documents"
+                  clickHandler={() => tabClicked("Upload Documents")}
+                />
+              </Link>
+            </li>
             </>
           )}
         {user && user.role === "ROLE_ASSOCIATE" && (
