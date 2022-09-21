@@ -14,8 +14,11 @@ import {
   MenuItem,
 } from "@mui/material";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { token } from "../../../store";
 
 const Form = (props) => {
+  const userToken = useSelector(token);
   const sendInfo = props.sendInfo;
   const data = {
     employeeName: sendInfo.employeeName ? sendInfo.employeeName : "",
@@ -57,7 +60,8 @@ const Form = (props) => {
     ) {
       axios
         .get(
-          "http://localhost:9094/onboarding_checklist/get-all-onboarding-checklist"
+          "http://localhost:9094/onboarding_checklist/get-all-onboarding-checklist",
+          { headers: { Authorization: "Bearer " + userToken } }
         )
         .then((result) => {
           props.onInfoSubmit({ info, result: result.data });
@@ -100,6 +104,10 @@ const Form = (props) => {
               size="small"
               onChange={(e) => handleChange(e, "employeeName")}
               error={errorEmpName}
+              sx={{
+                "& legend": { display: "none" },
+                "& fieldset": { top: 0 },
+              }}
             />
           </Grid>
           <Grid item xs={8} md={6} lg={3}>
@@ -121,6 +129,10 @@ const Form = (props) => {
               size="small"
               onChange={(e) => handleChange(e, "coordinatorName")}
               error={errorCoOrdinatorName}
+              sx={{
+                "& legend": { display: "none" },
+                "& fieldset": { top: 0 },
+              }}
             />
           </Grid>
           <Grid item xs={8} md={4} lg={2}>
@@ -143,6 +155,10 @@ const Form = (props) => {
                 size="small"
                 onChange={(e) => handleChange(e, "isIBMNewHire")}
                 error={errorIsNewHire}
+                sx={{
+                  "& legend": { display: "none" },
+                  "& fieldset": { top: 0 },
+                }}
                 //   inputProps={{ "aria-label": "Without label" }}
               >
                 <MenuItem disabled value="">
@@ -166,7 +182,16 @@ const Form = (props) => {
                 inputFormat="MM/dd/yyyy"
                 value={info.onBoardingDate}
                 onChange={(e) => handleChange(e, "onBoardingDate")}
-                renderInput={(params) => <TextField size="small" {...params} />}
+                renderInput={(params) => (
+                  <TextField
+                    size="small"
+                    sx={{
+                      "& legend": { display: "none" },
+                      "& fieldset": { top: 0 },
+                    }}
+                    {...params}
+                  />
+                )}
                 minDate={
                   new Date(new Date().setFullYear(new Date().getFullYear() - 1))
                 }
@@ -188,7 +213,16 @@ const Form = (props) => {
                 inputFormat="MM/dd/yyyy"
                 value={info.onBoardingCompletionDate}
                 onChange={(e) => handleChange(e, "onBoardingCompletionDate")}
-                renderInput={(params) => <TextField size="small" {...params} />}
+                renderInput={(params) => (
+                  <TextField
+                    size="small"
+                    sx={{
+                      "& legend": { display: "none" },
+                      "& fieldset": { top: 0 },
+                    }}
+                    {...params}
+                  />
+                )}
                 minDate={
                   new Date(new Date().setFullYear(new Date().getFullYear() - 1))
                 }

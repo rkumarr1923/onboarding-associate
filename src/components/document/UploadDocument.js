@@ -141,6 +141,7 @@ const UploadDocument = () => {
   };
 
   const fetchDocumentTypes = () => {
+    const role = user.role;
     axios
         .get('http://localhost:9003/document')
         .then((res) => {
@@ -274,7 +275,7 @@ const UploadDocument = () => {
 
       <Dialog
         open={openUpdate}
-        onClose={handleClose}
+        onClose={updateDialogClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >

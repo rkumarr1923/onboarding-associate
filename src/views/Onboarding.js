@@ -14,51 +14,69 @@ export default function Onboarding() {
   const loginFormRender = () => {
     return (
       <ul className="nav-links">
-        {user && (user.role === "REVIEWER" || user.role === "MANAGER") && (
-          <>
-            <li className={isTabActive("New User")}>
-              <Link to="/auth/register">
+        {user &&
+          (user.role === "ROLE_ONBOARDING_REVIEWER" ||
+            user.role === "ROLE_ONBOARDING_MANAGER") && (
+            <>
+              <li className={isTabActive("New User")}>
+                <Link to="/auth/register">
+                  <Button
+                    label="New User"
+                    clickHandler={() => tabClicked("New User")}
+                  />
+                </Link>
+              </li>
+              <li className={isTabActive("All Associates")}>
+                <Link to="/allAssociates">
+                  <Button
+                    label="All Associates"
+                    clickHandler={() => tabClicked("All Associates")}
+                  />
+                </Link>
+              </li>
+              <li className={isTabActive("Taining Links")}>
+                <Link to="/trainingLinks">
+                  <Button
+                    label="Taining Links"
+                    clickHandler={() => tabClicked("Taining Links")}
+                  />
+                </Link>
+              </li>
+              <li className={isTabActive("Comment")}>
+                <Link to="/comment">
+                  <Button
+                    label="Comment"
+                    clickHandler={() => tabClicked("Comment")}
+                  />
+                </Link>
+              </li>
+              <li className={isTabActive("Recordings")}>
+                <Link to="/recording">
+                  <Button
+                    label="Recordings"
+                    clickHandler={() => tabClicked("Recordings")}
+                  />
+                </Link>
+              </li>
+              <li className={isTabActive("Sample Documents")}>
+              <Link to="/sampleDocuments">
                 <Button
-                  label="New User"
-                  clickHandler={() => tabClicked("New User")}
+                  label="Sample Documents"
+                  clickHandler={() => tabClicked("Sample Documents")}
                 />
               </Link>
             </li>
-            <li className={isTabActive("All Associates")}>
-              <Link to="/allAssociates">
+            <li className={isTabActive("Upload Documents")}>
+              <Link to="/uploadDocuments">
                 <Button
-                  label="All Associates"
-                  clickHandler={() => tabClicked("All Associates")}
+                  label="Upload Documents"
+                  clickHandler={() => tabClicked("Upload Documents")}
                 />
               </Link>
             </li>
-            <li className={isTabActive("Taining Links")}>
-              <Link to="/trainingLinks">
-                <Button
-                  label="Taining Links"
-                  clickHandler={() => tabClicked("Taining Links")}
-                />
-              </Link>
-            </li>
-            <li className={isTabActive("Comment")}>
-              <Link to="/comment">
-                <Button
-                  label="Comment"
-                  clickHandler={() => tabClicked("Comment")}
-                />
-              </Link>
-            </li>
-            <li className={isTabActive("Recordings")}>
-              <Link to="/recording">
-                <Button
-                  label="Recordings"
-                  clickHandler={() => tabClicked("Recordings")}
-                />
-              </Link>
-            </li>
-          </>
-        )}
-        {user && user.role === "ASSOCIATE" && (
+            </>
+          )}
+        {user && user.role === "ROLE_ASSOCIATE" && (
           <>
             <li className={isTabActive("On-boarding Checklist")}>
               <Link to="/onBoardingCheckList">
