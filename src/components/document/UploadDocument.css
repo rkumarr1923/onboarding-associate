@@ -1,5 +1,7 @@
 .upload-doc-container {
     margin: 15px;
+    max-height: 82%;
+    overflow: auto;
 }
 
 .upload-doc-wrapper {
