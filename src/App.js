@@ -17,6 +17,7 @@ import NewUserComponent from "./components/auth/NewUserComponent";
 import Associates from './components/associate/Associates';
 import "./styles/app.css";
 import SampleDocuments from './components/document/SampleDocuments';
+import BackgroundCheck from './components/BGCheck/BackGroundCheck';
 
 function App() {
   const user = useSelector(userDetails);
@@ -37,6 +38,7 @@ function App() {
                 <Route path="recording" element={<Recording />} />
                 <Route path="comment" element={<CommentComponent />} />
                 <Route path="auth/register" element={<NewUserComponent />} />
+                <Route path="bgCheck" element={<BackgroundCheck/>} />
               </>
             )}
             <Route path="auth/login" element={<LoginComponent />} />
