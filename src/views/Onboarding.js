@@ -74,6 +74,11 @@ export default function Onboarding() {
                 />
               </Link>
             </li>
+            <li className={isTabActive('BackGround Check')}>
+              <Link to="/bgCheck">
+                <Button label="BackGround Check" clickHandler={() => tabClicked('BackGround Check')} />
+              </Link>
+            </li>
             </>
           )}
         {user && user.role === "ROLE_ASSOCIATE" && (
