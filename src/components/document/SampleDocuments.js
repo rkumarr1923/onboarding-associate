@@ -34,8 +34,8 @@ const SampleDocuments = () => {
     const [uploadStatus, setUploadStatus] = useState(false);
     const [docTobeUpdate, setDocTobeUpdate] = useState({});
     const [openUpdate, setUpdateDialogStatus] = useState(false);
-  
-
+    const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
+    const [open, setDialogStatus] = useState(false);
   
     useEffect(() => {
         fetchDocuments();
@@ -101,10 +101,16 @@ const SampleDocuments = () => {
 
     const callUploadAPI = () => {
       var input = document.getElementById("myfile");
+      const jsonData ={
+        "document_type": optionselect,
+        "employeeId": user.empId,
+        "role": user.role
+      };
       var formdata = new FormData();
       formdata.append("file", input.files[0], input.files[0].name);
-      formdata.append("document_type", optionselect);
-      formdata.append("employeeId", user.empId);
+      formdata.append("data", JSON.stringify(jsonData));
+      // formdata.append("document_type", optionselect);
+      // formdata.append("employeeId", user.empId);
       var requestOptions = {
         method: "POST",
         body: formdata,
@@ -120,7 +126,6 @@ const SampleDocuments = () => {
           updateDialogClose();
           setSnakBarOpen(true);
           setUploadStatus(true);
-          //document.getElementById("myfile").value = "";
           fetchDocuments();
           resetFields();
           //console.log(result);
@@ -141,6 +146,48 @@ const SampleDocuments = () => {
       setOptionselect('1');
       setInputfile(false);
     }
+
+    const download = (id, name) => {
+      axios
+        .get(`http://localhost:9003/files/${id}`, { responseType: "blob" })
+        .then((result) => {
+          //console.log(result);
+          if (result) {
+            const file = new Blob([result.data], { type: "application/pdf" });
+            const fileURL = URL.createObjectURL(file);
+            var a = document.createElement("a");
+            a.href = fileURL;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+          }
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    };
+
+    const openDialog = (doc) => {
+      setDocIdTobeDeleted(doc);
+      setDialogStatus(true);
+    };
+
+    const handleClose = () => {
+      setDialogStatus(false);
+    };
+
+    const deleteDocs = (id) => {
+      axios
+        .delete(`http://localhost:9003/files/delete/${id}`)
+        .then((result) => {
+          setDialogStatus(false);
+          //console.log(result);
+          fetchDocuments();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     return (
         <div className="upload-doc-container">
@@ -186,7 +233,7 @@ const SampleDocuments = () => {
                         <TableCell>S.No.</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Document Type</TableCell>
-                        <TableCell>Delete</TableCell>
+                        {user.role==='ROLE_ONBOARDING_MANAGER' && <TableCell>Delete</TableCell> }
                         <TableCell>Download</TableCell>
                       </TableRow>
                     </TableHead>
@@ -205,18 +252,15 @@ const SampleDocuments = () => {
                           <TableCell component="th" scope="row">
                             {doc.documentType.name}
                           </TableCell>
-                          <TableCell>
-                            {/* <Button color="secondary" onClick={() => openDialog(doc)}>
+                          {user.role==='ROLE_ONBOARDING_MANAGER' && <TableCell>
+                            <Button color="secondary" onClick={() => openDialog(doc)}>
                               Delete
-                            </Button> */}
-                          </TableCell>
+                            </Button>
+                          </TableCell> }
                           <TableCell>
-                            {/* <Button
-                              color="primary"
-                              onClick={() => download(doc.id, doc.name)}
-                            >
+                            <Button color="primary" onClick={() => download(doc.id, doc.name)} >
                               Download
-                            </Button> */}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -227,6 +271,27 @@ const SampleDocuments = () => {
             ) : (
               <Typography>No Records Exist</Typography>
             )}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {`Are you sure you want to delete the document ${docTobeDeleted.name}?`}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Once deleted canot be reverted.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={() => deleteDocs(docTobeDeleted.id)} autoFocus>
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Dialog
               open={openUpdate}
               onClose={updateDialogClose}
