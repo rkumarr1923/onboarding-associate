@@ -215,12 +215,15 @@ const SampleDocuments = () => {
             </div>
             ) }
           <div className="button-content">
-            <div><h3>Sample Documents:</h3></div>
+            <div className="content-left"><h3>Sample Documents:</h3></div>
             {documents.length > 0  && ( 
               <div className="content-right">
-              <h3>
+                <div className="download-icon">
+                <a href="http://localhost:9003/files/sampledoc/zip" className="fa fa-download" title="Download All"></a>
+                </div>
+              {/* <h3>
                 <a href="http://localhost:9003/files/sampledoc/zip" className="btn btn-primary">Download All</a>
-              </h3>
+              </h3> */}
             </div>) }
           </div>
           <div>

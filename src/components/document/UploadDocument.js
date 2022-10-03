@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from 'react-router-dom'
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -15,6 +16,8 @@ import { useSelector } from "react-redux";
 import DocumentTable from "./DocumentTable";
 
 const UploadDocument = () => {
+  const location = useLocation()
+  const { forAssociate } = location.state
   const [documents, setDocuments] = useState([]);
   const [openSnakBar, setSnakBarOpen] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);
@@ -26,10 +29,11 @@ const UploadDocument = () => {
   const [openUpdate, setUpdateDialogStatus] = useState(false);
   const user = useSelector(userDetails);
   const [revieweddocuments, setReviewedDocuments] = useState([]);
-  const [associateObj, setAssociate] = useState({
-    name: 'astik', role: 'ROLE_ASSOCIATE', reviewer: {empId: 'reviewer1', reviewerName: 'Arindam'},
-    manager: {empId: 'manager1', managerName: 'Arindam'}, empId: '000U2M747'
-  });
+  // const [associateObj, setAssociate] = useState({
+  //   name: 'astik', role: 'ROLE_ASSOCIATE', reviewer: {empId: 'reviewer1', reviewerName: 'Arindam'},
+  //   manager: {empId: 'manager1', managerName: 'Arindam'}, empId: '000U2M747'
+  // });
+
   const childRefReviewed = useRef(null);
   const childRefNonReviewed = useRef(null);
   
@@ -43,7 +47,7 @@ const UploadDocument = () => {
     
     const jsonData ={
       "document_type": optionselect,
-      "employeeId": (user.role==="ROLE_ASSOCIATE") ? user.empId : associateObj.empId,
+      "employeeId": (user.role==="ROLE_ASSOCIATE") ? user.empId : forAssociate.empId,
       "role": user.role,
       "reviewerId": (user.role==="ROLE_ASSOCIATE") ? "" : user.empId
     };
@@ -165,10 +169,10 @@ const UploadDocument = () => {
             </Button>
         </div>
       </div>
-      <DocumentTable onSyncDocuments={syncDocuments} ref={childRefNonReviewed} type='NOTREVIEWED' title='Documents:' fetchDocumentURL='http://localhost:9003/files/employee' />
+      <DocumentTable forAssociate={forAssociate} onSyncDocuments={syncDocuments} ref={childRefNonReviewed} type='NOTREVIEWED' title='Documents:' fetchDocumentURL='http://localhost:9003/files/employee' />
 
       {user.role!=='ROLE_ASSOCIATE' && 
-        <DocumentTable options={options} onSyncDocuments={syncDocuments} ref={childRefReviewed} type='REVIEWED' title='Reviewed Documents:' fetchDocumentURL='http://localhost:9003/files/reviewer' />
+        <DocumentTable forAssociate={forAssociate} options={options} onSyncDocuments={syncDocuments} ref={childRefReviewed} type='REVIEWED' title='Reviewed Documents:' fetchDocumentURL='http://localhost:9003/files/reviewer' />
       }
 
       <Dialog

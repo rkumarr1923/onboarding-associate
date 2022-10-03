@@ -67,7 +67,7 @@ export default function Onboarding() {
               </Link>
             </li>
             <li className={isTabActive("Upload Documents")}>
-              <Link to="/uploadDocuments">
+              <Link to="/uploadDocuments" state={{ forAssociate: {} }}>
                 <Button
                   label="Upload Documents"
                   clickHandler={() => tabClicked("Upload Documents")}
@@ -100,7 +100,7 @@ export default function Onboarding() {
               </Link>
             </li>
             <li className={isTabActive("Upload Documents")}>
-              <Link to="/uploadDocuments">
+              <Link to="/uploadDocuments" state={{ forAssociate: {} }}>
                 <Button
                   label="Upload Documents"
                   clickHandler={() => tabClicked("Upload Documents")}
