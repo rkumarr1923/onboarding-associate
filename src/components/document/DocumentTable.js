@@ -24,10 +24,10 @@ const DocumentTable = forwardRef((props, ref) => {
   const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
   const [isReviewed, setIsReviewed] = useState(false);
   const user = useSelector(userDetails);
-  const [associateObj, setAssociate] = useState({
-    name: 'astik', role: 'ROLE_ASSOCIATE', reviewer: {empId: 'reviewer1', reviewerName: 'Arindam'},
-    manager: {empId: 'manager1', managerName: 'Arindam'}, empId: '000U2M747'
-  });
+  // const [associateObj, setAssociate] = useState({
+  //   name: 'astik', role: 'ROLE_ASSOCIATE', reviewer: {empId: 'reviewer1', reviewerName: 'Arindam'},
+  //   manager: {empId: 'manager1', managerName: 'Arindam'}, empId: '000U2M747'
+  // });
 
   useImperativeHandle(ref, () => ({
     fetchChildDocuments() {
@@ -49,7 +49,7 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const fetchDocuments = () => {
-    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : associateObj.empId;
+    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : props.forAssociate.empId;
     const reviewerId = (user.role==="ROLE_ASSOCIATE") ? "" : user.empId;
     var url = props.fetchDocumentURL ? props.fetchDocumentURL : '';
     if(props.type==='REVIEWED'){
@@ -71,7 +71,7 @@ const DocumentTable = forwardRef((props, ref) => {
         if(props.type==='REVIEWED'){
           props.onSyncDocuments({
             revieweddocuments: res.data,
-            isReviewed: filteredObj.length>0 ? true : false          
+            isReviewed: filteredObj.length>0 ? true : false
           });
         } else {
           props.onSyncDocuments({documents: res.data});
@@ -117,7 +117,7 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const submitReviewed = () => {
-    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : associateObj.empId;
+    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : props.forAssociate.empId;
     const reviewerId = (user.role==="ROLE_ASSOCIATE") ? "" : user.empId;
     axios
       .put(`http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}`)
@@ -131,7 +131,7 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const downloadDocsForAsso = () => {
-    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : associateObj.empId;
+    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : props.forAssociate.empId;
     const reviewerId = (user.role==="ROLE_ASSOCIATE") ? "" : user.empId;
     const url = `http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}/zip`;
     axios
@@ -157,15 +157,23 @@ const DocumentTable = forwardRef((props, ref) => {
       {user && (
         <div>
           <div className="button-content">
-            <div><h3>{props.title}</h3></div>
+            <div className="content-left"><h3>{props.title}</h3></div>
             {documents.length > 0  && user.role!=='ROLE_ASSOCIATE' && props.type==='NOTREVIEWED' && ( 
               <div className="content-right">
-              <h3>
-                {/* <a href={downloadAllURL.url} className="btn btn-primary">Download All Link</a> */}
+                <div className="download-icon">
+                  <i
+                    title="Download All"
+                    className="fa fa-download"
+                    onClick={() => downloadDocsForAsso()}
+                    aria-hidden="true"
+                  ></i>
+                </div>
+              {/* <h3>
+                <a href={downloadAllURL.url} className="btn btn-primary">Download All Link</a>
                 <Button color="primary" variant="contained" component="span" onClick={() => downloadDocsForAsso()} >
                     Download All 
                 </Button>
-              </h3>
+              </h3> */}
             </div>) }
           </div>
           {documents.length > 0 ? (

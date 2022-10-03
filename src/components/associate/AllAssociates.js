@@ -5,6 +5,7 @@ import DTPicker from '../associate/DatePicker/DTPicker';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/associate.css';
+import { Link } from 'react-router-dom';
 
 const AllAssociates = () => {
   const [gridApi, setGridApi] = useState([]);
@@ -25,6 +26,7 @@ const AllAssociates = () => {
         primaryContact: associate.primaryContact,
         itExpDate: associate.itExpDate, // new Date(associate.itExpDate)
         status: associate.activeInactive,
+        actions: ''
       };
     });
     console.log('formatted data ', formattedData);
@@ -118,6 +120,20 @@ const AllAssociates = () => {
       cellClass: (params) => onBoardStatus(params.data.status),
       minWidth: 100,
       maxWidth: 175,
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      cellStyle: { textAlign: '' },
+      minWidth: 40,
+      maxWidth: 100,
+      cellRenderer: (params) => {
+        return <Link to="/uploadDocuments" state={{ forAssociate: { empId : params.data.ibmId} }}>
+          <div>
+            <i title="Upload Document" className="fa fa-upload" aria-hidden="true" ></i>
+          </div>
+        </Link>
+      }
     },
   ];
 
