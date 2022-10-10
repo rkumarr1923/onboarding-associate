@@ -10,6 +10,10 @@ import FormSkillInputField from '../core/FormSkillInputField';
 import '../styles/associate.css';
 
 class AddNewAssociate extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     firstName: '',
     lastName: '',
@@ -50,8 +54,8 @@ class AddNewAssociate extends Component {
     riskMitigationComments: '',
     planInCaseOfExtensionAmendmentRejection: '',
     h1bNominations: '',
-    skillset: '',
     validationErrors: {},
+    skillsSelected: [],
   };
 
   validators = {
@@ -103,7 +107,6 @@ class AddNewAssociate extends Component {
     riskMitigationComments: () => '',
     planInCaseOfExtensionAmendmentRejection: () => '',
     h1bNominations: () => '',
-    skillset: () => '',
   };
 
   validate = (name) => {
@@ -129,8 +132,20 @@ class AddNewAssociate extends Component {
   };
 
   setSkillSet = (value) => {
-    this.setState({ skill: value });
+    console.log('skill set value ', value);
+    this.setState({ skillsSelected: value });
   };
+
+  componentDidMount() {
+    fetch('http://localhost:9191/pru-skill/get-skill-master').then(
+      (response) => {
+        response.json().then((result) => {
+          let skills = result;
+          // this.setState({ [skills]: skills });
+        });
+      }
+    );
+  }
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -161,7 +176,6 @@ class AddNewAssociate extends Component {
         experienceWithPru: associateInfo.experienceWithPru,
         careerExperience: associateInfo.careerExperience,
         experienceWithIbm: associateInfo.experienceIBM,
-        skillset: associateInfo.skillset,
         resourceCriticality: associateInfo.resourceCriticality,
         atImmigrationVisaRisks: associateInfo.atImmigrationVisaRisks,
         backupSuccessorResource: associateInfo.backupSuccessorResource,
@@ -177,16 +191,7 @@ class AddNewAssociate extends Component {
         planInCaseOfExtensionAmendmentRejection:
           associateInfo.planInCaseOfExtensionAmendmentRejection,
       },
-      associateSkill: [
-        {
-          skillId: 1,
-          skillRating: '2',
-        },
-        {
-          skillId: 12,
-          skillRating: '5',
-        },
-      ],
+      associateSkill: associateInfo.skillsSelected,
     };
     const isValid = Object.keys(this.validators)
       .map(this.validate)
@@ -467,16 +472,6 @@ class AddNewAssociate extends Component {
               value={this.state.totalExperienceWithIBM}
               handleChange={this.handleChange}
               placeHolder="Total experience with IBM"
-              validationErrors={this.state.validationErrors}
-            />
-            <FormInputField
-              md="4"
-              controlId="skillset"
-              label="Skill Set"
-              fieldName="skillset"
-              value={this.state.skillset}
-              handleChange={this.handleChange}
-              placeHolder="Skill set"
               validationErrors={this.state.validationErrors}
             />
           </Row>
