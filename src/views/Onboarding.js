@@ -34,11 +34,11 @@ export default function Onboarding() {
                   />
                 </Link>
               </li>
-              <li className={isTabActive("Taining Links")}>
+              <li className={isTabActive("Training Links")}>
                 <Link to="/trainingLinks">
                   <Button
-                    label="Taining Links"
-                    clickHandler={() => tabClicked("Taining Links")}
+                    label="Training Links"
+                    clickHandler={() => tabClicked("Training Links")}
                   />
                 </Link>
               </li>

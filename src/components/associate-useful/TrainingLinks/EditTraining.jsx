@@ -8,16 +8,17 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import axios from "axios";
+import TrainingService from '../../../services/hooks/TrainingService';
 
 
 const EditTraining = (props) => {
-  const [training, setTraining] = useState(props.currentTraining)
-  useEffect(
-    () => {
-      setTraining(props.currentTraining)
-    },
-    [props]
-  )
+  const [training, setTraining] = useState(props.currentTraining);
+  const [trainings, setTrainings] = useState([]);
+  const BASE_URL = "http://localhost:9094/training";
+  useEffect(() => {
+    setTraining(props.currentTraining);
+  }, [props]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target
@@ -28,8 +29,26 @@ const EditTraining = (props) => {
   return (
     <form onSubmit={event => {
       event.preventDefault()
-      if (!training.trainingName || !training.link || !training.remarks) return
+      if (!training.trainingName || !training.link ) return;
 
+      var data = {
+        trainingName: training.trainingName,
+        link: training.link,
+        remarks: training.remarks
+      };
+      TrainingService.updateTraining(data,training.trainingId)
+      .then(response => {
+        setTraining({
+          trainingId: response.data.trainingId,
+          trainingName: response.data.trainingName,
+          link: response.data.link,
+          remarks: response.data.remarks
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
       props.updateTraining(training.trainingId, training)
     }}>
 

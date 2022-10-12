@@ -8,12 +8,31 @@ import {
     Button,
     Typography
 } from "@mui/material";
-import React, { Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import axios from "axios";
+import TrainingService from "../../../services/hooks/TrainingService";
+
 
 const tableHeader = ["Training", "Link", "Remarks"];
-const TrainingList = (props) => (
 
+
+const TrainingList = (props) => {
+    const [trainings, setTrainings] = useState([]);
+    const [currentTraining, setCurrentTraining] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(-1);
+    
+    useEffect(() => {
+        const BASE_URL = "http://localhost:9094/training";
+        
+        axios.get(BASE_URL + '/get-all-training')
+        .then((response) => {
+            setTrainings(response.data);
+            console.log("in Training list useEffect getall trainings ",response.data);
+        })
+        //retrieveTrainings();
+      },[]);
+   
+      return (
     <TableContainer style={{ margin: "0px" }}>
         <Table>
             <TableHead>
@@ -71,7 +90,8 @@ const TrainingList = (props) => (
 
         </Table>
     </TableContainer >
+      );
 
-)
+}
 
 export default TrainingList

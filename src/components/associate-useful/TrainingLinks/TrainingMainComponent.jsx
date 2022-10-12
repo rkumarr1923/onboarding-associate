@@ -1,24 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TrainingList from './TrainingList';
-import {trainingData} from "../../../json/trainingData";
 import AddTraining from './AddTraining';
 import EditTraining from './EditTraining';
 import { Grid } from "@mui/material";
+import axios from "axios";
+import TrainingService from "../../../services/hooks/TrainingService";
+
 
 const TrainingMainComponent = () => {
 
-    const initialFormState = { trainingId: '', trainingName: '', link: '', remarks: '' }
-    const [trainings, setTrainings] = useState(trainingData)
+    const initialFormState = { trainingId: '', trainingName: '', link: '', remarks: '' };
+    const [trainings, setTrainings] = useState([]);
+    const BASE_URL = "http://localhost:9094/training";
+    useEffect(() => {
+        const BASE_URL = "http://localhost:9094/training";
+        
+        axios.get(BASE_URL + '/get-all-training')
+        .then((response) => {
+            setTrainings(response.data);
+            console.log("in Main component useEffect getall trainings ",response.data);
+        })
+        //retrieveTrainings();
+      },[]);
+    //  const retrieveTrainings = () => {
+    //      const response = axios.get(BASE_URL + '/get-all-training');
+    //      setTrainings(response.data);
+    //      console.log("in main component, getall trainings ",response.data);
+    //  };
+    
     const [editing, setEditing] = useState(false);
     const [currentTraining, setCurrentTraining] = useState(initialFormState)
     // Add training...
     const addTraining = training => {
-        training.trainingId = trainings.length + 1
-        setTrainings([...trainings, training])
+        console.log("in main component, add training", training);
+        setTrainings([...trainings, training]);
     }
     // delete trainings...
     const deleteTraining = trainingId => {
-        setTrainings(trainings.filter(training => training.trainingId !== trainingId))
+        TrainingService.deleteTraining(trainingId)
+        .then(response => {
+            console.log(response.data);
+            setTrainings(trainings.filter(training => training.trainingId !== trainingId))
+        })
     }
     // set value for edit training form...
     const editTraining = (training) => {
@@ -32,8 +55,12 @@ const TrainingMainComponent = () => {
     }
     //  update training
     const updateTraining = (trainingId, updatedTraining) => {
-        setEditing(false)
-        setTrainings(trainings.map(item => {console.log(item.trainingId); return (item.trainingId === trainingId ? updatedTraining : item)}))
+        console.log("in updateTraining", trainingId);
+        setEditing(false);
+        setTrainings(
+            trainings.map(item => {
+                return (item.trainingId === trainingId ? updatedTraining : item)
+            }));
     }
 
     return (
