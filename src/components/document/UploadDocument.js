@@ -26,6 +26,7 @@ const UploadDocument = () => {
   const [inputfile, setInputfile] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
   const [docTobeUpdate, setDocTobeUpdate] = useState({});
+  const [docTypeTobeUpdate, setDocTypeTobeUpdate] = useState({});
   const [openUpdate, setUpdateDialogStatus] = useState(false);
   const user = useSelector(userDetails);
   const [revieweddocuments, setReviewedDocuments] = useState([]);
@@ -128,7 +129,9 @@ const UploadDocument = () => {
     }
     
     if(filteredObj && filteredObj.length>0){
+      console.log(filteredObj[0])
       setDocTobeUpdate(filteredObj[0]);
+      setDocTypeTobeUpdate(filteredObj[0].documentType.name);
       setUpdateDialogStatus(true);
     } else {
       callUploadAPI();
@@ -182,7 +185,7 @@ const UploadDocument = () => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {`${docTobeUpdate.name} already exists. Do you want to replace it?`}
+            {`${docTobeUpdate.name} of type ${docTypeTobeUpdate} already exists. Do you want to replace it?`}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
