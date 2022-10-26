@@ -6,15 +6,20 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/associate.css';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { token } from '../../store';
 
 const AllAssociates = () => {
+  const userToken = useSelector(token);
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
 
   const fetchData = async () => {
+    const BASE_URL = 'http://localhost:9092/pru-associate';
     const response = await axios.get(
-      'http://localhost:9092/pru-associate/get-all-associates'
-    );
+      BASE_URL+'/get-all-associates', {
+        headers: { Authorization: 'Bearer ' + userToken },
+      });
     const { data, error, loading } = response;
     let formattedData = data.map((associate) => {
       return {
