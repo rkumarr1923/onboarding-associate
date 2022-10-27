@@ -26,6 +26,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { comments, userComments, userDetails, token } from '../../store';
+import Loader from '../common/Loader';
 
 const CommentComponent = () => {
   const userToken = useSelector(token);
@@ -36,6 +37,7 @@ const CommentComponent = () => {
   const user = useSelector(userDetails);
   const allComments = useSelector(userComments);
   const empId = user.empId;
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
     axios
@@ -43,12 +45,14 @@ const CommentComponent = () => {
         headers: { Authorization: 'Bearer ' + userToken },
       })
       .then((result) => {
-        if (result.data)
+        if (result.data) {
           dispatch(
             comments({
               comments: result.data,
             })
           );
+          setLoader(false);
+        }
       }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [empId]);
 
@@ -111,7 +115,10 @@ const CommentComponent = () => {
 
   return (
     <div style={{ padding: '20px 20px 130px 20px' }}>
-      {allComments.length !== 0 ? (
+      <h2 style={{ textAlign: 'center' }}>Comment</h2>
+      {loader ? (
+        <Loader />
+      ) : allComments.length !== 0 ? (
         <List style={{ overflow: 'auto', backgroundColor: 'white' }}>
           {allComments.map((data, index) => {
             return (
@@ -222,5 +229,4 @@ const CommentComponent = () => {
     </div>
   );
 };
-
 export default CommentComponent;
