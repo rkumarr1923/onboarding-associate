@@ -195,9 +195,7 @@ const SampleDocuments = () => {
       });
   };
 
-  return loader ? (
-    <Loader />
-  ) : (
+  return (
     <div className="upload-doc-container">
       {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
         user.role === 'ROLE_ONBOARDING_REVIEWER') && (
@@ -242,27 +240,25 @@ const SampleDocuments = () => {
         <div className="content-left">
           <h3>Sample Documents:</h3>
         </div>
-        {loader ? (
-          <Loader />
-        ) : (
-          documents.length > 0 && (
-            <div className="content-right">
-              <div className="download-icon">
-                <a
-                  href="http://localhost:9003/files/sampledoc/zip"
-                  className="fa fa-download"
-                  title="Download All"
-                ></a>
-              </div>
-              {/* <h3>
+        {documents.length > 0 && (
+          <div className="content-right">
+            <div className="download-icon">
+              <a
+                href="http://localhost:9003/files/sampledoc/zip"
+                className="fa fa-download"
+                title="Download All"
+              ></a>
+            </div>
+            {/* <h3>
         <a href="http://localhost:9003/files/sampledoc/zip" className="btn btn-primary">Download All</a>
       </h3> */}
-            </div>
-          )
+          </div>
         )}
       </div>
       <div>
-        {documents.length > 0 ? (
+        {loader ? (
+          <Loader />
+        ) : documents.length > 0 ? (
           <div className="table-content">
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
