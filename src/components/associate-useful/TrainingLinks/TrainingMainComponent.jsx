@@ -20,6 +20,7 @@ const TrainingMainComponent = () => {
   };
   const [trainings, setTrainings] = useState([]);
   const [loader, setLoader] = useState(true);
+  const headers = { Authorization: 'Bearer ' + userToken };
   const BASE_URL = 'http://localhost:9094/training';
   useEffect(() => {
     const BASE_URL = 'http://localhost:9094/training';
@@ -53,11 +54,13 @@ const TrainingMainComponent = () => {
   };
   // delete trainings...
   const deleteTraining = (trainingId) => {
-    TrainingService.deleteTraining(trainingId).then((response) => {
+    setLoader(true);
+    TrainingService.deleteTraining(trainingId, headers).then((response) => {
       console.log(response.data);
       setTrainings(
         trainings.filter((training) => training.trainingId !== trainingId)
       );
+      setLoader(false);
     });
   };
   // set value for edit training form...
@@ -82,50 +85,52 @@ const TrainingMainComponent = () => {
   };
 
   return (
-    <Grid container>
-      {user.role === 'ROLE_ONBOARDING_MANAGER' ||
-      user.role === 'ROLE_ONBOARDING_REVIEWER' ? (
-        <Grid item xs={12}>
-          {editing ? (
-            <Grid item xs={12}>
-              <h2 style={{ textAlign: 'center' }}>Edit Training</h2>
+    <div style={{ padding: '20px 20px 130px 20px' }}>
+      <Grid container>
+        {user.role === 'ROLE_ONBOARDING_MANAGER' ||
+        user.role === 'ROLE_ONBOARDING_REVIEWER' ? (
+          <Grid item xs={12}>
+            {editing ? (
               <Grid item xs={12}>
-                <EditTraining
-                  editing={editing}
-                  setEditing={setEditing}
-                  currentTraining={currentTraining}
-                  updateTraining={updateTraining}
+                <h2 style={{ textAlign: 'center' }}>Edit Training</h2>
+                <Grid item xs={12}>
+                  <EditTraining
+                    editing={editing}
+                    setEditing={setEditing}
+                    currentTraining={currentTraining}
+                    updateTraining={updateTraining}
+                  />
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <h2 style={{ textAlign: 'center' }}>Add Training</h2>
+                <Grid item xs={12}>
+                  <AddTraining addTraining={addTraining} />
+                </Grid>
+              </Grid>
+            )}
+            <Grid item xs={12}>
+              <h2>Training</h2>
+              {loader ? (
+                <Loader />
+              ) : (
+                <TrainingList
+                  trainings={trainings}
+                  editTraining={editTraining}
+                  deleteTraining={deleteTraining}
                 />
-              </Grid>
+              )}
             </Grid>
-          ) : (
-            <Grid item xs={12}>
-              <h2 style={{ textAlign: 'center' }}>Add Training</h2>
-              <Grid item xs={12}>
-                <AddTraining addTraining={addTraining} />
-              </Grid>
-            </Grid>
-          )}
-          {loader ? (
-            <Loader />
-          ) : (
-            <Grid item xs={12}>
-              <TrainingList
-                trainings={trainings}
-                editTraining={editTraining}
-                deleteTraining={deleteTraining}
-              />
-            </Grid>
-          )}
-        </Grid>
-      ) : loader ? (
-        <Loader />
-      ) : (
-        <Grid item xs={12}>
-          <TrainingList trainings={trainings} />
-        </Grid>
-      )}
-    </Grid>
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <h2>Training</h2>
+            {loader ? <Loader /> : <TrainingList trainings={trainings} />}
+          </Grid>
+        )}
+      </Grid>
+    </div>
   );
 };
 
