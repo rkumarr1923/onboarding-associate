@@ -115,7 +115,7 @@ const CommentComponent = () => {
 
   return (
     <div style={{ padding: '20px 20px 130px 20px' }}>
-      <h2 style={{ textAlign: 'center' }}>Comment</h2>
+      <h2>Comment</h2>
       {loader ? (
         <Loader />
       ) : allComments.length !== 0 ? (
