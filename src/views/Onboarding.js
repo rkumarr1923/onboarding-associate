@@ -94,14 +94,6 @@ export default function Onboarding() {
                 />
               </Link>
             </li>
-            <li className={isTabActive('Training Links')}>
-              <Link to="/trainingLinks">
-                <Button
-                  label="Training Links"
-                  clickHandler={() => tabClicked('Training Links')}
-                />
-              </Link>
-            </li>
             <li className={isTabActive('Comment')}>
               <Link to="/comment">
                 <Button

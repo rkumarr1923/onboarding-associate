@@ -11,8 +11,8 @@ import {
   Input,
   Typography,
   TablePagination,
-} from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
+} from '@mui/material';
+import React, { Fragment, useEffect, useState } from 'react';
 
 const CheckListTable = (props) => {
   const infoDetails = props.infoData;
@@ -20,16 +20,16 @@ const CheckListTable = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
   const tableHeader = [
-    "On-Boarding Checklist",
-    "Date Verified",
-    "Yes/No or N/A",
-    "Comments",
+    'On-Boarding Checklist',
+    'Date Verified',
+    'Yes/No or N/A',
+    'Comments',
   ];
 
   if (infoDetails) {
     let today = new Date(infoDetails.onBoardingDate);
     let date =
-      today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear();
+      today.getMonth() + 1 + '/' + today.getDate() + '/' + today.getFullYear();
     // eslint-disable-next-line
     onBoardingChecklist.map((data) => {
       return (data.date = date);
@@ -41,10 +41,10 @@ const CheckListTable = (props) => {
     setTableValues((prevState) => {
       const newData = prevState.map((data) => {
         if (data.checkListId === id) {
-          if (keyName === "date") return { ...data, date: event.target.value };
-          if (keyName === "comment")
+          if (keyName === 'date') return { ...data, date: event.target.value };
+          if (keyName === 'comment')
             return { ...data, comment: event.target.value };
-          if (keyName === "status")
+          if (keyName === 'status')
             return { ...data, status: event.target.value };
         }
         return data;
@@ -92,7 +92,7 @@ const CheckListTable = (props) => {
                   .map((tableValue) => {
                     return (
                       <TableRow key={tableValue.checkListId}>
-                        <TableCell style={{ width: "40rem" }}>
+                        <TableCell style={{ width: '40rem' }}>
                           {tableValue.questions}
                           {tableValue.link && (
                             <div>
@@ -111,7 +111,7 @@ const CheckListTable = (props) => {
                             variant="standard"
                             value={tableValue.date}
                             onChange={(e) =>
-                              handleChange(e, tableValue.checkListId, "date")
+                              handleChange(e, tableValue.checkListId, 'date')
                             }
                           />
                         </TableCell>
@@ -120,15 +120,15 @@ const CheckListTable = (props) => {
                             displayEmpty
                             value={tableValue.status}
                             onChange={(e) =>
-                              handleChange(e, tableValue.checkListId, "status")
+                              handleChange(e, tableValue.checkListId, 'status')
                             }
-                            inputProps={{ "aria-label": "Without label" }}
+                            inputProps={{ 'aria-label': 'Without label' }}
                           >
                             <MenuItem disabled value="">
                               <em>None</em>
                             </MenuItem>
-                            <MenuItem value="Yes">Yes</MenuItem>
-                            <MenuItem value="No">No</MenuItem>
+                            <MenuItem value="Y">Yes</MenuItem>
+                            <MenuItem value="N">No</MenuItem>
                             <MenuItem value="N/A">N/A</MenuItem>
                           </Select>
                         </TableCell>
@@ -139,7 +139,7 @@ const CheckListTable = (props) => {
                               handleChange(
                                 e,
                                 tableValue.checkListId,
-                                "comment"
+                                'comment'
                               );
                             }}
                           />

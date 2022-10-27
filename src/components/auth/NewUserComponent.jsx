@@ -1,5 +1,6 @@
 import { InfoRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -9,6 +10,7 @@ import {
   InputAdornment,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
   Tooltip,
   Typography,
@@ -16,7 +18,7 @@ import {
   useTheme,
 } from '@mui/material';
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import {
@@ -46,6 +48,7 @@ const NewUserComponent = () => {
   const allReviewer = useSelector(allReviewers).filter(
     (item) => item.empId !== 'N/A'
   );
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:9099/roles').then((response) => {
@@ -115,6 +118,10 @@ const NewUserComponent = () => {
     );
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleNewUser = (e) => {
     e.preventDefault();
     let error = {};
@@ -173,6 +180,7 @@ const NewUserComponent = () => {
           .post('http://localhost:9099/user_add', requestData)
           .then((response) => {
             console.log(response.data);
+            setSnackbarOpen(true);
           });
       }
     } else console.log('Error');
@@ -452,6 +460,24 @@ const NewUserComponent = () => {
           </Card>
         </Grid>
       </Grid>
+      <Snackbar
+        sx={{ height: '20%' }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          New User created!!!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

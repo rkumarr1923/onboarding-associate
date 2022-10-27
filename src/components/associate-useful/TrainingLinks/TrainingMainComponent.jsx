@@ -6,10 +6,11 @@ import { Grid } from '@mui/material';
 import axios from 'axios';
 import TrainingService from '../../../services/hooks/TrainingService';
 import { useSelector } from 'react-redux';
-import { token } from '../../../store';
+import { token, userDetails } from '../../../store';
 
 const TrainingMainComponent = () => {
   const userToken = useSelector(token);
+  const user = useSelector(userDetails);
   const initialFormState = {
     trainingId: '',
     trainingName: '',
@@ -79,36 +80,43 @@ const TrainingMainComponent = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
-        {editing ? (
-          <Grid item xs={12}>
-            <h2 style={{ textAlign: 'center' }}>Edit Training</h2>
-            <Grid item xs={12}>
-              <EditTraining
-                editing={editing}
-                setEditing={setEditing}
-                currentTraining={currentTraining}
-                updateTraining={updateTraining}
-              />
-            </Grid>
-          </Grid>
-        ) : (
-          <Grid item xs={12}>
-            <h2 style={{ textAlign: 'center' }}>Add Training</h2>
-            <Grid item xs={12}>
-              <AddTraining addTraining={addTraining} />
-            </Grid>
-          </Grid>
-        )}
-
+      {user.role === 'ROLE_ONBOARDING_MANAGER' ||
+      user.role === 'ROLE_ONBOARDING_REVIEWER' ? (
         <Grid item xs={12}>
-          <TrainingList
-            trainings={trainings}
-            editTraining={editTraining}
-            deleteTraining={deleteTraining}
-          />
+          {editing ? (
+            <Grid item xs={12}>
+              <h2 style={{ textAlign: 'center' }}>Edit Training</h2>
+              <Grid item xs={12}>
+                <EditTraining
+                  editing={editing}
+                  setEditing={setEditing}
+                  currentTraining={currentTraining}
+                  updateTraining={updateTraining}
+                />
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <h2 style={{ textAlign: 'center' }}>Add Training</h2>
+              <Grid item xs={12}>
+                <AddTraining addTraining={addTraining} />
+              </Grid>
+            </Grid>
+          )}
+
+          <Grid item xs={12}>
+            <TrainingList
+              trainings={trainings}
+              editTraining={editTraining}
+              deleteTraining={deleteTraining}
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        <Grid item xs={12}>
+          <TrainingList trainings={trainings} />
+        </Grid>
+      )}
     </Grid>
   );
 };
