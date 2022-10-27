@@ -11,11 +11,14 @@ import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "flatpickr/dist/flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import "flatpickr/dist/themes/dark.css";
+import { useSelector } from 'react-redux';
+import { associates } from '../../store';
 
 const Associates = ({ }) => {
 
     const [isFormVisible, setFormVisiblity] = useState(false);
     const [isImportAssociateVisible, setImportAssociateVisiblity] = useState(false);
+    const list = useSelector(associates);
 
     return (
         <div className='all-associate-container'>
@@ -31,11 +34,11 @@ const Associates = ({ }) => {
                     </ul>
                 </div>
                 <div className='right-container'>
-                    <ExportAssociates />
+                    <ExportAssociates list={list} />
                 </div>
             </div>}
             {
-                isFormVisible || isImportAssociateVisible ? isImportAssociateVisible ? <ImportAssociates setImportAssociateVisiblity={setImportAssociateVisiblity} /> : <AddNewAssociate setFormVisiblity={setFormVisiblity} /> : <AllAssociates />
+                isFormVisible || isImportAssociateVisible ? isImportAssociateVisible ? <ImportAssociates setImportAssociateVisiblity={setImportAssociateVisiblity} /> : <AddNewAssociate list={list} setFormVisiblity={setFormVisiblity} /> : <AllAssociates />
             }
         </div>
     )

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-const useFetchAssociate = async () => {
+const useFetchAssociate = () => {
   const [data, setdata] = useState(null);
   const [loading, setloading] = useState(true);
   const [error, seterror] = useState('');
@@ -11,8 +11,9 @@ const useFetchAssociate = async () => {
       const response = await axios.get(
         'http://localhost:9092/pru-associate/get-all-associates'
       );
-      const { data, error, loading } = response;
-      seterror(data.error);
+      const { data, error } = response;
+      console.log('api response', response)
+      seterror(error);
       setdata(data);
       setloading(false);
     };
@@ -22,4 +23,4 @@ const useFetchAssociate = async () => {
   return { data, loading, error };
 };
 
-export default useFetchAssociate;
+export {useFetchAssociate};

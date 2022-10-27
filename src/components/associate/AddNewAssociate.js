@@ -7,7 +7,10 @@ import FormInputField from '../core/FormInputField';
 import axios from 'axios';
 import FormDatePickerField from '../core/FormDatePickerField';
 import FormSkillInputField from '../core/FormSkillInputField';
+import { useSelector } from 'react-redux';
+import { associates } from '../../store';
 import '../styles/associate.css';
+
 
 class AddNewAssociate extends Component {
   constructor(props) {
@@ -28,6 +31,7 @@ class AddNewAssociate extends Component {
     band: '',
     clientManager: '',
     clientEmail: '',
+    email: '',
     xid: '',
     endDate: '',
     city: '',
@@ -56,13 +60,15 @@ class AddNewAssociate extends Component {
     h1bNominations: '',
     validationErrors: {},
     skillsSelected: [],
+    skills:[],
+    isAssociateExist: false
   };
 
   validators = {
     firstName: (str) => (str === '' ? 'Firstname is required' : ''),
     lastName: (str) => (str === '' ? 'Lastname is required' : ''),
-    ibmId: (str) => (str === '' ? 'IBM id is required' : ''),
-    ibmEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid email address' : ''),
+    ibmId: (str) => (str === '' ? 'IBM id is required' : ( this.state.isAssociateExist ? 'Employee already exist' :'')),
+    ibmEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid ibm email address' : ''),
     location: (str) => (str === '' ? 'Location is required' : ''),
     role: (str) => (str === '' ? 'Role is required' : ''),
     engagementName: () => '',
@@ -74,7 +80,8 @@ class AddNewAssociate extends Component {
     majorFunction: () => '',
     band: () => '',
     clientManager: () => '',
-    clientEmail: () => '',
+    clientEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid client email address' : ''),
+    email: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid email address' : ''),
     xid: () => '',
     endDate: () => '',
     city: (str) => (str === '' ? 'City is required' : ''),
@@ -131,6 +138,11 @@ class AddNewAssociate extends Component {
     this.setState({ [fieldName]: value }, () => this.validate(fieldName));
   };
 
+  handleIbmIdBlur = ({ event, fieldProps, fields, form }) => {
+    this.state.isAssociateExist = !!this.props.list.find(x => x.ibmId === this.state.ibmId);
+    this.validate('ibmId');
+  }
+
   setSkillSet = (value) => {
     console.log('skill set value ', value);
     this.setState({ skillsSelected: value });
@@ -140,8 +152,7 @@ class AddNewAssociate extends Component {
     fetch('http://localhost:9191/pru-skill/get-skill-master').then(
       (response) => {
         response.json().then((result) => {
-          let skills = result;
-          // this.setState({ [skills]: skills });
+          this.setState({ skills: result });
         });
       }
     );
@@ -190,8 +201,9 @@ class AddNewAssociate extends Component {
         riskMitigationComments: associateInfo.riskMitigationComments,
         planInCaseOfExtensionAmendmentRejection:
           associateInfo.planInCaseOfExtensionAmendmentRejection,
+          skillset: "Test"
       },
-      associateSkill: associateInfo.skillsSelected,
+      associateSkill: associateInfo.skillsSelected
     };
     const isValid = Object.keys(this.validators)
       .map(this.validate)
@@ -252,6 +264,7 @@ class AddNewAssociate extends Component {
               isRequired={true}
               controlId="ibmId"
               label="IBM Id"
+              ibmIdBlur={this.handleIbmIdBlur}
               fieldName="ibmId"
               value={this.state.ibmId}
               handleChange={this.handleChange}
@@ -484,6 +497,7 @@ class AddNewAssociate extends Component {
               md="4"
               controlId="skill"
               label="Skill"
+              skills={this.state.skills}
               setSkillSet={this.setSkillSet}
             />
           </Row>

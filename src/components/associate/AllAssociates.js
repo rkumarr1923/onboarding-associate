@@ -5,36 +5,35 @@ import DTPicker from '../associate/DatePicker/DTPicker';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/associate.css';
+import { useFetchAssociate } from '../../services/hooks/useFetchAssociate';
+import { useDispatch } from 'react-redux';
+import { associateList } from '../../store';
 
 const AllAssociates = () => {
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
-
-  const fetchData = async () => {
-    const response = await axios.get(
-      'http://localhost:9092/pru-associate/get-all-associates'
-    );
-    const { data, error, loading } = response;
-    let formattedData = data.map((associate) => {
-      return {
-        associateName: associate.associateName,
-        ibmId: associate.ibmId,
-        emailIBM: associate.emailIbm,
-        location: associate.location,
-        role: associate.role,
-        primaryContact: associate.primaryContact,
-        itExpDate: associate.itExpDate, // new Date(associate.itExpDate)
-        status: associate.activeInactive,
-      };
-    });
-    console.log('formatted data ', formattedData);
-    setFormattedData(formattedData);
-  };
-
+  const { data, error, loading } = useFetchAssociate();
+  const dispatch = useDispatch();
+  
   useEffect(() => {
-    fetchData();
-    console.log('gridApi', gridApi);
-  }, []);
+    if (!loading && data) {
+      let formattedData = data.map((associate) => {
+        return {
+          associateName: associate.associateName,
+          ibmId: associate.ibmId,
+          emailIBM: associate.emailIbm,
+          location: associate.location,
+          role: associate.role,
+          primaryContact: associate.primaryContact,
+          itExpDate: associate.itExpDate, // new Date(associate.itExpDate)
+          status: associate.activeInactive,
+        };
+      });
+      console.log('formatted data ', formattedData);
+      dispatch(associateList({associateList: formattedData}))
+      setFormattedData(formattedData);
+    }
+  }, [loading]);
 
   const resetAppliedFilters = () => {
     gridApi.setFilterModel(null);

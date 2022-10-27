@@ -73,6 +73,9 @@ const slice = createSlice({
     reviewers: (state, action) => {
       state.reviewers = action.payload.reviewers;
     },
+    associateList: (state, action) => {
+      state.associateList = action.payload.associateList;
+    }
   },
 });
 
@@ -89,9 +92,11 @@ export const {
   managers,
   reviewers,
   roles,
+  associateList,
 } = slice.actions;
 export const selectedTab = (state) => state.activeTab;
 export const userDetails = (state) => state.userDetails;
+export const associates = (state) => state.associateList;
 export const token = (state) => state.token;
 export const userComments = (state) => state.comments;
 export const createNewUser = (state) => state.createNewUserDetailsData;
