@@ -84,7 +84,7 @@ const RecordingMainComponent = () => {
               </Grid>
             ) : (
               <Grid item xs={12}>
-                <h2 style={{ textAlign: 'center' }}>Recording</h2>
+                <h2 style={{ textAlign: 'center' }}>Add Recording</h2>
                 <Grid item xs={12}>
                   <AddRecording addRecording={addRecording} />
                 </Grid>
