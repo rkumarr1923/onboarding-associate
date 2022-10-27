@@ -41,7 +41,7 @@ const TrainingList = (props) => {
   }, []);
 
   return (
-    <TableContainer style={{ margin: '0px' }}>
+    <TableContainer style={{ margin: '0px', backgroundColor: 'white' }}>
       <Table>
         <TableHead>
           <TableRow>
