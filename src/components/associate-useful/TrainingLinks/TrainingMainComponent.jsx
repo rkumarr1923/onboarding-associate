@@ -7,6 +7,7 @@ import axios from 'axios';
 import TrainingService from '../../../services/hooks/TrainingService';
 import { useSelector } from 'react-redux';
 import { token, userDetails } from '../../../store';
+import Loader from '../../common/Loader';
 
 const TrainingMainComponent = () => {
   const userToken = useSelector(token);
@@ -18,6 +19,7 @@ const TrainingMainComponent = () => {
     remarks: '',
   };
   const [trainings, setTrainings] = useState([]);
+  const [loader, setLoader] = useState(true);
   const BASE_URL = 'http://localhost:9094/training';
   useEffect(() => {
     const BASE_URL = 'http://localhost:9094/training';
@@ -32,6 +34,7 @@ const TrainingMainComponent = () => {
           'in Main component useEffect getall trainings ',
           response.data
         );
+        setLoader(false);
       });
     //retrieveTrainings();
   }, []);
@@ -103,15 +106,20 @@ const TrainingMainComponent = () => {
               </Grid>
             </Grid>
           )}
-
-          <Grid item xs={12}>
-            <TrainingList
-              trainings={trainings}
-              editTraining={editTraining}
-              deleteTraining={deleteTraining}
-            />
-          </Grid>
+          {loader ? (
+            <Loader />
+          ) : (
+            <Grid item xs={12}>
+              <TrainingList
+                trainings={trainings}
+                editTraining={editTraining}
+                deleteTraining={deleteTraining}
+              />
+            </Grid>
+          )}
         </Grid>
+      ) : loader ? (
+        <Loader />
       ) : (
         <Grid item xs={12}>
           <TrainingList trainings={trainings} />

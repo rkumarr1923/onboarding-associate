@@ -1,22 +1,28 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import axios from "axios";
-import "./UploadDocument.css";
-import { Typography } from "@mui/material";
-import { userDetails } from "../../store"; 
-import { useSelector } from "react-redux";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import axios from 'axios';
+import './UploadDocument.css';
+import { Typography } from '@mui/material';
+import { userDetails } from '../../store';
+import { useSelector } from 'react-redux';
+import Loader from '../common/Loader';
 
 const DocumentTable = forwardRef((props, ref) => {
   const [documents, setDocuments] = useState([]);
@@ -24,6 +30,7 @@ const DocumentTable = forwardRef((props, ref) => {
   const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
   const [isReviewed, setIsReviewed] = useState(false);
   const user = useSelector(userDetails);
+  const [loader, setLoader] = useState(true);
   // const [associateObj, setAssociate] = useState({
   //   name: 'astik', role: 'ROLE_ASSOCIATE', reviewer: {empId: 'reviewer1', reviewerName: 'Arindam'},
   //   manager: {empId: 'manager1', managerName: 'Arindam'}, empId: '000U2M747'
@@ -32,9 +39,9 @@ const DocumentTable = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     fetchChildDocuments() {
       fetchDocuments();
-    }
+    },
   }));
-  
+
   useEffect(() => {
     fetchDocuments();
   }, []);
@@ -49,33 +56,35 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const fetchDocuments = () => {
-    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : props.forAssociate.empId;
-    const reviewerId = (user.role==="ROLE_ASSOCIATE") ? "" : user.empId;
+    const id =
+      user.role === 'ROLE_ASSOCIATE' ? user.empId : props.forAssociate.empId;
+    const reviewerId = user.role === 'ROLE_ASSOCIATE' ? '' : user.empId;
     var url = props.fetchDocumentURL ? props.fetchDocumentURL : '';
-    if(props.type==='REVIEWED'){
-        url = url +`/${reviewerId}/employee/${id}`;
+    if (props.type === 'REVIEWED') {
+      url = url + `/${reviewerId}/employee/${id}`;
     } else {
-        url = url +`/${id}`;
+      url = url + `/${id}`;
     }
     axios
       .get(url)
       .then((res) => {
         //console.log(res.data);
         setDocuments(res.data);
-        const filteredObj = res.data.filter(obj => (obj.reviewed==true));
-        if(filteredObj.length>0){
+        const filteredObj = res.data.filter((obj) => obj.reviewed == true);
+        if (filteredObj.length > 0) {
           setIsReviewed(true);
         } else {
           setIsReviewed(false);
         }
-        if(props.type==='REVIEWED'){
+        if (props.type === 'REVIEWED') {
           props.onSyncDocuments({
             revieweddocuments: res.data,
-            isReviewed: filteredObj.length>0 ? true : false
+            isReviewed: filteredObj.length > 0 ? true : false,
           });
         } else {
-          props.onSyncDocuments({documents: res.data});
+          props.onSyncDocuments({ documents: res.data });
         }
+        setLoader(false);
       })
       .catch((err) => {
         console.log(err);
@@ -83,15 +92,17 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const download = (id, name) => {
-    const url = props.downloadURL ? props.downloadURL : `http://localhost:9003/files/${id}`;
+    const url = props.downloadURL
+      ? props.downloadURL
+      : `http://localhost:9003/files/${id}`;
     axios
-      .get(url, { responseType: "blob" })
+      .get(url, { responseType: 'blob' })
       .then((result) => {
         //console.log(result);
         if (result) {
-          const file = new Blob([result.data], { type: "application/pdf" });
+          const file = new Blob([result.data], { type: 'application/pdf' });
           const fileURL = URL.createObjectURL(file);
-          var a = document.createElement("a");
+          var a = document.createElement('a');
           a.href = fileURL;
           a.download = name;
           document.body.appendChild(a);
@@ -99,12 +110,14 @@ const DocumentTable = forwardRef((props, ref) => {
         }
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        console.error('There was an error!', error);
       });
   };
 
   const deleteDocs = (id) => {
-    const url = props.deleteURL ? props.deleteURL : `http://localhost:9003/files/delete/${id}`;
+    const url = props.deleteURL
+      ? props.deleteURL
+      : `http://localhost:9003/files/delete/${id}`;
     axios
       .delete(url)
       .then((result) => {
@@ -117,8 +130,9 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const submitReviewed = () => {
-    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : props.forAssociate.empId;
-    const reviewerId = (user.role==="ROLE_ASSOCIATE") ? "" : user.empId;
+    const id =
+      user.role === 'ROLE_ASSOCIATE' ? user.empId : props.forAssociate.empId;
+    const reviewerId = user.role === 'ROLE_ASSOCIATE' ? '' : user.empId;
     axios
       .put(`http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}`)
       .then((result) => {
@@ -131,50 +145,58 @@ const DocumentTable = forwardRef((props, ref) => {
   };
 
   const downloadDocsForAsso = () => {
-    const id = (user.role==="ROLE_ASSOCIATE") ? user.empId : props.forAssociate.empId;
-    const reviewerId = (user.role==="ROLE_ASSOCIATE") ? "" : user.empId;
+    const id =
+      user.role === 'ROLE_ASSOCIATE' ? user.empId : props.forAssociate.empId;
+    const reviewerId = user.role === 'ROLE_ASSOCIATE' ? '' : user.empId;
     const url = `http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}/zip`;
     axios
-      .get(url, { responseType: "blob" })
+      .get(url, { responseType: 'blob' })
       .then((result) => {
         if (result) {
-          const file = new Blob([result.data], { type: "application/pdf" });
+          const file = new Blob([result.data], { type: 'application/pdf' });
           const fileURL = URL.createObjectURL(file);
-          var a = document.createElement("a");
+          var a = document.createElement('a');
           a.href = fileURL;
-          a.download = 'Onboarding_'+id+'.ZIP';
+          a.download = 'Onboarding_' + id + '.ZIP';
           document.body.appendChild(a);
           a.click();
         }
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        console.error('There was an error!', error);
       });
   };
 
-  return (
+  return loader ? (
+    <Loader />
+  ) : (
     <div>
       {user && (
         <div>
           <div className="button-content">
-            <div className="content-left"><h3>{props.title}</h3></div>
-            {documents.length > 0  && user.role!=='ROLE_ASSOCIATE' && props.type==='NOTREVIEWED' && ( 
-              <div className="content-right">
-                <div className="download-icon">
-                  <i
-                    title="Download All"
-                    className="fa fa-download"
-                    onClick={() => downloadDocsForAsso()}
-                    aria-hidden="true"
-                  ></i>
-                </div>
-              {/* <h3>
+            <div className="content-left">
+              <h3>{props.title}</h3>
+            </div>
+            {documents.length > 0 &&
+              user.role !== 'ROLE_ASSOCIATE' &&
+              props.type === 'NOTREVIEWED' && (
+                <div className="content-right">
+                  <div className="download-icon">
+                    <i
+                      title="Download All"
+                      className="fa fa-download"
+                      onClick={() => downloadDocsForAsso()}
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  {/* <h3>
                 <a href={downloadAllURL.url} className="btn btn-primary">Download All Link</a>
                 <Button color="primary" variant="contained" component="span" onClick={() => downloadDocsForAsso()} >
                     Download All 
                 </Button>
               </h3> */}
-            </div>) }
+                </div>
+              )}
           </div>
           {documents.length > 0 ? (
             <div className="table-content">
@@ -185,9 +207,12 @@ const DocumentTable = forwardRef((props, ref) => {
                       <TableCell>S.No.</TableCell>
                       <TableCell>Name</TableCell>
                       <TableCell>Document Type</TableCell>
-                      {((user.role!=='ROLE_ASSOCIATE' && props.type==='REVIEWED') || (user.role==='ROLE_ASSOCIATE' && props.type==='NOTREVIEWED')) && 
+                      {((user.role !== 'ROLE_ASSOCIATE' &&
+                        props.type === 'REVIEWED') ||
+                        (user.role === 'ROLE_ASSOCIATE' &&
+                          props.type === 'NOTREVIEWED')) && (
                         <TableCell>Delete</TableCell>
-                      }
+                      )}
                       <TableCell>Download</TableCell>
                     </TableRow>
                   </TableHead>
@@ -195,7 +220,9 @@ const DocumentTable = forwardRef((props, ref) => {
                     {documents.map((doc, i) => (
                       <TableRow
                         key={i}
-                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
                       >
                         <TableCell component="th" scope="row">
                           {i + 1}
@@ -206,13 +233,19 @@ const DocumentTable = forwardRef((props, ref) => {
                         <TableCell component="th" scope="row">
                           {doc.documentType.name}
                         </TableCell>
-                        {((user.role!=='ROLE_ASSOCIATE' && props.type==='REVIEWED') || (user.role==='ROLE_ASSOCIATE' && props.type==='NOTREVIEWED')) && 
+                        {((user.role !== 'ROLE_ASSOCIATE' &&
+                          props.type === 'REVIEWED') ||
+                          (user.role === 'ROLE_ASSOCIATE' &&
+                            props.type === 'NOTREVIEWED')) && (
                           <TableCell>
-                            <Button color="secondary" onClick={() => openDialog(doc)}>
+                            <Button
+                              color="secondary"
+                              onClick={() => openDialog(doc)}
+                            >
                               Delete
                             </Button>
                           </TableCell>
-                        }
+                        )}
                         <TableCell>
                           <Button
                             color="primary"
@@ -223,15 +256,27 @@ const DocumentTable = forwardRef((props, ref) => {
                         </TableCell>
                       </TableRow>
                     ))}
-                    {user.role!=='ROLE_ASSOCIATE' && props.type==='REVIEWED' && 
-                      <TableRow>
-                        <TableCell>
-                            <Button disabled={!(documents.length===props.options.length-1 && !isReviewed)} onClick={() => submitReviewed()}  color="primary" variant="contained" component="span" >
-                              Submit Reviewed 
+                    {user.role !== 'ROLE_ASSOCIATE' &&
+                      props.type === 'REVIEWED' && (
+                        <TableRow>
+                          <TableCell>
+                            <Button
+                              disabled={
+                                !(
+                                  documents.length ===
+                                    props.options.length - 1 && !isReviewed
+                                )
+                              }
+                              onClick={() => submitReviewed()}
+                              color="primary"
+                              variant="contained"
+                              component="span"
+                            >
+                              Submit Reviewed
                             </Button>
-                        </TableCell>
-                      </TableRow>
-                    }
+                          </TableCell>
+                        </TableRow>
+                      )}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -241,7 +286,7 @@ const DocumentTable = forwardRef((props, ref) => {
           )}
         </div>
       )}
-      <br/>
+      <br />
       <Dialog
         open={open}
         onClose={handleClose}

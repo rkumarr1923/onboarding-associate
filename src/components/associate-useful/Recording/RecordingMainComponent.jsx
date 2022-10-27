@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Loader from '../../common/Loader';
 const RecordingMainComponent = () => {
   const userToken = useSelector(token);
   const dispatch = useDispatch();
@@ -24,11 +25,13 @@ const RecordingMainComponent = () => {
       })
       .then((response) => {
         dispatch(recordings({ recordings: response.data }));
+        setLoader(false);
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [editing, setEditing] = useState(false);
   const [currentRecording, setCurrentRecording] = useState(initialFormState);
   const user = useSelector(userDetails);
+  const [loader, setLoader] = useState(true);
   // Add recording...
   const addRecording = (recording) => {
     console.log(recording);
@@ -62,50 +65,47 @@ const RecordingMainComponent = () => {
     dispatch(recordings({ data }));
   };
   return (
-    <div className="checklist-container">
-      <div className="row">
-        <Grid
-          container
-          direction="row"
-          style={{ backgroundColor: 'white' }}
-          className="pt-3"
-        >
-          {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
-            user.role === 'ROLE_ONBOARDING_REVIEWER') && (
-            <>
-              {editing ? (
-                <div>
-                  <h2 style={{ textAlign: 'center' }}>Edit Recording</h2>
-                  <div>
-                    <EditRecording
-                      editing={editing}
-                      setEditing={setEditing}
-                      currentRecording={currentRecording}
-                      updateRecording={updateRecording}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <h2 style={{ textAlign: 'center' }}>Recording</h2>
-                  <div>
-                    <AddRecording addRecording={addRecording} />
-                  </div>
-                </div>
-              )}
-            </>
+    <Grid container>
+      {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
+        user.role === 'ROLE_ONBOARDING_REVIEWER') && (
+        <>
+          {editing ? (
+            <Grid item xs={12}>
+              <h2 style={{ textAlign: 'center' }}>Edit Recording</h2>
+              <Grid item xs={12}>
+                <EditRecording
+                  editing={editing}
+                  setEditing={setEditing}
+                  currentRecording={currentRecording}
+                  updateRecording={updateRecording}
+                />
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <h2 style={{ textAlign: 'center' }}>Recording</h2>
+              <Grid item xs={12}>
+                <AddRecording addRecording={addRecording} />
+              </Grid>
+            </Grid>
           )}
-
-          <div>
+        </>
+      )}
+      <Grid item xs={12}>
+        <Grid item xs={12}>
+          <h2 style={{ textAlign: 'center' }}>Recording</h2>
+          {loader ? (
+            <Loader />
+          ) : (
             <RecordingList
               recordings={recordings}
               editRecording={editRecording}
               deleteRecording={deleteRecording}
             />
-          </div>
+          )}
         </Grid>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 export default RecordingMainComponent;
