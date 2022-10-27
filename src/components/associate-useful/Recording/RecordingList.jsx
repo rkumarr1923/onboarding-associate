@@ -7,15 +7,16 @@ import {
   TableCell,
   Button,
   Typography,
-} from "@mui/material";
-import React from "react";
-import { useSelector } from "react-redux";
-import { userDetails } from "../../../store";
-const tableHeader = ["Recording Description", "Recording Link"];
+} from '@mui/material';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { allRecordings, userDetails } from '../../../store';
+const tableHeader = ['Recording Description', 'Recording Link'];
 const RecordingList = (props) => {
+  const recording = useSelector(allRecordings);
   const user = useSelector(userDetails);
   return (
-    <TableContainer style={{ margin: "0px" }}>
+    <TableContainer style={{ margin: '0px' }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -32,18 +33,18 @@ const RecordingList = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.recordings.length > 0 ? (
-            props.recordings.map((item) => (
-              <TableRow key={item.recordingId}>
-                <TableCell>{item.recordingDescription}</TableCell>
+          {recording.length > 0 ? (
+            recording.map((item) => (
+              <TableRow key={item.recordId}>
+                <TableCell>{item.recordDesc}</TableCell>
                 <TableCell>
-                  <a target="_blank" href={item.link}>
-                    {item.link}
+                  <a target="_blank" href={item.recordLink}>
+                    {item.recordLink}
                   </a>
                   <br />
-                  Password : {item.password}
+                  Password : {item.recordLinkPassword}
                 </TableCell>
-                {(user.role === "REVIEWER" || user.role === "MANAGER") && (
+                {(user.role === 'REVIEWER' || user.role === 'MANAGER') && (
                   <>
                     <TableCell>
                       <Button
@@ -58,7 +59,7 @@ const RecordingList = (props) => {
                     <TableCell>
                       <Button
                         type="submit"
-                        onClick={() => props.deleteRecording(item.recordingId)}
+                        onClick={() => props.deleteRecording(item.recordId)}
                         variant="contained"
                         size="small"
                         color="error"

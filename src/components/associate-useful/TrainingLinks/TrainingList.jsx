@@ -12,12 +12,13 @@ import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import TrainingService from '../../../services/hooks/TrainingService';
 import { useSelector } from 'react-redux';
-import { token } from '../../../store';
+import { token, userDetails } from '../../../store';
 
 const tableHeader = ['Training', 'Link', 'Remarks'];
 
 const TrainingList = (props) => {
   const userToken = useSelector(token);
+  const user = useSelector(userDetails);
   const [trainings, setTrainings] = useState([]);
   const [currentTraining, setCurrentTraining] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -67,27 +68,32 @@ const TrainingList = (props) => {
                   </a>
                 </TableCell>
                 <TableCell>{item.remarks}</TableCell>
-                <TableCell>
-                  <Button
-                    type="submit"
-                    onClick={() => props.editTraining(item)}
-                    variant="contained"
-                    size="small"
-                  >
-                    Edit
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    type="submit"
-                    onClick={() => props.deleteTraining(item.trainingId)}
-                    variant="contained"
-                    size="small"
-                    color="error"
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
+                {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
+                  user.role === 'ROLE_ONBOARDING_REVIEWER') && (
+                  <>
+                    <TableCell>
+                      <Button
+                        type="submit"
+                        onClick={() => props.editTraining(item)}
+                        variant="contained"
+                        size="small"
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        type="submit"
+                        onClick={() => props.deleteTraining(item.trainingId)}
+                        variant="contained"
+                        size="small"
+                        color="error"
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </>
+                )}
               </TableRow>
             ))
           ) : (

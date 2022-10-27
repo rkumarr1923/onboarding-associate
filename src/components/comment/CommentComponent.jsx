@@ -2,8 +2,8 @@ import {
   PeopleAltTwoTone,
   PreviewTwoTone,
   SupportAgentTwoTone,
-} from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+} from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 import {
   Button,
   Dialog,
@@ -19,17 +19,18 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { Fragment, useState } from "react";
-import moment from "moment/moment.js";
-import axios from "axios";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { comments, userComments, userDetails } from "../../store";
+} from '@mui/material';
+import { Fragment, useState } from 'react';
+import moment from 'moment/moment.js';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { comments, userComments, userDetails, token } from '../../store';
 
 const CommentComponent = () => {
+  const userToken = useSelector(token);
   const [open, setOpen] = useState(false);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(userDetails);
@@ -37,19 +38,23 @@ const CommentComponent = () => {
   const empId = user.empId;
 
   useEffect(() => {
-    axios.get("http://localhost:9094/comment/" + empId).then((result) => {
-      if (result.data)
-        dispatch(
-          comments({
-            comments: result.data,
-          })
-        );
-    }); // eslint-disable-next-line react-hooks/exhaustive-deps
+    axios
+      .get('http://localhost:9094/comment/' + empId, {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
+      .then((result) => {
+        if (result.data)
+          dispatch(
+            comments({
+              comments: result.data,
+            })
+          );
+      }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [empId]);
 
   const handleClickOpen = () => {
     setError(false);
-    setComment("");
+    setComment('');
     setOpen(true);
   };
 
@@ -60,16 +65,16 @@ const CommentComponent = () => {
   const convertDate = (date) => {
     let updatedDate = moment(new Date(date));
     return updatedDate.calendar(null, {
-      lastWeek: "[Last] ddd hh:mm A",
-      lastDay: "[Yesterday at] hh:mm A",
+      lastWeek: '[Last] ddd hh:mm A',
+      lastDay: '[Yesterday at] hh:mm A',
       sameDay: function (now) {
         if (moment(date).isSame(moment(new Date()).format())) {
-          return "[Now]";
+          return '[Now]';
         } else {
-          return "[Today at] hh:mm A";
+          return '[Today at] hh:mm A';
         }
       },
-      sameElse: "YYYY/MM/DD hh:mm A",
+      sameElse: 'YYYY/MM/DD hh:mm A',
     });
   };
 
@@ -78,7 +83,7 @@ const CommentComponent = () => {
   };
 
   const handleAddComments = () => {
-    if (comment === null || comment === "") setError(true);
+    if (comment === null || comment === '') setError(true);
     else {
       let updatedComments = {
         empId: empId,
@@ -88,7 +93,9 @@ const CommentComponent = () => {
         date: moment(new Date()).format(),
       };
       axios
-        .post("http://localhost:9094/comment/add-comment", updatedComments)
+        .post('http://localhost:9094/comment/add-comment', updatedComments, {
+          headers: { Authorization: 'Bearer ' + userToken },
+        })
         .then((result) => {
           if (result.data)
             dispatch(
@@ -103,9 +110,9 @@ const CommentComponent = () => {
   };
 
   return (
-    <div style={{ padding: "20px 20px 130px 20px" }}>
+    <div style={{ padding: '20px 20px 130px 20px' }}>
       {allComments.length !== 0 ? (
-        <List style={{ overflow: "auto", backgroundColor: "white" }}>
+        <List style={{ overflow: 'auto', backgroundColor: 'white' }}>
           {allComments.map((data, index) => {
             return (
               <Fragment key={`comments-${index}`}>
@@ -137,11 +144,11 @@ const CommentComponent = () => {
                                         title={data.role}
                                         placement="right"
                                       >
-                                        {data.role === "REVIEWER" ? (
+                                        {data.role === 'REVIEWER' ? (
                                           <PreviewTwoTone
                                             style={{ fontSize: 13 }}
                                           />
-                                        ) : data.role === "ASSOCIATE" ? (
+                                        ) : data.role === 'ASSOCIATE' ? (
                                           <SupportAgentTwoTone
                                             style={{ fontSize: 13 }}
                                           />
@@ -156,8 +163,8 @@ const CommentComponent = () => {
                                 </>
                               )}
                             </Grid>
-                            <Grid item xs={6} style={{ textAlign: "end" }}>
-                              <span style={{ fontSize: "10px" }}>
+                            <Grid item xs={6} style={{ textAlign: 'end' }}>
+                              <span style={{ fontSize: '10px' }}>
                                 {convertDate(data.date)}
                               </span>
                             </Grid>
@@ -167,7 +174,7 @@ const CommentComponent = () => {
                     }
                     secondary={
                       <Typography
-                        sx={{ display: "inline" }}
+                        sx={{ display: 'inline' }}
                         variant="span"
                         color="black"
                       >
@@ -182,11 +189,11 @@ const CommentComponent = () => {
           })}
         </List>
       ) : (
-        "No comments to display."
+        'No comments to display.'
       )}
       <Tooltip
         title="Add New comment"
-        sx={{ position: "fixed", bottom: 60, right: 50 }}
+        sx={{ position: 'fixed', bottom: 60, right: 50 }}
       >
         <Fab color="primary" onClick={handleClickOpen}>
           <AddIcon />
