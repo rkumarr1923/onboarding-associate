@@ -1,5 +1,7 @@
 .upload-doc-container {
     margin: 15px;
+    max-height: 82%;
+    overflow: auto;
 }
 
 .upload-doc-wrapper {
@@ -62,6 +64,7 @@
 
 .content-left {
     float: left;
+    width: 70%;
 }
 
 .content-right {
@@ -74,6 +77,6 @@
     padding: 10px 0px;
     position: static;
     height: 60px;
-    width: 80%;
+    width: 30%;
     z-index: 999;
   }

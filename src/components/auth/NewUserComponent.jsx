@@ -1,5 +1,6 @@
-import { InfoRounded, Visibility, VisibilityOff } from "@mui/icons-material";
+import { InfoRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -9,13 +10,16 @@ import {
   InputAdornment,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
   Tooltip,
+  useTheme,
   Typography,
+  useMediaQuery
 } from "@mui/material";
-import axios from "axios";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
   allManagers,
   allReviewers,
@@ -26,41 +30,45 @@ import {
   resetCreateNewUserDetails,
   reviewers,
   roles,
-} from "../../store";
-import { authConstant } from "./AuthConstant";
-import "../styles/login.css";
+} from '../../store';
+import { authConstant } from './AuthConstant';
+import '../styles/login.css';
 
 const NewUserComponent = () => {
+  const theme = useTheme();
+  const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
+  const matchesXL = useMediaQuery(theme.breakpoints.down('xl'));
   const dispatch = useDispatch();
   const newUserDetails = useSelector(createNewUser);
   const allRole = useSelector(allRoles);
   const allManager = useSelector(allManagers).filter(
-    (item) => item.empId !== "N/A"
+    (item) => item.empId !== 'N/A'
   );
   const allReviewer = useSelector(allReviewers).filter(
-    (item) => item.empId !== "N/A"
+    (item) => item.empId !== 'N/A'
   );
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:9099/roles").then((response) => {
+    axios.get('http://localhost:9099/roles').then((response) => {
       if (response.data) dispatch(roles({ roles: response.data }));
-      else console.log("No Roles");
+      else console.log('No Roles');
     });
-    axios.get("http://localhost:9099/managers").then((response) => {
+    axios.get('http://localhost:9099/managers').then((response) => {
       if (response.data) dispatch(managers({ managers: response.data }));
-      else console.log("No managers");
+      else console.log('No managers');
     });
-    axios.get("http://localhost:9099/reviewers").then((response) => {
+    axios.get('http://localhost:9099/reviewers').then((response) => {
       if (response.data) dispatch(reviewers({ reviewers: response.data }));
-      else console.log("No Reviewers");
+      else console.log('No Reviewers');
     });
     return () => dispatch(resetCreateNewUserDetails());
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const generatePassword = () => {
-    if (newUserDetails.employeeId !== "" && newUserDetails.userName !== "") {
+    if (newUserDetails.employeeId !== '' && newUserDetails.userName !== '') {
       const generatedPassword =
-        newUserDetails.userName.replace(/\s+/g, "").slice(0, 3) +
+        newUserDetails.userName.replace(/\s+/g, '').slice(0, 3) +
         newUserDetails.employeeId;
       dispatch(
         createNewUserDetails({
@@ -79,8 +87,8 @@ const NewUserComponent = () => {
     } else {
       let errorEmployeeId = false;
       let errorUserName = false;
-      if (newUserDetails.employeeId === "") errorEmployeeId = true;
-      if (newUserDetails.userName === "") errorUserName = true;
+      if (newUserDetails.employeeId === '') errorEmployeeId = true;
+      if (newUserDetails.userName === '') errorUserName = true;
       dispatch(
         createNewUserDetails({
           createNewUser: {
@@ -100,7 +108,7 @@ const NewUserComponent = () => {
           ...newUserDetails,
           [prop]: event.target.value,
           isGeneratedButtonDisabled:
-            prop === "userName" || prop === "employeeId"
+            prop === 'userName' || prop === 'employeeId'
               ? false
               : newUserDetails.isGeneratedButtonDisabled,
           error: { ...newUserDetails.error, [errorType]: false },
@@ -109,34 +117,38 @@ const NewUserComponent = () => {
     );
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleNewUser = (e) => {
     e.preventDefault();
     let error = {};
-    if (newUserDetails.email === "") error = { ...error, errorEmail: true };
-    if (newUserDetails.employeeId === "")
+    if (newUserDetails.email === '') error = { ...error, errorEmail: true };
+    if (newUserDetails.employeeId === '')
       error = { ...error, errorEmployeeId: true };
     if (
-      newUserDetails.reviewerName === "" &&
+      newUserDetails.reviewerName === '' &&
       newUserDetails.role === authConstant.assosiateRoleId
     )
       error = { ...error, errorReviewerName: true };
     if (
-      newUserDetails.managerName === "" &&
+      newUserDetails.managerName === '' &&
       (newUserDetails.role === authConstant.assosiateRoleId ||
         newUserDetails.role === authConstant.reviewerRoleId)
     )
       error = { ...error, errorManagerName: true };
-    if (newUserDetails.role === "") error = { ...error, errorRole: true };
-    if (newUserDetails.userName === "")
+    if (newUserDetails.role === '') error = { ...error, errorRole: true };
+    if (newUserDetails.userName === '')
       error = { ...error, errorUserName: true };
-    if (newUserDetails.password === "")
+    if (newUserDetails.password === '')
       error = { ...error, errorPassword: true };
     dispatch(
       createNewUserDetails({
         createNewUser: { ...newUserDetails, error },
       })
     );
-    if (JSON.stringify(error) === "{}") {
+    if (JSON.stringify(error) === '{}') {
       if (!newUserDetails.isGeneratedButtonDisabled) {
         dispatch(
           createNewUserDetails({
@@ -156,26 +168,27 @@ const NewUserComponent = () => {
           reviewerEmpId:
             newUserDetails.role === authConstant.assosiateRoleId
               ? newUserDetails.reviewerName
-              : "N/A",
+              : 'N/A',
           managerEmpId:
             newUserDetails.role === authConstant.assosiateRoleId ||
             newUserDetails.role === authConstant.reviewerRoleId
               ? newUserDetails.managerName
-              : "N/A",
+              : 'N/A',
         };
         axios
-          .post("http://localhost:9099/user_add", requestData)
+          .post('http://localhost:9099/user_add', requestData)
           .then((response) => {
             console.log(response.data);
+            setSnackbarOpen(true);
           });
       }
-    } else console.log("Error");
+    } else console.log('Error');
   };
 
   const handleClickShowPassword = () => {
     if (!newUserDetails.showPassword)
-      document.getElementById("password").type = "text";
-    else document.getElementById("password").type = "password";
+      document.getElementById('password').type = 'text';
+    else document.getElementById('password').type = 'password';
     dispatch(
       createNewUserDetails({
         createNewUser: {
@@ -187,14 +200,20 @@ const NewUserComponent = () => {
   };
 
   return (
-    <>
+    <div
+      style={{
+        textAlign: 'center',
+        width: matchesMD ? '80%' : matchesXL ? '40%' : '30%',
+        margin: 'auto',
+      }}
+    >
       <Grid
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
         className="pt-3"
-        style={{ marginBottom: "10rem" }}
+        style={{ marginBottom: '10rem' }}
       >
         <Grid item xs={12}>
           <Typography variant="h6">
@@ -214,11 +233,11 @@ const NewUserComponent = () => {
                 variant="standard"
                 value={newUserDetails.employeeId}
                 error={newUserDetails.error.errorEmployeeId}
-                onChange={handleChange("employeeId", "errorEmployeeId")}
+                onChange={handleChange('employeeId', 'errorEmployeeId')}
               />
               <Typography
                 variant="caption"
-                color={newUserDetails.error.errorEmployeeId ? "red" : "black"}
+                color={newUserDetails.error.errorEmployeeId ? 'red' : 'black'}
               >
                 Please enter IBM employee ID in 6 character. Eg: xxxxxx
               </Typography>
@@ -230,11 +249,11 @@ const NewUserComponent = () => {
                 variant="standard"
                 value={newUserDetails.email}
                 error={newUserDetails.error.errorEmail}
-                onChange={handleChange("email", "errorEmail")}
+                onChange={handleChange('email', 'errorEmail')}
               />
               <Typography
                 variant="caption"
-                color={newUserDetails.error.errorEmail ? "red" : "black"}
+                color={newUserDetails.error.errorEmail ? 'red' : 'black'}
               >
                 Please enter IBM employee mail id
               </Typography>
@@ -246,7 +265,7 @@ const NewUserComponent = () => {
                 variant="standard"
                 value={newUserDetails.userName}
                 error={newUserDetails.error.errorUserName}
-                onChange={handleChange("userName", "errorUserName")}
+                onChange={handleChange('userName', 'errorUserName')}
               />
               <TextField
                 id="password"
@@ -257,7 +276,7 @@ const NewUserComponent = () => {
                 variant="standard"
                 value={newUserDetails.password}
                 error={newUserDetails.error.errorPassword}
-                onChange={handleChange("password", "errorPassword")}
+                onChange={handleChange('password', 'errorPassword')}
                 InputProps={{
                   readOnly: true,
                   endAdornment: (
@@ -293,53 +312,55 @@ const NewUserComponent = () => {
                 variant="contained"
                 disabled={newUserDetails.isGeneratedButtonDisabled}
                 onClick={generatePassword}
-                style={{ marginTop: "10px" }}
+                style={{ marginTop: '10px' }}
               >
                 Generate Password
               </Button>
               <Typography
                 variant="caption"
                 color={
-                  newUserDetails.error.errorGeneratebutton ? "red" : "black"
+                  newUserDetails.error.errorGeneratebutton ? 'red' : 'black'
                 }
               >
                 Please generate password
               </Typography>
               {allRole && (
-                <Select
-                  margin="dense"
-                  displayEmpty
-                  id="role"
-                  value={newUserDetails.role}
-                  error={newUserDetails.error.errorRole}
-                  size="small"
-                  fullWidth
-                  onChange={handleChange("role", "errorRole")}
-                  style={{ marginTop: "1.5rem" }}
-                  sx={{
-                    "& legend": { display: "none" },
-                    "& fieldset": { top: 0 },
-                  }}
-                  //   inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem disabled value="">
-                    UserRole
-                  </MenuItem>
-                  {allRole.map((data) => {
-                    return (
-                      <MenuItem value={data.id} key={data.id}>
-                        {data.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
+                <>
+                  <Select
+                    margin="dense"
+                    displayEmpty
+                    id="role"
+                    value={newUserDetails.role}
+                    error={newUserDetails.error.errorRole}
+                    size="small"
+                    fullWidth
+                    onChange={handleChange('role', 'errorRole')}
+                    style={{ marginTop: '1.5rem' }}
+                    sx={{
+                      '& legend': { display: 'none' },
+                      '& fieldset': { top: 0 },
+                    }}
+                    //   inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem disabled value="">
+                      UserRole
+                    </MenuItem>
+                    {allRole.map((data) => {
+                      return (
+                        <MenuItem value={data.id} key={data.id}>
+                          {data.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <Typography
+                    variant="caption"
+                    color={newUserDetails.error.errorRole ? 'red' : 'black'}
+                  >
+                    Please select the role for the user
+                  </Typography>
+                </>
               )}
-              <Typography
-                variant="caption"
-                color={newUserDetails.error.errorRole ? "red" : "black"}
-              >
-                Please select the role for the user
-              </Typography>
               {newUserDetails.role === authConstant.assosiateRoleId &&
                 allReviewer && (
                   <>
@@ -352,13 +373,13 @@ const NewUserComponent = () => {
                       size="small"
                       fullWidth
                       onChange={handleChange(
-                        "reviewerName",
-                        "errorReviewerName"
+                        'reviewerName',
+                        'errorReviewerName'
                       )}
-                      style={{ marginTop: "1.5rem" }}
+                      style={{ marginTop: '1.5rem' }}
                       sx={{
-                        "& legend": { display: "none" },
-                        "& fieldset": { top: 0 },
+                        '& legend': { display: 'none' },
+                        '& fieldset': { top: 0 },
                       }}
                       //   inputProps={{ "aria-label": "Without label" }}
                     >
@@ -376,7 +397,7 @@ const NewUserComponent = () => {
                     <Typography
                       variant="caption"
                       color={
-                        newUserDetails.error.errorReviewerName ? "red" : "black"
+                        newUserDetails.error.errorReviewerName ? 'red' : 'black'
                       }
                     >
                       Please select the Reviewer Name
@@ -395,11 +416,11 @@ const NewUserComponent = () => {
                       error={newUserDetails.error.errorManagerName}
                       size="small"
                       fullWidth
-                      onChange={handleChange("managerName", "errorManagerName")}
-                      style={{ marginTop: "1.5rem" }}
+                      onChange={handleChange('managerName', 'errorManagerName')}
+                      style={{ marginTop: '1.5rem' }}
                       sx={{
-                        "& legend": { display: "none" },
-                        "& fieldset": { top: 0 },
+                        '& legend': { display: 'none' },
+                        '& fieldset': { top: 0 },
                       }}
                       //   inputProps={{ "aria-label": "Without label" }}
                     >
@@ -417,7 +438,7 @@ const NewUserComponent = () => {
                     <Typography
                       variant="caption"
                       color={
-                        newUserDetails.error.errorManagerName ? "red" : "black"
+                        newUserDetails.error.errorManagerName ? 'red' : 'black'
                       }
                     >
                       Please select the Manager Name
@@ -438,7 +459,25 @@ const NewUserComponent = () => {
           </Card>
         </Grid>
       </Grid>
-    </>
+      <Snackbar
+        sx={{ height: '20%' }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          New User created!!!
+        </Alert>
+      </Snackbar>
+    </div>
   );
 };
 

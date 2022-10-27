@@ -2,6 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import React from "react";
 import TemplateSummary from "./TemplateSummary";
 import CheckListStepper from "./CheckListStepper";
+import {Link} from "react-router-dom";
 
 const OnBoardingCheckList = () => {
   return (
@@ -19,6 +20,11 @@ const OnBoardingCheckList = () => {
         </Grid>
         <Grid item xs={12}>
           <TemplateSummary />
+        </Grid>
+        <Grid item xs={12}  style={{ margin: "20px" }}>
+          <Typography variant="h6">       
+            <strong> <Link to="/TrainingLinks">Mandatory Trainings >> </Link></strong>
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography

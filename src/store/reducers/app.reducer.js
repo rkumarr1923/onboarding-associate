@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const newUserInitState = {
-  email: "",
-  employeeId: "",
-  reviewerName: "",
-  managerName: "",
-  role: "",
-  userName: "",
-  password: "",
+  email: '',
+  employeeId: '',
+  reviewerName: '',
+  managerName: '',
+  role: '',
+  userName: '',
+  password: '',
   showPassword: false,
   isLoginButonDisabled: false,
   isGeneratedButtonDisabled: false,
@@ -24,10 +24,10 @@ const newUserInitState = {
 };
 
 const slice = createSlice({
-  name: "count",
+  name: 'count',
   initialState: {
     count: 0,
-    activeTab: "Default",
+    activeTab: 'Default',
     token: null,
     userDetails: null,
     comments: [],
@@ -35,6 +35,7 @@ const slice = createSlice({
     managers: [],
     reviewers: [],
     roles: [],
+    recordings: [],
   },
   reducers: {
     increment: (state) => {
@@ -75,7 +76,10 @@ const slice = createSlice({
     },
     associateList: (state, action) => {
       state.associateList = action.payload.associateList;
-    }
+    },
+    recordings: (state, action) => {
+      state.recordings = action.payload.recordings;
+    },
   },
 });
 
@@ -93,6 +97,7 @@ export const {
   reviewers,
   roles,
   associateList,
+  recordings,
 } = slice.actions;
 export const selectedTab = (state) => state.activeTab;
 export const userDetails = (state) => state.userDetails;
@@ -103,4 +108,5 @@ export const createNewUser = (state) => state.createNewUserDetailsData;
 export const allRoles = (state) => state.roles;
 export const allManagers = (state) => state.managers;
 export const allReviewers = (state) => state.reviewers;
+export const allRecordings = (state) => state.recordings;
 export const { reducer } = slice;

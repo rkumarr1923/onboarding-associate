@@ -3,18 +3,21 @@ import { AgGridReact } from 'ag-grid-react';
 import Button from '@mui/material/Button';
 import DTPicker from '../associate/DatePicker/DTPicker';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/associate.css';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { token } from '../../store';
 import { useFetchAssociate } from '../../services/hooks/useFetchAssociate';
 import { useDispatch } from 'react-redux';
 import { associateList } from '../../store';
 
 const AllAssociates = () => {
+  const userToken = useSelector(token);
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
   const { data, error, loading } = useFetchAssociate();
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     if (!loading && data) {
       let formattedData = data.map((associate) => {
@@ -30,7 +33,7 @@ const AllAssociates = () => {
         };
       });
       console.log('formatted data ', formattedData);
-      dispatch(associateList({associateList: formattedData}))
+      dispatch(associateList({ associateList: formattedData }))
       setFormattedData(formattedData);
     }
   }, [loading]);
@@ -117,6 +120,20 @@ const AllAssociates = () => {
       cellClass: (params) => onBoardStatus(params.data.status),
       minWidth: 100,
       maxWidth: 175,
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      cellStyle: { textAlign: '' },
+      minWidth: 40,
+      maxWidth: 100,
+      cellRenderer: (params) => {
+        return <Link to="/uploadDocuments" state={{ forAssociate: { empId: params.data.ibmId } }}>
+          <div>
+            <i title="Upload Document" className="fa fa-upload" aria-hidden="true" ></i>
+          </div>
+        </Link>
+      }
     },
   ];
 
