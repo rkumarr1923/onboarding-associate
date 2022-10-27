@@ -16,7 +16,7 @@ const RecordingList = (props) => {
   const recording = useSelector(allRecordings);
   const user = useSelector(userDetails);
   return (
-    <TableContainer style={{ margin: '0px' }}>
+    <TableContainer style={{ margin: '0px', backgroundColor: 'white' }}>
       <Table>
         <TableHead>
           <TableRow>

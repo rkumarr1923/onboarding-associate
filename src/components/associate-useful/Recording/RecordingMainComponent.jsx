@@ -65,47 +65,49 @@ const RecordingMainComponent = () => {
     dispatch(recordings({ data }));
   };
   return (
-    <Grid container>
-      {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
-        user.role === 'ROLE_ONBOARDING_REVIEWER') && (
-        <>
-          {editing ? (
-            <Grid item xs={12}>
-              <h2 style={{ textAlign: 'center' }}>Edit Recording</h2>
+    <div style={{ padding: '20px 20px 130px 20px' }}>
+      <Grid container>
+        {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
+          user.role === 'ROLE_ONBOARDING_REVIEWER') && (
+          <>
+            {editing ? (
               <Grid item xs={12}>
-                <EditRecording
-                  editing={editing}
-                  setEditing={setEditing}
-                  currentRecording={currentRecording}
-                  updateRecording={updateRecording}
-                />
+                <h2 style={{ textAlign: 'center' }}>Edit Recording</h2>
+                <Grid item xs={12}>
+                  <EditRecording
+                    editing={editing}
+                    setEditing={setEditing}
+                    currentRecording={currentRecording}
+                    updateRecording={updateRecording}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          ) : (
-            <Grid item xs={12}>
-              <h2 style={{ textAlign: 'center' }}>Recording</h2>
+            ) : (
               <Grid item xs={12}>
-                <AddRecording addRecording={addRecording} />
+                <h2 style={{ textAlign: 'center' }}>Recording</h2>
+                <Grid item xs={12}>
+                  <AddRecording addRecording={addRecording} />
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-        </>
-      )}
-      <Grid item xs={12}>
+            )}
+          </>
+        )}
         <Grid item xs={12}>
-          <h2 style={{ textAlign: 'center' }}>Recording</h2>
+          <h2>Recording</h2>
           {loader ? (
             <Loader />
           ) : (
-            <RecordingList
-              recordings={recordings}
-              editRecording={editRecording}
-              deleteRecording={deleteRecording}
-            />
+            <Grid item xs={12}>
+              <RecordingList
+                recordings={recordings}
+                editRecording={editRecording}
+                deleteRecording={deleteRecording}
+              />
+            </Grid>
           )}
         </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 };
 export default RecordingMainComponent;
