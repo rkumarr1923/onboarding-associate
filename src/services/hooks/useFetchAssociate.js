@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { token } from '../../store';
 
-const useFetchAssociate = async () => {
+const useFetchAssociate = () => {
   const userToken = useSelector(token);
   const [data, setdata] = useState(null);
   const [loading, setloading] = useState(true);
@@ -16,8 +16,8 @@ const useFetchAssociate = async () => {
         BASE_URL+'/get-all-associates', {
           headers: { Authorization: 'Bearer ' + userToken },
         });
-      const { data, error, loading } = response;
-      seterror(data.error);
+      const { data, error } = response;
+      seterror(error);
       setdata(data);
       setloading(false);
     };
@@ -27,4 +27,4 @@ const useFetchAssociate = async () => {
   return { data, loading, error };
 };
 
-export default useFetchAssociate;
+export {useFetchAssociate};

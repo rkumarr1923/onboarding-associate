@@ -3,45 +3,40 @@ import { AgGridReact } from 'ag-grid-react';
 import Button from '@mui/material/Button';
 import DTPicker from '../associate/DatePicker/DTPicker';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/associate.css';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { token } from '../../store';
+import { useFetchAssociate } from '../../services/hooks/useFetchAssociate';
+import { useDispatch } from 'react-redux';
+import { associateList } from '../../store';
 
 const AllAssociates = () => {
   const userToken = useSelector(token);
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
-
-  const fetchData = async () => {
-    const BASE_URL = 'http://localhost:9092/pru-associate';
-    const response = await axios.get(
-      BASE_URL+'/get-all-associates', {
-        headers: { Authorization: 'Bearer ' + userToken },
-      });
-    const { data, error, loading } = response;
-    let formattedData = data.map((associate) => {
-      return {
-        associateName: associate.associateName,
-        ibmId: associate.ibmId,
-        emailIBM: associate.emailIbm,
-        location: associate.location,
-        role: associate.role,
-        primaryContact: associate.primaryContact,
-        itExpDate: associate.itExpDate, // new Date(associate.itExpDate)
-        status: associate.activeInactive,
-        actions: ''
-      };
-    });
-    console.log('formatted data ', formattedData);
-    setFormattedData(formattedData);
-  };
+  const { data, error, loading } = useFetchAssociate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchData();
-    console.log('gridApi', gridApi);
-  }, []);
+    if (!loading && data) {
+      let formattedData = data.map((associate) => {
+        return {
+          associateName: associate.associateName,
+          ibmId: associate.ibmId,
+          emailIBM: associate.emailIbm,
+          location: associate.location,
+          role: associate.role,
+          primaryContact: associate.primaryContact,
+          itExpDate: associate.itExpDate, // new Date(associate.itExpDate)
+          status: associate.activeInactive,
+        };
+      });
+      console.log('formatted data ', formattedData);
+      dispatch(associateList({ associateList: formattedData }))
+      setFormattedData(formattedData);
+    }
+  }, [loading]);
 
   const resetAppliedFilters = () => {
     gridApi.setFilterModel(null);
@@ -133,7 +128,7 @@ const AllAssociates = () => {
       minWidth: 40,
       maxWidth: 100,
       cellRenderer: (params) => {
-        return <Link to="/uploadDocuments" state={{ forAssociate: { empId : params.data.ibmId} }}>
+        return <Link to="/uploadDocuments" state={{ forAssociate: { empId: params.data.ibmId } }}>
           <div>
             <i title="Upload Document" className="fa fa-upload" aria-hidden="true" ></i>
           </div>

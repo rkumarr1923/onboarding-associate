@@ -1,7 +1,6 @@
 import React from "react";
 import Excel from 'exceljs';
 import { saveAs } from 'file-saver';
-import { allAssociates } from "../DatePicker/all-associates-data";
 import '../../styles/associate.css';
 
 const columns = [
@@ -17,8 +16,9 @@ const columns = [
 const workSheetName = 'Associates-Details';
 const workBookName = 'Associates';
 
-const ExportAssociates = ({ }) => {
+const ExportAssociates = ({list=[] }) => {
 
+  console.log('export list', list)
   const workbook = new Excel.Workbook();
 
   const exportIntoExcel = async () => {
@@ -43,7 +43,7 @@ const ExportAssociates = ({ }) => {
       });
 
       // loop through data and add each one to worksheet
-      allAssociates.forEach(singleData => {
+      list.forEach(singleData => {
         worksheet.addRow(singleData);
       });
 
