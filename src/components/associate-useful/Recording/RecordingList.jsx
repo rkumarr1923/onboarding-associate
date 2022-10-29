@@ -8,13 +8,39 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { allRecordings, userDetails } from '../../../store';
+import RecordingService from '../../../services/hooks/RecordingService';
+//import { allRecordings, userDetails } from '../../../store';
+import { token, userDetails } from '../../../store';
+
 const tableHeader = ['Recording Description', 'Recording Link'];
 const RecordingList = (props) => {
-  const recording = useSelector(allRecordings);
+  const userToken = useSelector(token);
   const user = useSelector(userDetails);
+  const [recordings, setRecordings] = useState([]);
+  const [currentRecording, setCurrentRecording] = useState(null);
+  //const recording = useSelector(allRecordings);
+  const [currentIndex, setCurrentIndex] = useState(-1);
+
+  useEffect(() => {
+    const BASE_URL = 'http://localhost:9094/recording';
+
+    axios
+      .get(BASE_URL + '/get-all-recording', {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
+      .then((response) => {
+        setRecordings(response.data);
+        console.log(
+          'in Recording list useEffect getall recordings ',
+          response.data
+        );
+      });
+    //retrieveTrainings();
+  }, []);
+
   return (
     <TableContainer style={{ margin: '0px', backgroundColor: 'white' }}>
       <Table>
@@ -33,8 +59,8 @@ const RecordingList = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {recording.length > 0 ? (
-            recording.map((item) => (
+          {props.recordings.length > 0 ? (
+            props.recordings.map((item) => (
               <TableRow key={item.recordId}>
                 <TableCell>{item.recordDesc}</TableCell>
                 <TableCell>
@@ -44,7 +70,7 @@ const RecordingList = (props) => {
                   <br />
                   Password : {item.recordLinkPassword}
                 </TableCell>
-                {(user.role === 'REVIEWER' || user.role === 'MANAGER') && (
+                {(user.role === 'ROLE_ONBOARDING_REVIEWER' || user.role === 'ROLE_ONBOARDING_MANAGER') && (
                   <>
                     <TableCell>
                       <Button

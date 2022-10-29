@@ -1,48 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RecordingList from './RecordingList';
 import AddRecording from './AddRecording';
 import EditRecording from './EditRecording';
 import { Grid } from '@mui/material';
-import { recordings, token, userDetails } from '../../../store';
+import { token, userDetails } from '../../../store';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import Loader from '../../common/Loader';
+import RecordingService from '../../../services/hooks/RecordingService';
+
 const RecordingMainComponent = () => {
   const userToken = useSelector(token);
-  const dispatch = useDispatch();
+  const user = useSelector(userDetails);
+  //const dispatch = useDispatch();  
   const initialFormState = {
     recordId: '',
     recordDesc: '',
     recordLink: '',
     recordLinkPassword: '',
   };
+  const [recordings, setRecordings] = useState([]);
+  const headers = { Authorization: 'Bearer ' + userToken };
   useEffect(() => {
     axios
       .get('http://localhost:9094/recording/get-all-recordings', {
         headers: { Authorization: 'Bearer ' + userToken },
       })
       .then((response) => {
-        dispatch(recordings({ recordings: response.data }));
+        //dispatch(recordings({ recordings: response.data }));
+        setRecordings(response.data);
+        console.log(
+          'in Main component useEffect getall recordings ',
+          response.data
+        );
         setLoader(false);
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [editing, setEditing] = useState(false);
   const [currentRecording, setCurrentRecording] = useState(initialFormState);
-  const user = useSelector(userDetails);
+  
   const [loader, setLoader] = useState(true);
   // Add recording...
   const addRecording = (recording) => {
-    console.log(recording);
-    dispatch(recordings({ recordings }));
+    //console.log(recording);
+    //dispatch(recordings({ recordings }));
+    console.log('in main component, add recording', recording);
+    setRecordings([...recordings, recording]);
   };
   // delete recordings...
   const deleteRecording = (recordId) => {
-    const data = recordings.filter(
-      (recording) => recording.recordId !== recordId
-    );
-    dispatch(recordings({ data }));
+    setLoader(true);
+    RecordingService.deleteRecording(recordId, headers).then((response) => {
+      console.log(response.data);
+      setRecordings(
+        recordings.filter((recording) => recording.recordId !== recordId)
+      );
+      setLoader(false);
+    });
   };
   // set value for edit recording form...
   const editRecording = (recording) => {
@@ -57,19 +71,19 @@ const RecordingMainComponent = () => {
   //  update recording
   const updateRecording = (recordId, updatedRecording) => {
     setEditing(false);
-    console.log(recordId, 'idd');
-    const data = recordings.map((item) => {
-      console.log(item.recordId);
-      return item.recordId === recordId ? updatedRecording : item;
-    });
-    dispatch(recordings({ data }));
+    console.log(recordId+ 'idd');
+    setRecordings(
+      recordings.map((item) => {
+        return item.recordId === recordId ? updatedRecording : item;
+      })
+    );
   };
-  return (
+  return (    
     <div style={{ padding: '20px 20px 130px 20px' }}>
       <Grid container>
-        {(user.role === 'ROLE_ONBOARDING_MANAGER' ||
-          user.role === 'ROLE_ONBOARDING_REVIEWER') && (
-          <>
+        {user.role === 'ROLE_ONBOARDING_MANAGER' ||
+        user.role === 'ROLE_ONBOARDING_REVIEWER' ? (
+          <Grid item xs={12}>
             {editing ? (
               <Grid item xs={12}>
                 <h2 style={{ textAlign: 'center' }}>Edit Recording</h2>
@@ -90,22 +104,25 @@ const RecordingMainComponent = () => {
                 </Grid>
               </Grid>
             )}
-          </>
-        )}
-        <Grid item xs={12}>
-          <h2>Recording</h2>
-          {loader ? (
-            <Loader />
-          ) : (
             <Grid item xs={12}>
-              <RecordingList
-                recordings={recordings}
-                editRecording={editRecording}
-                deleteRecording={deleteRecording}
-              />
+              <h2>Recording</h2>
+              {loader ? (
+                <Loader />
+              ) : (
+                <RecordingList
+                  recordings={recordings}
+                  editRecording={editRecording}
+                  deleteRecording={deleteRecording}
+                />
+              )}
             </Grid>
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <h2>Recording</h2>
+            {loader ? <Loader /> : <RecordingList recording={recordings} />}
+          </Grid>
+        )}
       </Grid>
     </div>
   );
