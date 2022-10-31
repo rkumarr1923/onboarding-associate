@@ -29,6 +29,7 @@ const SampleDocuments = () => {
   const [openSnakBar, setSnakBarOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [optionselect, setOptionselect] = useState('');
+  const [option, setOption] = useState({});
   const [inputfile, setInputfile] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);
   const [docTobeUpdate, setDocTobeUpdate] = useState({});
@@ -59,7 +60,8 @@ const SampleDocuments = () => {
       .get('http://localhost:9003/document/sample')
       .then((res) => {
         setOptions([...res.data]);
-        setOptionselect('1');
+        setOption(res.data.filter(obj=> obj.id===0)[0]);
+        setOptionselect('0');
       })
       .catch((err) => {
         console.log(err);
@@ -149,7 +151,7 @@ const SampleDocuments = () => {
 
   const resetFields = () => {
     document.getElementById('myfile').value = '';
-    setOptionselect('1');
+    setOptionselect('0');
     setInputfile(false);
   };
 
@@ -205,11 +207,14 @@ const SampleDocuments = () => {
             <div className="input-select">
               {' '}
               Document Type:&nbsp;
-              <SelectBox
+              {/* <SelectBox
                 options={options}
                 onOptionChanged={optionChanged}
                 optionselect={optionselect}
-              />
+              /> */}
+              <label htmlFor="documenttype">
+                  <input id="documenttype" name="documenttype" value={option.name} type="text" disabled={true} />
+              </label>
             </div>{' '}
             &nbsp;
             <div className="file-upload-wrapper" data-text="Select your file!">
