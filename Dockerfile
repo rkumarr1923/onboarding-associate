@@ -1,3 +1,4 @@
+# To install docker desktop : https://docs.docker.com/desktop/install/windows-install/
 #cmd : docker build -t onboarding-associate .
 # Fetching the latest node image on apline linux
 FROM node:alpine AS development
