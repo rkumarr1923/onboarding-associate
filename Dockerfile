@@ -1,3 +1,4 @@
+#cmd : docker build -t onboarding-associate .
 # Fetching the latest node image on apline linux
 FROM node:alpine AS development
 
