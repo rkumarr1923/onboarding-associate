@@ -70,7 +70,7 @@ const DocumentTable = forwardRef((props, ref) => {
       .then((res) => {
         //console.log(res.data);
         setDocuments(res.data);
-        const filteredObj = res.data.filter((obj) => obj.reviewed == true);
+        const filteredObj = res.data.filter((obj) => obj.reviewed === true);
         if (filteredObj.length > 0) {
           setIsReviewed(true);
         } else {

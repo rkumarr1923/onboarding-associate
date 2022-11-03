@@ -28,6 +28,8 @@ const UploadDocument = () => {
   const [isReviewed, setIsReviewed] = useState(false);
   const [docTobeUpdate, setDocTobeUpdate] = useState({});
   const [docTypeTobeUpdate, setDocTypeTobeUpdate] = useState({});
+  const [updatePopupMessage, setUpdatePopupMessage] = useState('');
+  const [isDocTypePopup, setIsDocTypePopup] = useState(false);
   const [openUpdate, setUpdateDialogStatus] = useState(false);
   const user = useSelector(userDetails);
   const [revieweddocuments, setReviewedDocuments] = useState([]);
@@ -124,26 +126,62 @@ const UploadDocument = () => {
 
   const openUpdateDialog = () => {
     const updateFileName = document.getElementById('myfile').files[0].name;
-    var filteredObj = [];
+    //var filteredObj = [];
+    var isPopupDisplay = false;
     if (user.role === 'ROLE_ASSOCIATE') {
-      filteredObj = documents.filter(
-        (obj) => obj.documentType.id === parseInt(optionselect)
-      );
+      isPopupDisplay = validateUploadFile(documents, updateFileName);
     } else {
-      filteredObj = revieweddocuments.filter(
-        (obj) => obj.documentType.id === parseInt(optionselect)
-      );
+      isPopupDisplay = validateUploadFile(revieweddocuments, updateFileName);
     }
 
-    if (filteredObj && filteredObj.length > 0) {
-      console.log(filteredObj[0]);
-      setDocTobeUpdate(filteredObj[0]);
-      setDocTypeTobeUpdate(filteredObj[0].documentType.name);
+    if(isPopupDisplay) {
+      //console.log(filteredObj[0])
+      //setDocTobeUpdate(filteredObj[0]);
+      //setDocTypeTobeUpdate(filteredObj[0].documentType.name);
       setUpdateDialogStatus(true);
     } else {
       callUploadAPI();
     }
   };
+
+  const validateUploadFile = (documentList, updateFileName) => {
+    var filteredObj = [];
+    const fileName = updateFileName.substring(0, updateFileName.lastIndexOf("."));
+    filteredObj = documentList.filter(obj => (obj.documentType.id===parseInt(optionselect)));
+    if(filteredObj && filteredObj.length>0) {
+      //var filteredObj1 = documentList.filter(obj => (obj.documentType.id===parseInt(optionselect) && obj.name===updateFileName));
+      var filteredObj1 = documentList.filter(obj => (obj.documentType.id===parseInt(optionselect) && obj.name.substring(0, obj.name.lastIndexOf(".")) === fileName));
+      if(filteredObj1 && filteredObj1.length>0) {
+        return setIsPopupDisplay(filteredObj1[0], true);
+      } else {
+        filteredObj1 = documentList.filter(obj => (obj.name.substring(0, obj.name.lastIndexOf(".")) === fileName));
+        if(filteredObj1 && filteredObj1.length>0) {
+          return setIsPopupDisplay(filteredObj1[0], false);
+        } else {
+          return setIsPopupDisplay(filteredObj[0], true);
+        }
+      }
+    } else {
+      //filteredObj = documentList.filter(obj => (obj.name===updateFileName));
+      filteredObj = documentList.filter(obj => (obj.name.substring(0, obj.name.lastIndexOf(".")) === fileName));
+      if(filteredObj && filteredObj.length>0) {
+        return setIsPopupDisplay(filteredObj[0], false);
+      }
+    }
+  }
+
+  const setIsPopupDisplay = (fileObj, isDocTypePopup) => {
+    if(isDocTypePopup){
+      //setUpdatePopupMessage(fileObj.name+" of type "+fileObj.documentType.name+" already exists. Do you want to replace it?");
+      setUpdatePopupMessage(fileObj.documentType.name+" type document already exists. Do you want to replace it?");
+      setIsDocTypePopup(isDocTypePopup);
+    } else {
+      //setUpdatePopupMessage(fileObj.name+" of type "+fileObj.documentType.name+" already exists. Please select a different file.");
+      setUpdatePopupMessage("Document with this name already exists.");
+      setIsDocTypePopup(isDocTypePopup);
+    }
+    return true;
+  }
 
   const updateDialogClose = () => {
     setUpdateDialogStatus(false);
@@ -224,18 +262,23 @@ const UploadDocument = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`${docTobeUpdate.name} of type ${docTypeTobeUpdate} already exists. Do you want to replace it?`}
+          {/* {`${docTobeUpdate.name} of type ${docTypeTobeUpdate} already exists. Do you want to replace it?`} */}
+          { `${updatePopupMessage}`}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Once updated canot be reverted.
-          </DialogContentText>
+          {(isDocTypePopup) && 
+            <DialogContentText id="alert-dialog-description">
+              Once updated canot be reverted.
+            </DialogContentText>
+          }
         </DialogContent>
         <DialogActions>
           <Button onClick={updateDialogClose}>Cancel</Button>
+          {(isDocTypePopup) && 
           <Button onClick={() => callUploadAPI()} autoFocus>
             Yes
           </Button>
+          }
         </DialogActions>
       </Dialog>
 
