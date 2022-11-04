@@ -11,12 +11,14 @@ import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import './UploadDocument.css';
 import SelectBox from '../core/Select';
-import { userDetails } from '../../store';
+import { token,userDetails } from '../../store';
 import { useSelector } from 'react-redux';
 import DocumentTable from './DocumentTable';
 import Loader from '../common/Loader';
 
 const UploadDocument = () => {
+  const BASE_URL = 'http://localhost:9003/';
+  const userToken = useSelector(token);
   const location = useLocation();
   const { forAssociate } = location.state;
   const [documents, setDocuments] = useState([]);
@@ -66,9 +68,10 @@ const UploadDocument = () => {
       redirect: 'follow',
     };
     axios
-      .post('http://localhost:9003/files', formdata, {
+      .post(BASE_URL+'files', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization':'Bearer'+userToken
         },
       })
       .then((result) => {
@@ -103,7 +106,7 @@ const UploadDocument = () => {
   const fetchDocumentTypes = () => {
     const role = user.role;
     axios
-      .get('http://localhost:9003/document')
+      .get(BASE_URL+'document',{headers: { Authorization: 'Bearer ' + userToken }})
       .then((res) => {
         setOptions([...res.data]);
         setOptionselect('1');

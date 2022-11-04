@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { userDetails } from '../../store';
+import { token,userDetails } from '../../store';
 import { useSelector } from 'react-redux';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
@@ -24,6 +24,8 @@ import './UploadDocument.css';
 import Loader from '../common/Loader';
 
 const SampleDocuments = () => {
+  const BASE_URL = 'http://localhost:9003/';
+  const userToken = useSelector(token);
   const [documents, setDocuments] = useState([]);
   const user = useSelector(userDetails);
   const [openSnakBar, setSnakBarOpen] = useState(false);
@@ -43,9 +45,11 @@ const SampleDocuments = () => {
     fetchDocumentTypes();
   }, []);
 
-  const fetchDocuments = () => {
+  const fetchDocuments = () => {    
     axios
-      .get(`http://localhost:9003/files/sampledoc`)
+      .get(BASE_URL+'files/sampledoc', {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
       .then((res) => {
         setDocuments(res.data);
         setLoader(false);
@@ -57,7 +61,9 @@ const SampleDocuments = () => {
 
   const fetchDocumentTypes = () => {
     axios
-      .get('http://localhost:9003/document/sample')
+      .get(BASE_URL+'document/sample', {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
       .then((res) => {
         setOptions([...res.data]);
         setOption(res.data.filter(obj=> obj.id===0)[0]);
@@ -125,9 +131,10 @@ const SampleDocuments = () => {
       redirect: 'follow',
     };
     axios
-      .post('http://localhost:9003/files', formdata, {
+      .post(BASE_URL+'files', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization':'Bearer '+userToken
         },
       })
       .then((result) => {
@@ -157,7 +164,7 @@ const SampleDocuments = () => {
 
   const download = (id, name) => {
     axios
-      .get(`http://localhost:9003/files/${id}`, { responseType: 'blob' })
+      .get(`http://localhost:9003/files/${id}`, { headers: { Authorization: 'Bearer ' + userToken }, responseType: 'blob' })
       .then((result) => {
         //console.log(result);
         if (result) {
@@ -186,7 +193,7 @@ const SampleDocuments = () => {
 
   const deleteDocs = (id) => {
     axios
-      .delete(`http://localhost:9003/files/delete/${id}`)
+      .delete(`http://localhost:9003/files/delete/${id}`,{headers: { Authorization: 'Bearer ' + userToken },})
       .then((result) => {
         setDialogStatus(false);
         //console.log(result);

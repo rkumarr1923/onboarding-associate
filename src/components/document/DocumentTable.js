@@ -20,11 +20,12 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import './UploadDocument.css';
 import { Typography } from '@mui/material';
-import { userDetails } from '../../store';
+import { token,userDetails } from '../../store';
 import { useSelector } from 'react-redux';
 import Loader from '../common/Loader';
 
 const DocumentTable = forwardRef((props, ref) => {
+  const userToken = useSelector(token);
   const [documents, setDocuments] = useState([]);
   const [open, setDialogStatus] = useState(false);
   const [docTobeDeleted, setDocIdTobeDeleted] = useState({});
@@ -66,7 +67,7 @@ const DocumentTable = forwardRef((props, ref) => {
       url = url + `/${id}`;
     }
     axios
-      .get(url)
+      .get(url,{headers: { Authorization: 'Bearer ' + userToken },})
       .then((res) => {
         //console.log(res.data);
         setDocuments(res.data);
@@ -96,7 +97,7 @@ const DocumentTable = forwardRef((props, ref) => {
       ? props.downloadURL
       : `http://localhost:9003/files/${id}`;
     axios
-      .get(url, { responseType: 'blob' })
+      .get(url, { headers: { Authorization: 'Bearer ' + userToken }, responseType: 'blob' })
       .then((result) => {
         //console.log(result);
         if (result) {
@@ -119,7 +120,7 @@ const DocumentTable = forwardRef((props, ref) => {
       ? props.deleteURL
       : `http://localhost:9003/files/delete/${id}`;
     axios
-      .delete(url)
+      .delete(url,{headers: { Authorization: 'Bearer ' + userToken },})
       .then((result) => {
         setDialogStatus(false);
         fetchDocuments();
@@ -134,7 +135,7 @@ const DocumentTable = forwardRef((props, ref) => {
       user.role === 'ROLE_ASSOCIATE' ? user.empId : props.forAssociate.empId;
     const reviewerId = user.role === 'ROLE_ASSOCIATE' ? '' : user.empId;
     axios
-      .put(`http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}`)
+      .put(`http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}`,{headers: { Authorization: 'Bearer ' + userToken },})
       .then((result) => {
         setDialogStatus(false);
         fetchDocuments();
@@ -150,7 +151,7 @@ const DocumentTable = forwardRef((props, ref) => {
     const reviewerId = user.role === 'ROLE_ASSOCIATE' ? '' : user.empId;
     const url = `http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}/zip`;
     axios
-      .get(url, { responseType: 'blob' })
+      .get(url, { headers: { Authorization: 'Bearer ' + userToken },responseType: 'blob' })
       .then((result) => {
         if (result) {
           const file = new Blob([result.data], { type: 'application/pdf' });
