@@ -134,7 +134,7 @@ const CheckListTable = (props) => {
                         </TableCell>
                         <TableCell>
                           <Input
-                            value={tableValue.comment}
+                            value={tableValue.comment ? tableValue.comment : ''}
                             onChange={(e) => {
                               handleChange(
                                 e,
