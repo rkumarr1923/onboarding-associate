@@ -12,7 +12,7 @@ import RecordingService from '../../../services/hooks/RecordingService';
 const RecordingMainComponent = () => {
   const userToken = useSelector(token);
   const user = useSelector(userDetails);
-  //const dispatch = useDispatch();  
+  //const dispatch = useDispatch();
   const initialFormState = {
     recordId: '',
     recordDesc: '',
@@ -38,7 +38,7 @@ const RecordingMainComponent = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [editing, setEditing] = useState(false);
   const [currentRecording, setCurrentRecording] = useState(initialFormState);
-  
+
   const [loader, setLoader] = useState(true);
   // Add recording...
   const addRecording = (recording) => {
@@ -71,14 +71,14 @@ const RecordingMainComponent = () => {
   //  update recording
   const updateRecording = (recordId, updatedRecording) => {
     setEditing(false);
-    console.log(recordId+ 'idd');
+    console.log(recordId + 'idd');
     setRecordings(
       recordings.map((item) => {
         return item.recordId === recordId ? updatedRecording : item;
       })
     );
   };
-  return (    
+  return (
     <div style={{ padding: '20px 20px 130px 20px' }}>
       <Grid container>
         {user.role === 'ROLE_ONBOARDING_MANAGER' ||
@@ -120,7 +120,7 @@ const RecordingMainComponent = () => {
         ) : (
           <Grid item xs={12}>
             <h2>Recording</h2>
-            {loader ? <Loader /> : <RecordingList recording={recordings} />}
+            {loader ? <Loader /> : <RecordingList recordings={recordings} />}
           </Grid>
         )}
       </Grid>
