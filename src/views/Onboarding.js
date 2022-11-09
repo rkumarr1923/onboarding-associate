@@ -1,10 +1,9 @@
 import React from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
-import { tabSelected, appStore } from "../store";
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, Outlet } from 'react-router-dom';
 import { Tab } from "@material-ui/core";
 import { Route} from "react-router-dom";
-//import "./styles.css";
+import { tabSelected, appStore } from '../store';
 
 export default function Onboarding() {
   const dispatch = useDispatch();
@@ -16,10 +15,12 @@ export default function Onboarding() {
   const loginFormRender = () => {
     return (
       <ul className="nav-links">
-        {user && (user.role === "Reviewer" || user.role === "Manager") && (
-          <>
-            <li className={isTabActive('New User')} 
-     TabIndicatorProps={{style: {background:'white'}}}>
+        {user &&
+          (user.role === 'ROLE_ONBOARDING_REVIEWER' ||
+            user.role === 'ROLE_ONBOARDING_MANAGER') && (
+            <>
+              <li className={isTabActive('New User')}>
+	TabIndicatorProps={{style: {background:'white'}}}
               <Link to="/auth/register">
                 <Tab
                   value={routes[0]}
@@ -89,12 +90,13 @@ export default function Onboarding() {
                   label="BackgroundCheck"
                   component={Link}
                   to={routes[6]}
-                />
-              </Link>
-            </li>
-          </>
-        )}
-        {user && user.role === "Associate" && (
+
+                  />
+                </Link>
+              </li>
+            </>
+          )}
+        {user && user.role === 'ROLE_ASSOCIATE' && (
           <>
             <li className={isTabActive('OnBoardingCheckList')} style={{ color: 'red',fontWeight: 'bold' }}>
               <Link to="/onBoardingCheckList">
@@ -123,6 +125,7 @@ export default function Onboarding() {
                   label="Comment"
                   component={Link}
                   to={routes[4]}
+
                 />
               </Link>
             </li>
