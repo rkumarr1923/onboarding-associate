@@ -4,13 +4,21 @@ import "./styles/index.css";
 // import reportWebVitals from '../reportWebVitals';
 import App from "./App";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import store from "./store/store";
+import { persistor } from "./store";
+import { PersistGate } from "redux-persist/integration/react";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const theme = createTheme({});
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

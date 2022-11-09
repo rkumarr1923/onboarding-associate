@@ -1,12 +1,17 @@
-import { AddCircleOutline } from "@mui/icons-material";
 import {
-  Avatar,
+  PeopleAltTwoTone,
+  PreviewTwoTone,
+  SupportAgentTwoTone,
+} from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
+  Fab,
   Grid,
   List,
   ListItem,
@@ -14,37 +19,46 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { Fragment, useState } from "react";
-import moment from "moment/moment.js";
-import axios from "axios";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { comments, userComments, userDetails } from "../../store";
+} from '@mui/material';
+import { Fragment, useState } from 'react';
+import moment from 'moment/moment.js';
+import axios from 'axios';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { comments, userComments, userDetails, token } from '../../store';
+import Loader from '../common/Loader';
 
 const CommentComponent = () => {
+  const userToken = useSelector(token);
   const [open, setOpen] = useState(false);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(userDetails);
   const allComments = useSelector(userComments);
-  const empId = "000GM1";
+  const empId = user.empId;
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:9094/comment/" + empId).then((result) => {
-      if (result.data)
-        dispatch(
-          comments({
-            comments: result.data,
-          })
-        );
-    }); // eslint-disable-next-line react-hooks/exhaustive-deps
+    axios
+      .get('http://localhost:9094/comment/' + empId, {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
+      .then((result) => {
+        if (result.data) {
+          dispatch(
+            comments({
+              comments: result.data,
+            })
+          );
+          setLoader(false);
+        }
+      }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [empId]);
 
   const handleClickOpen = () => {
     setError(false);
-    setComment("");
+    setComment('');
     setOpen(true);
   };
 
@@ -55,16 +69,16 @@ const CommentComponent = () => {
   const convertDate = (date) => {
     let updatedDate = moment(new Date(date));
     return updatedDate.calendar(null, {
-      lastWeek: "[Last] ddd hh:mm A",
-      lastDay: "[Yesterday at] hh:mm A",
+      lastWeek: '[Last] ddd hh:mm A',
+      lastDay: '[Yesterday at] hh:mm A',
       sameDay: function (now) {
         if (moment(date).isSame(moment(new Date()).format())) {
-          return "[Now]";
+          return '[Now]';
         } else {
-          return "[Today at] hh:mm A";
+          return '[Today at] hh:mm A';
         }
       },
-      sameElse: "YYYY/MM/DD hh:mm A",
+      sameElse: 'YYYY/MM/DD hh:mm A',
     });
   };
 
@@ -73,7 +87,7 @@ const CommentComponent = () => {
   };
 
   const handleAddComments = () => {
-    if (comment === null || comment === "") setError(true);
+    if (comment === null || comment === '') setError(true);
     else {
       let updatedComments = {
         empId: empId,
@@ -83,7 +97,9 @@ const CommentComponent = () => {
         date: moment(new Date()).format(),
       };
       axios
-        .post("http://localhost:9094/comment/add-comment", updatedComments)
+        .post('http://localhost:9094/comment/add-comment', updatedComments, {
+          headers: { Authorization: 'Bearer ' + userToken },
+        })
         .then((result) => {
           if (result.data)
             dispatch(
@@ -98,117 +114,98 @@ const CommentComponent = () => {
   };
 
   return (
-    <>
-      <Grid container direction="row" style={{ backgroundColor: "white" }}>
-        <Grid item xs={12} position="fixed" style={{ zIndex: "998" }}>
-          <Grid
-            container
-            direction="row"
-            position="fixed"
-            style={{ backgroundColor: "black" }}
-          >
-            <Grid item xs={6}>
-              <Typography
-                variant="h6"
-                style={{ margin: "10px", color: "white" }}
-              >
-                <strong>Comments</strong>
-              </Typography>
-            </Grid>
-            <Grid item xs={6} style={{ textAlign: "end" }}>
-              <Button
-                size="small"
-                disableRipple
-                variant="contained"
-                startIcon={<AddCircleOutline />}
-                onClick={handleClickOpen}
-                style={{ margin: "10px" }}
-              >
-                Add
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} style={{ marginTop: "2.7rem" }}>
-          {allComments.length !== 0 ? (
-            <List>
-              {allComments.map((data, index) => {
-                return (
-                  <Fragment key={`comments-${index}`}>
-                    <ListItem alignItems="flex-start" key={index}>
-                      <ListItemText
-                        primary={
-                          <>
-                            <Typography
-                              variant="h6"
-                              color="black"
-                              style={{ margin: 0 }}
-                            >
-                              <Grid container direction="row">
-                                <Grid item xs={6}>
-                                  {user.role === data.role ? (
-                                    <strong>You</strong>
-                                  ) : (
-                                    <>
-                                      <Grid
-                                        container
-                                        textAlign="center"
-                                        alignItems="center"
+    <div style={{ padding: '20px 20px 130px 20px' }}>
+      <h2>Comment</h2>
+      {loader ? (
+        <Loader />
+      ) : allComments.length !== 0 ? (
+        <List style={{ overflow: 'auto', backgroundColor: 'white' }}>
+          {allComments.map((data, index) => {
+            return (
+              <Fragment key={`comments-${index}`}>
+                <ListItem alignItems="flex-start" key={index}>
+                  <ListItemText
+                    primary={
+                      <>
+                        <Typography
+                          variant="h6"
+                          color="black"
+                          style={{ margin: 0 }}
+                        >
+                          <Grid container direction="row">
+                            <Grid item xs={6}>
+                              {user.role === data.role ? (
+                                <strong>You:</strong>
+                              ) : (
+                                <>
+                                  <Grid
+                                    container
+                                    textAlign="start"
+                                    alignItems="center"
+                                  >
+                                    <Grid item xs="auto">
+                                      <strong>{data.who}:</strong>
+                                    </Grid>
+                                    <Grid item xs>
+                                      <Tooltip
+                                        title={data.role}
+                                        placement="right"
                                       >
-                                        <Grid item xs="auto">
-                                          <strong>{data.who}:</strong>
-                                        </Grid>
-                                        <Grid item xs>
-                                          <Tooltip
-                                            title={data.role}
-                                            placement="right"
-                                          >
-                                            <Avatar
-                                              alt="Role Information"
-                                              style={{
-                                                width: "15px",
-                                                height: "15px",
-                                                fontSize: "0.5rem",
-                                              }}
-                                            >
-                                              {data.role.charAt(0)}
-                                            </Avatar>
-                                          </Tooltip>
-                                        </Grid>
-                                      </Grid>
-                                    </>
-                                  )}
-                                </Grid>
-                                <Grid item xs={6} style={{ textAlign: "end" }}>
-                                  <span style={{ fontSize: "10px" }}>
-                                    {convertDate(data.date)}
-                                  </span>
-                                </Grid>
-                              </Grid>
-                            </Typography>
-                          </>
-                        }
-                        secondary={
-                          <Typography
-                            sx={{ display: "inline" }}
-                            variant="span"
-                            color="black"
-                          >
-                            {data.comments}
-                          </Typography>
-                        }
-                      />
-                    </ListItem>
-                    <Divider variant="li" />
-                  </Fragment>
-                );
-              })}
-            </List>
-          ) : (
-            "No comments"
-          )}
-        </Grid>
-      </Grid>
+                                        {data.role === 'REVIEWER' ? (
+                                          <PreviewTwoTone
+                                            style={{ fontSize: 13 }}
+                                          />
+                                        ) : data.role === 'ASSOCIATE' ? (
+                                          <SupportAgentTwoTone
+                                            style={{ fontSize: 13 }}
+                                          />
+                                        ) : (
+                                          <PeopleAltTwoTone
+                                            style={{ fontSize: 13 }}
+                                          />
+                                        )}
+                                      </Tooltip>
+                                    </Grid>
+                                  </Grid>
+                                </>
+                              )}
+                            </Grid>
+                            <Grid item xs={6} style={{ textAlign: 'end' }}>
+                              <span style={{ fontSize: '10px' }}>
+                                {convertDate(data.date)}
+                              </span>
+                            </Grid>
+                          </Grid>
+                        </Typography>
+                      </>
+                    }
+                    secondary={
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        variant="span"
+                        color="black"
+                      >
+                        {data.comments}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+                <Divider variant="li" />
+              </Fragment>
+            );
+          })}
+        </List>
+      ) : (
+        'No comments to display.'
+      )}
+      <Tooltip
+        title="Add New comment"
+        sx={{ position: 'fixed', bottom: 60, right: 50 }}
+      >
+        <Fab color="primary" onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </Tooltip>
       <Dialog open={open}>
         <DialogTitle>Add Comment</DialogTitle>
         <DialogContent>
@@ -229,8 +226,7 @@ const CommentComponent = () => {
           <Button onClick={handleAddComments}>Add</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };
-
 export default CommentComponent;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
+
 import { Tab } from "@material-ui/core";
 import { Route} from "react-router-dom";
 import { tabSelected, appStore } from '../store';
@@ -69,7 +70,8 @@ export default function Onboarding() {
                   label="TrainingLinks"
                   component={Link}
                   to={routes[4]}
-                />
+               
+             />
               </Link>
             </li>
             <li className={isTabActive('CommentComponent')} style={{ color: 'red',fontWeight: 'bold' }}>
@@ -125,15 +127,14 @@ export default function Onboarding() {
                   label="Comment"
                   component={Link}
                   to={routes[4]}
-
                 />
               </Link>
             </li>
           </>
         )}
       </ul>
-    )
-  }
+    );
+  };
 
   return (
     <>
