@@ -79,3 +79,7 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+.MuiTab-textColorInherit {
+  color: red !important; 
+}
