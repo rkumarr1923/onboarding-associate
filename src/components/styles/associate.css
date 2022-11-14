@@ -114,7 +114,8 @@
 }
 
 .import-bottom {
-  margin-left: 20px;
+  display: flex;
+  margin-top: 20px;
 }
 
 .checklist-container {
