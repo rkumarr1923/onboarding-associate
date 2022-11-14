@@ -12,9 +12,6 @@
   z-index: 999;
 }
 
-.MuiTab-textColorInherit {
-  color: red !important; 
-}
 .app-title,
 .logout {
   cursor: pointer;
