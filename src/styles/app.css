@@ -23,6 +23,7 @@ body {
   position: fixed;
   height: 100%;
   width: 100%;
+  padding-bottom: 100px;
 }
 
 .onboarding-container {
@@ -30,11 +31,8 @@ body {
 }
 
 .onboarding-body {
-  height: calc(100% - 50px);
+  height: 100%;
   overflow-y: auto;
-  background-image: url('../images/background.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .nav-links {
@@ -68,18 +66,4 @@ body {
   text-decoration: underline;
   color: #1976d2;
   margin-left: 10px;
-}
-
-.d-flex-center {
-  display: flex;
-  justify-content: center;
-}
-
-.d-flex-space {
-  display: flex;
-  justify-content: space-between;
-}
-
-.MuiTab-textColorInherit {
-  color: red !important; 
 }
