@@ -37,7 +37,7 @@ const ImportAssociates = (props) => {
     console.log('data to be saved ',data, props.list);
     const newAssociatesList = [];
     data.forEach(importAssociate => {
-      let isNewAssociate = props.list.find(existingAssociate => existingAssociate.ibmId !== importAssociate["IBM Id"])
+      let isNewAssociate = (props.list || []).find(existingAssociate => existingAssociate.ibmId === importAssociate["IBM Id"])
       if(!isNewAssociate) {
         newAssociatesList.push(importAssociate);
       }

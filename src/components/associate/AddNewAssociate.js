@@ -73,7 +73,7 @@ class AddNewAssociate extends Component {
     ibmEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid ibm email address' : ''),
     location: (str) => (str === '' ? 'Location is required' : ''),
     role: (str) => (str === '' ? 'Role is required' : ''),
-    engagementName: () => '',
+    engagementName: (str) => (str === '' ? 'Engagement name is required' : ''),
     primaryContact: (str) =>
       str === '' || !/^[0-9]*$/.test(str)
         ? 'Invalid primary contact, allow number only'
@@ -369,6 +369,7 @@ class AddNewAssociate extends Component {
             />
             <FormInputField
               md="4"
+              isRequired={true}
               controlId="clientEmail"
               label="Client Email"
               fieldName="clientEmail"
@@ -379,6 +380,7 @@ class AddNewAssociate extends Component {
             />
             <FormInputField
               md="4"
+              isRequired={true}
               controlId="email"
               label="Email"
               fieldName="email"
@@ -650,7 +652,7 @@ class AddNewAssociate extends Component {
           </Row>
         </div>
         <hr />
-        <div className="d-flex-center">
+        <div className="d-flex center">
           <Button type="submit" className="submit-btn">
             Submit
           </Button>
