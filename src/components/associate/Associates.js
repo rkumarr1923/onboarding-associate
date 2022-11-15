@@ -38,7 +38,7 @@ const Associates = ({ }) => {
                 </div>
             </div>}
             {
-                isFormVisible || isImportAssociateVisible ? isImportAssociateVisible ? <ImportAssociates setImportAssociateVisiblity={setImportAssociateVisiblity} /> : <AddNewAssociate list={list} setFormVisiblity={setFormVisiblity} /> : <AllAssociates />
+                isFormVisible || isImportAssociateVisible ? isImportAssociateVisible ? <ImportAssociates list={list} setImportAssociateVisiblity={setImportAssociateVisiblity} /> : <AddNewAssociate list={list} setFormVisiblity={setFormVisiblity} /> : <AllAssociates />
             }
         </div>
     )

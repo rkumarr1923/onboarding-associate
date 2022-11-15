@@ -7,14 +7,16 @@ import FormInputField from '../core/FormInputField';
 import axios from 'axios';
 import FormDatePickerField from '../core/FormDatePickerField';
 import FormSkillInputField from '../core/FormSkillInputField';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { associates } from '../../store';
 import '../styles/associate.css';
 
 
 class AddNewAssociate extends Component {
+  
   constructor(props) {
     super(props);
+    console.log(props);
   }
 
   state = {
@@ -71,7 +73,7 @@ class AddNewAssociate extends Component {
     ibmEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid ibm email address' : ''),
     location: (str) => (str === '' ? 'Location is required' : ''),
     role: (str) => (str === '' ? 'Role is required' : ''),
-    engagementName: () => '',
+    engagementName: (str) => (str === '' ? 'Engagement name is required' : ''),
     primaryContact: (str) =>
       str === '' || !/^[0-9]*$/.test(str)
         ? 'Invalid primary contact, allow number only'
@@ -144,12 +146,23 @@ class AddNewAssociate extends Component {
   }
 
   setSkillSet = (value) => {
-    console.log('skill set value ', value);
-    this.setState({ skillsSelected: value });
+    let sk = [
+      {
+          "associateSkillId":2,
+          "associateId":13,
+          "skillId":3,
+          "skillRating":"skillRating"
+      }
+  ]
+    console.log('skill set value ', sk);
+    this.setState({ skillsSelected: sk });
   };
 
   componentDidMount() {
-    fetch('http://localhost:9191/pru-skill/get-skill-master').then(
+    const response = axios.get('http://localhost:9091/pru-skill/get-skill-master',
+    {
+      headers: { Authorization: 'Bearer ' + this.props.token },
+    }).then(
       (response) => {
         response.json().then((result) => {
           this.setState({ skills: result });
@@ -213,7 +226,9 @@ class AddNewAssociate extends Component {
       console.log('submitted ');
       const response = axios.post(
         'http://localhost:9092/pru-associate/save-associate',
-        associatepostReq
+        associatepostReq, {
+          headers: { Authorization: 'Bearer ' + this.props.token },
+        }
       );
       this.props.setFormVisiblity(false);
     }
@@ -354,6 +369,7 @@ class AddNewAssociate extends Component {
             />
             <FormInputField
               md="4"
+              isRequired={true}
               controlId="clientEmail"
               label="Client Email"
               fieldName="clientEmail"
@@ -364,6 +380,7 @@ class AddNewAssociate extends Component {
             />
             <FormInputField
               md="4"
+              isRequired={true}
               controlId="email"
               label="Email"
               fieldName="email"
@@ -635,7 +652,7 @@ class AddNewAssociate extends Component {
           </Row>
         </div>
         <hr />
-        <div className="d-flex-center">
+        <div className="d-flex center">
           <Button type="submit" className="submit-btn">
             Submit
           </Button>
@@ -651,7 +668,14 @@ class AddNewAssociate extends Component {
   }
 }
 
-export default AddNewAssociate;
+const mapStateToProps = (state) => ({
+  token: state.token
+});
+
+const mapDispatchToProps = { };
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewAssociate);
+
 
 const getValidationState = (validationErrors, name) => {
   const err = validationErrors[name];

@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import MaterialTable from 'material-table';
 import { read, utils } from 'xlsx';
+import { useSelector } from 'react-redux';
 import CustomButton from '../../core/Button';
+import axios from 'axios';
 import '../../styles/associate.css';
+import { token } from '../../../store';
 
 const EXTENSIONS = ['xlsx', 'xls', 'csv']
 const ImportAssociates = (props) => {
+  const userToken = useSelector(token);
   const [colDefs, setColDefs] = useState();
   const [data, setData] = useState();
+  const [newAssociates, setNewAssociates] = useState();
 
   const getExention = (file) => {
     const parts = file.name.split('.')
@@ -26,6 +31,81 @@ const ImportAssociates = (props) => {
 
     });
     return rows
+  }
+
+  const saveImportAssociates = (data) => {
+    console.log('data to be saved ',data, props.list);
+    const newAssociatesList = [];
+    data.forEach(importAssociate => {
+      let isNewAssociate = (props.list || []).find(existingAssociate => existingAssociate.ibmId === importAssociate["IBM Id"])
+      if(!isNewAssociate) {
+        newAssociatesList.push(importAssociate);
+      }
+    });
+    setNewAssociates(newAssociatesList);
+
+    let associatesPostReq = [];
+    newAssociatesList.forEach(associateInput => {
+      let associateData = {
+        associate: {
+          associateName: associateInput["Associate First Name"] +" "+ associateInput["Associate Last Name"],
+          ibmId: associateInput["IBM Id"],
+          projectId: associateInput["Project Id"],
+          engagementName: associateInput["Engagement Name"],
+          majorFunction: associateInput["Major Function"],
+          band: associateInput["Band"],
+          primaryContact: associateInput["Primary Contact"],
+          emailIbm: associateInput["IBM Email"],
+          emailPru: associateInput["Client Email"],
+          xid: associateInput["XID"],
+          prudentialManager: associateInput["Client Manager"],
+          endDate: associateInput["End Date"],
+          location: associateInput["Location"],
+          city: associateInput["City"],
+          billType: associateInput["Bill Type"],
+          billCode: associateInput["Bill Code"],
+          role: associateInput["Role"],
+          asOnDate: associateInput["As On Date"],
+          pruExpDate: associateInput["Client Exp Date"],
+          itExpDate: associateInput["IT Experience"],
+          ibmDate: associateInput["IBM Experience"],
+          experienceWithPru: associateInput["Total Experience With Client"],
+          careerExperience: associateInput["Total Career Experience"],
+          experienceWithIbm: associateInput["Total Experience With IBM"],
+          resourceCriticality: associateInput["Resource Criticality"],
+          atImmigrationVisaRisks: associateInput["Other"],
+          backupSuccessorResource: associateInput["Other"],
+          keyContingencyGroup: associateInput["Other"],
+          additionalContingency: associateInput["Other"],
+          visaType: associateInput["Other"],
+          workPermitValidUntil: associateInput["Other"],
+          extensionUpdates: associateInput["Other"],
+          visaMaxOutDate: associateInput["Other"],
+          timeLeftInUs: associateInput["Other"],
+          h1bNominations: associateInput["Other"],
+          riskMitigationComments: associateInput["Other"],
+          planInCaseOfExtensionAmendmentRejection:
+          associateInput["Other"],
+            skillset: "Test"
+        },
+        associateSkill: [
+          {
+              associateSkillId:2,
+              associateId:13,
+              skillId:3,
+              skillRating:"skillRating"
+          }
+      ]
+      };
+      associatesPostReq.push(associateData);
+    });
+    const response = axios.post(
+      'http://localhost:9092/pru-associate/save-all-associate',
+      associatesPostReq, {
+        headers: { Authorization: 'Bearer ' + userToken },
+      }
+    );
+    props.setImportAssociateVisiblity(false);
   }
 
   const importExcel = (e) => {
@@ -81,9 +161,11 @@ const ImportAssociates = (props) => {
       <hr/>
       <div className='import-table'>
         {data && colDefs && <MaterialTable title="Associate Data" data={data} columns={colDefs} />}
-      </div>
       <div className='import-bottom'>
+        {data && colDefs && 
+        <CustomButton clickHandler={() => saveImportAssociates(data)} label="Submit" />}
         <CustomButton clickHandler={() => props.setImportAssociateVisiblity(false)} label="Cancel" />
+      </div>
       </div>
     </div>
   );

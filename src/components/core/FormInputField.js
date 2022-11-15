@@ -18,7 +18,7 @@ const FormInputField = (props) => {
       {validationErrors[fieldName] && <Form.Control.Feedback 
         type="invalid" 
         className="d-inline-block">
-        <i class="fa fa-exclamation-circle error-text" 
+        <i className="fa fa-exclamation-circle error-text" 
         aria-hidden="true"></i>
         {validationErrors[fieldName]}
       </Form.Control.Feedback>}
