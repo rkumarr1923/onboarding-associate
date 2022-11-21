@@ -15,9 +15,9 @@ import {
   Tooltip,
   useTheme,
   Typography,
-  useMediaQuery
-} from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+  useMediaQuery,
+} from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
@@ -180,6 +180,7 @@ const NewUserComponent = () => {
           .then((response) => {
             console.log(response.data);
             setSnackbarOpen(true);
+            dispatch(createNewUserDetails());
           });
       }
     } else console.log('Error');

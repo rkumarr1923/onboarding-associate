@@ -5,6 +5,7 @@ import {
 } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -28,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { comments, userComments, userDetails, token } from '../../store';
 import Loader from '../common/Loader';
 
-const CommentComponent = () => {
+const CommentComponent = (props) => {
   const userToken = useSelector(token);
   const [open, setOpen] = useState(false);
   const [comment, setComment] = useState('');
@@ -36,7 +37,7 @@ const CommentComponent = () => {
   const dispatch = useDispatch();
   const user = useSelector(userDetails);
   const allComments = useSelector(userComments);
-  const empId = user.empId;
+  const empId = props.empId ? props.empId : user.empId;
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
@@ -114,8 +115,13 @@ const CommentComponent = () => {
   };
 
   return (
-    <div style={{ padding: '20px 20px 130px 20px' }}>
-      <h2>Comment</h2>
+    <div
+      style={{
+        padding: '20px 20px 0 20px',
+        paddingBottom: props.empId ? '10px' : '80px',
+      }}
+    >
+      {props.empId ? <></> : <h2>Comment</h2>}
       {loader ? (
         <Loader />
       ) : allComments.length !== 0 ? (

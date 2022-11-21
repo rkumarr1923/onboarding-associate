@@ -6,14 +6,11 @@ import AddNewAssociate from '../associate/AddNewAssociate';
 import { useState, useEffect } from 'react';
 import '../styles/associate.css';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { token } from '../../store';
 import { useFetchAssociate } from '../../services/hooks/useFetchAssociate';
 import { useDispatch } from 'react-redux';
 import { associateList } from '../../store';
 
 const AllAssociates = () => {
-  const userToken = useSelector(token);
   const [isFormVisible, setFormVisiblity] = useState(null);
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
@@ -35,7 +32,7 @@ const AllAssociates = () => {
         };
       });
       console.log('formatted data ', formattedData);
-      dispatch(associateList({ associateList: formattedData }))
+      dispatch(associateList({ associateList: data }));
       setFormattedData(formattedData);
     }
   }, [loading]);
@@ -45,9 +42,9 @@ const AllAssociates = () => {
   };
 
   const editAssociate = () => {
-    console.log("bfr frm "+isFormVisible);
+    console.log('bfr frm ' + isFormVisible);
     setFormVisiblity(true);
-    console.log("aftr frm "+isFormVisible);
+    console.log('aftr frm ' + isFormVisible);
   };
 
   const cols = [
@@ -64,6 +61,16 @@ const AllAssociates = () => {
       cellStyle: { textAlign: '' },
       minWidth: 75,
       maxWidth: 120,
+      cellRenderer: (params) => {
+        return (
+          <Link
+            to={'/user/' + params.data.ibmId}
+            state={{ forAssociate: { data: params.data.ibmId } }}
+          >
+            {params.data.ibmId}
+          </Link>
+        );
+      },
     },
     {
       field: 'emailIBM',
@@ -136,12 +143,21 @@ const AllAssociates = () => {
       minWidth: 40,
       maxWidth: 100,
       cellRenderer: (params) => {
-        return <Link to="/uploadDocuments" state={{ forAssociate: { empId: params.data.ibmId } }}>
-          <div>
-            <i title="Upload Document" className="fa fa-upload" aria-hidden="true" ></i>
-          </div>
-        </Link>
-      }
+        return (
+          <Link
+            to="/uploadDocuments"
+            state={{ forAssociate: { empId: params.data.ibmId } }}
+          >
+            <div>
+              <i
+                title="Upload Document"
+                className="fa fa-upload"
+                aria-hidden="true"
+              ></i>
+            </div>
+          </Link>
+        );
+      },
     },
     {
       field: 'edit',
@@ -150,15 +166,17 @@ const AllAssociates = () => {
       minWidth: 100,
       maxWidth: 175,
       cellRenderer: (params) => {
-        return <Button
-        type='submit'
-        variant="contained"
-        className="reset-filter"
-        onClick={editAssociate}
-      >
-        Edit
-      </Button>
-      }
+        return (
+          <Button
+            type="submit"
+            variant="contained"
+            className="reset-filter"
+            onClick={editAssociate}
+          >
+            Edit
+          </Button>
+        );
+      },
     },
   ];
 
@@ -198,49 +216,49 @@ const AllAssociates = () => {
 
   return (
     <>
-    {isFormVisible?(
+      {isFormVisible ? (
         <AddNewAssociate setFormVisiblity={setFormVisiblity}></AddNewAssociate>
-       ):(
-      <div className="associate-table-container">
-        <div className="associate-table-header">
-          <h2>All Associates</h2>
-          <Button
-            className="reset-filter"
-            onClick={resetAppliedFilters}
-            variant="outlined"
+      ) : (
+        <div className="associate-table-container">
+          <div className="associate-table-header">
+            <h2>All Associates</h2>
+            <Button
+              className="reset-filter"
+              onClick={resetAppliedFilters}
+              variant="outlined"
+            >
+              Reset Filters
+            </Button>
+          </div>
+          <hr />
+          <div
+            className="ag-theme-alpine all-associate-table"
+            style={{ height: '86vh', width: '100%' }}
           >
-            Reset Filters
-          </Button>
+            <AgGridReact
+              onGridReady={onGridReady}
+              rowData={formattedData}
+              rowSelection="multiple"
+              defaultColDef={{
+                flex: 1,
+                minWidth: 100,
+                cellStyle: { textAlign: 'center' },
+                resizable: true,
+                sortable: true,
+                filter: true,
+                filterParams: {
+                  buttons: ['apply', 'clear', 'reset'],
+                },
+              }}
+              pagination
+              columnDefs={cols}
+              frameworkComponents={{
+                agDateInput: DTPicker,
+              }}
+            />
+          </div>
         </div>
-        <hr />
-        <div
-          className="ag-theme-alpine all-associate-table"
-          style={{ height: '86vh', width: '100%' }}
-        >
-          <AgGridReact
-            onGridReady={onGridReady}
-            rowData={formattedData}
-            rowSelection="multiple"
-            defaultColDef={{
-              flex: 1,
-              minWidth: 100,
-              cellStyle: { textAlign: 'center' },
-              resizable: true,
-              sortable: true,
-              filter: true,
-              filterParams: {
-                buttons: ['apply', 'clear', 'reset'],
-              },
-            }}
-            pagination
-            columnDefs={cols}
-            frameworkComponents={{
-              agDateInput: DTPicker,
-            }}
-          />
-        </div>
-      </div>
-       )}
+      )}
     </>
   );
 };
