@@ -2,6 +2,7 @@ import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import Button from '@mui/material/Button';
 import DTPicker from '../associate/DatePicker/DTPicker';
+import AddNewAssociate from '../associate/AddNewAssociate';
 import { useState, useEffect } from 'react';
 import '../styles/associate.css';
 import { Link } from 'react-router-dom';
@@ -13,6 +14,7 @@ import { associateList } from '../../store';
 
 const AllAssociates = () => {
   const userToken = useSelector(token);
+  const [isFormVisible, setFormVisiblity] = useState(null);
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
   const { data, error, loading } = useFetchAssociate();
@@ -40,6 +42,12 @@ const AllAssociates = () => {
 
   const resetAppliedFilters = () => {
     gridApi.setFilterModel(null);
+  };
+
+  const editAssociate = () => {
+    console.log("bfr frm "+isFormVisible);
+    setFormVisiblity(true);
+    console.log("aftr frm "+isFormVisible);
   };
 
   const cols = [
@@ -135,6 +143,23 @@ const AllAssociates = () => {
         </Link>
       }
     },
+    {
+      field: 'edit',
+      headerName: 'Edit',
+      cellStyle: { textAlign: '' },
+      minWidth: 100,
+      maxWidth: 175,
+      cellRenderer: (params) => {
+        return <Button
+        type='submit'
+        variant="contained"
+        className="reset-filter"
+        onClick={editAssociate}
+      >
+        Edit
+      </Button>
+      }
+    },
   ];
 
   const onGridReady = (params) => {
@@ -173,6 +198,9 @@ const AllAssociates = () => {
 
   return (
     <>
+    {isFormVisible?(
+        <AddNewAssociate setFormVisiblity={setFormVisiblity}></AddNewAssociate>
+       ):(
       <div className="associate-table-container">
         <div className="associate-table-header">
           <h2>All Associates</h2>
@@ -212,6 +240,7 @@ const AllAssociates = () => {
           />
         </div>
       </div>
+       )}
     </>
   );
 };
