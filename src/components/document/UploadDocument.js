@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import './UploadDocument.css';
 import SelectBox from '../core/Select';
-import { token,userDetails } from '../../store';
+import { token, userDetails } from '../../store';
 import { useSelector } from 'react-redux';
 import DocumentTable from './DocumentTable';
 import Loader from '../common/Loader';
@@ -68,10 +68,10 @@ const UploadDocument = () => {
       redirect: 'follow',
     };
     axios
-      .post(BASE_URL+'files', formdata, {
+      .post(BASE_URL + 'files', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization':'Bearer'+userToken
+          Authorization: 'Bearer ' + userToken,
         },
       })
       .then((result) => {
@@ -106,14 +106,18 @@ const UploadDocument = () => {
   const fetchDocumentTypes = () => {
     const role = user.role;
     axios
-      .get(BASE_URL+'document',{headers: { Authorization: 'Bearer ' + userToken }})
+      .get(BASE_URL + 'document', {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
       .then((res) => {
+        console.log(res);
         setOptions([...res.data]);
         setOptionselect('1');
         setLoader(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoader(false);
       });
   };
 
@@ -137,7 +141,7 @@ const UploadDocument = () => {
       isPopupDisplay = validateUploadFile(revieweddocuments, updateFileName);
     }
 
-    if(isPopupDisplay) {
+    if (isPopupDisplay) {
       //console.log(filteredObj[0])
       //setDocTobeUpdate(filteredObj[0]);
       //setDocTypeTobeUpdate(filteredObj[0].documentType.name);
@@ -149,16 +153,27 @@ const UploadDocument = () => {
 
   const validateUploadFile = (documentList, updateFileName) => {
     var filteredObj = [];
-    const fileName = updateFileName.substring(0, updateFileName.lastIndexOf("."));
-    filteredObj = documentList.filter(obj => (obj.documentType.id===parseInt(optionselect)));
-    if(filteredObj && filteredObj.length>0) {
+    const fileName = updateFileName.substring(
+      0,
+      updateFileName.lastIndexOf('.')
+    );
+    filteredObj = documentList.filter(
+      (obj) => obj.documentType.id === parseInt(optionselect)
+    );
+    if (filteredObj && filteredObj.length > 0) {
       //var filteredObj1 = documentList.filter(obj => (obj.documentType.id===parseInt(optionselect) && obj.name===updateFileName));
-      var filteredObj1 = documentList.filter(obj => (obj.documentType.id===parseInt(optionselect) && obj.name.substring(0, obj.name.lastIndexOf(".")) === fileName));
-      if(filteredObj1 && filteredObj1.length>0) {
+      var filteredObj1 = documentList.filter(
+        (obj) =>
+          obj.documentType.id === parseInt(optionselect) &&
+          obj.name.substring(0, obj.name.lastIndexOf('.')) === fileName
+      );
+      if (filteredObj1 && filteredObj1.length > 0) {
         return setIsPopupDisplay(filteredObj1[0], true);
       } else {
-        filteredObj1 = documentList.filter(obj => (obj.name.substring(0, obj.name.lastIndexOf(".")) === fileName));
-        if(filteredObj1 && filteredObj1.length>0) {
+        filteredObj1 = documentList.filter(
+          (obj) => obj.name.substring(0, obj.name.lastIndexOf('.')) === fileName
+        );
+        if (filteredObj1 && filteredObj1.length > 0) {
           return setIsPopupDisplay(filteredObj1[0], false);
         } else {
           return setIsPopupDisplay(filteredObj[0], true);
@@ -166,25 +181,30 @@ const UploadDocument = () => {
       }
     } else {
       //filteredObj = documentList.filter(obj => (obj.name===updateFileName));
-      filteredObj = documentList.filter(obj => (obj.name.substring(0, obj.name.lastIndexOf(".")) === fileName));
-      if(filteredObj && filteredObj.length>0) {
+      filteredObj = documentList.filter(
+        (obj) => obj.name.substring(0, obj.name.lastIndexOf('.')) === fileName
+      );
+      if (filteredObj && filteredObj.length > 0) {
         return setIsPopupDisplay(filteredObj[0], false);
       }
     }
-  }
+  };
 
   const setIsPopupDisplay = (fileObj, isDocTypePopup) => {
-    if(isDocTypePopup){
+    if (isDocTypePopup) {
       //setUpdatePopupMessage(fileObj.name+" of type "+fileObj.documentType.name+" already exists. Do you want to replace it?");
-      setUpdatePopupMessage(fileObj.documentType.name+" type document already exists. Do you want to replace it?");
+      setUpdatePopupMessage(
+        fileObj.documentType.name +
+          ' type document already exists. Do you want to replace it?'
+      );
       setIsDocTypePopup(isDocTypePopup);
     } else {
       //setUpdatePopupMessage(fileObj.name+" of type "+fileObj.documentType.name+" already exists. Please select a different file.");
-      setUpdatePopupMessage("Document with this name already exists.");
+      setUpdatePopupMessage('Document with this name already exists.');
       setIsDocTypePopup(isDocTypePopup);
     }
     return true;
-  }
+  };
 
   const updateDialogClose = () => {
     setUpdateDialogStatus(false);
@@ -266,22 +286,22 @@ const UploadDocument = () => {
       >
         <DialogTitle id="alert-dialog-title">
           {/* {`${docTobeUpdate.name} of type ${docTypeTobeUpdate} already exists. Do you want to replace it?`} */}
-          { `${updatePopupMessage}`}
+          {`${updatePopupMessage}`}
         </DialogTitle>
         <DialogContent>
-          {(isDocTypePopup) && 
+          {isDocTypePopup && (
             <DialogContentText id="alert-dialog-description">
               Once updated canot be reverted.
             </DialogContentText>
-          }
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={updateDialogClose}>Cancel</Button>
-          {(isDocTypePopup) && 
-          <Button onClick={() => callUploadAPI()} autoFocus>
-            Yes
-          </Button>
-          }
+          {isDocTypePopup && (
+            <Button onClick={() => callUploadAPI()} autoFocus>
+              Yes
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
 
