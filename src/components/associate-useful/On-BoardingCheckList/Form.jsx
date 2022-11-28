@@ -1,9 +1,9 @@
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useState } from "react";
-import { Box } from "@mui/system";
-import * as React from "react";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useState } from 'react';
+import { Box } from '@mui/system';
+import * as React from 'react';
 import {
   Grid,
   Typography,
@@ -12,68 +12,77 @@ import {
   FormControl,
   Select,
   MenuItem,
-} from "@mui/material";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { token } from "../../../store";
+} from '@mui/material';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { token, userDetails } from '../../../store';
 
 const Form = (props) => {
   const userToken = useSelector(token);
+  const userDetail = useSelector(userDetails);
   const sendInfo = props.sendInfo;
   const data = {
-    employeeName: sendInfo.employeeName ? sendInfo.employeeName : "",
+    employeeName: userDetail.name
+      ? userDetail.name
+      : sendInfo.employeeName
+      ? sendInfo.employeeName
+      : '',
     onBoardingDate: sendInfo.onBoardingDate
       ? sendInfo.onBoardingDate
       : new Date(),
-    coordinatorName: sendInfo.coordinatorName ? sendInfo.coordinatorName : "",
+    coordinatorName: userDetail.reviewer.reviewerName
+      ? userDetail.reviewer.reviewerName
+      : sendInfo.coordinatorName
+      ? sendInfo.coordinatorName
+      : '',
     onBoardingCompletionDate: sendInfo.onBoardingCompletionDate
       ? sendInfo.onBoardingCompletionDate
       : new Date(),
-    isIBMNewHire: sendInfo.isIBMNewHire ? sendInfo.isIBMNewHire : "",
+    isIBMNewHire: sendInfo.isIBMNewHire ? sendInfo.isIBMNewHire : '',
   };
   const [info, setInfo] = useState(data);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [errorEmpName, setErrorEmpName] = useState(false);
   const [errorCoOrdinatorName, setErrorCoOrdinatorName] = useState(false);
   const [errorIsNewHire, setErrorIsNewHire] = useState(false);
   const handleChange = (e, keyName) => {
-    setError("");
-    if (keyName === "onBoardingDate")
+    setError('');
+    if (keyName === 'onBoardingDate')
       return setInfo({ ...info, onBoardingDate: e });
-    else if (keyName === "employeeName") {
+    else if (keyName === 'employeeName') {
       setErrorEmpName(false);
       return setInfo({ ...info, employeeName: e.target.value });
-    } else if (keyName === "coordinatorName") {
+    } else if (keyName === 'coordinatorName') {
       setErrorCoOrdinatorName(false);
       return setInfo({ ...info, coordinatorName: e.target.value });
-    } else if (keyName === "isIBMNewHire") {
+    } else if (keyName === 'isIBMNewHire') {
       setErrorIsNewHire(false);
       return setInfo({ ...info, isIBMNewHire: e.target.value });
-    } else if (keyName === "onBoardingCompletionDate")
+    } else if (keyName === 'onBoardingCompletionDate')
       return setInfo({ ...info, onBoardingCompletionDate: e });
   };
   const handleSubmit = () => {
     if (
-      info.employeeName !== "" &&
-      info.coordinatorName !== "" &&
-      info.isIBMNewHire !== ""
+      info.employeeName !== '' &&
+      info.coordinatorName !== '' &&
+      info.isIBMNewHire !== ''
     ) {
       axios
         .get(
-          "http://localhost:9094/onboarding_checklist/get-all-onboarding-checklist",
-          { headers: { Authorization: "Bearer " + userToken } }
+          'http://localhost:9094/onboarding_checklist/get-all-onboarding-checklist',
+          { headers: { Authorization: 'Bearer ' + userToken } }
         )
         .then((result) => {
           props.onInfoSubmit({ info, result: result.data });
         });
-      setError("");
+      setError('');
     } else {
-      if (info.employeeName === "")
-        setErrorEmpName(info.employeeName === "" ? true : false);
-      if (info.coordinatorName === "")
-        setErrorCoOrdinatorName(info.coordinatorName === "" ? true : false);
-      if (info.isIBMNewHire === "")
-        setErrorIsNewHire(info.isIBMNewHire === "" ? true : false);
+      if (info.employeeName === '')
+        setErrorEmpName(info.employeeName === '' ? true : false);
+      if (info.coordinatorName === '')
+        setErrorCoOrdinatorName(info.coordinatorName === '' ? true : false);
+      if (info.isIBMNewHire === '')
+        setErrorIsNewHire(info.isIBMNewHire === '' ? true : false);
     }
   };
   return (
@@ -91,7 +100,7 @@ const Form = (props) => {
               variant="span"
               style={{
                 margin: 0,
-                color: errorEmpName ? "red" : "black",
+                color: errorEmpName ? 'red' : 'black',
               }}
             >
               <strong>Employee Name</strong>
@@ -100,13 +109,13 @@ const Form = (props) => {
               variant="outlined"
               id="employeeName"
               value={info.employeeName}
-              style={{ width: "80%" }}
+              style={{ width: '80%' }}
               size="small"
-              onChange={(e) => handleChange(e, "employeeName")}
+              onChange={(e) => handleChange(e, 'employeeName')}
               error={errorEmpName}
               sx={{
-                "& legend": { display: "none" },
-                "& fieldset": { top: 0 },
+                '& legend': { display: 'none' },
+                '& fieldset': { top: 0 },
               }}
             />
           </Grid>
@@ -116,7 +125,7 @@ const Form = (props) => {
               variant="span"
               style={{
                 margin: 0,
-                color: errorCoOrdinatorName ? "red" : "black",
+                color: errorCoOrdinatorName ? 'red' : 'black',
               }}
             >
               <strong>On-Boarding Coordinator Name</strong>
@@ -125,13 +134,13 @@ const Form = (props) => {
               id="coordinatorName"
               variant="outlined"
               value={info.coordinatorName}
-              style={{ width: "80%" }}
+              style={{ width: '80%' }}
               size="small"
-              onChange={(e) => handleChange(e, "coordinatorName")}
+              onChange={(e) => handleChange(e, 'coordinatorName')}
               error={errorCoOrdinatorName}
               sx={{
-                "& legend": { display: "none" },
-                "& fieldset": { top: 0 },
+                '& legend': { display: 'none' },
+                '& fieldset': { top: 0 },
               }}
             />
           </Grid>
@@ -141,23 +150,23 @@ const Form = (props) => {
               variant="span"
               style={{
                 margin: 0,
-                color: errorIsNewHire ? "red" : "black",
+                color: errorIsNewHire ? 'red' : 'black',
               }}
             >
               <strong>New Hire to IBM(Y/N)</strong>
             </Typography>
-            <FormControl style={{ width: "80%" }}>
+            <FormControl style={{ width: '80%' }}>
               <Select
                 displayEmpty
                 id="isIBMNewHire"
                 value={info.isIBMNewHire}
-                style={{ width: "80%" }}
+                style={{ width: '80%' }}
                 size="small"
-                onChange={(e) => handleChange(e, "isIBMNewHire")}
+                onChange={(e) => handleChange(e, 'isIBMNewHire')}
                 error={errorIsNewHire}
                 sx={{
-                  "& legend": { display: "none" },
-                  "& fieldset": { top: 0 },
+                  '& legend': { display: 'none' },
+                  '& fieldset': { top: 0 },
                 }}
                 //   inputProps={{ "aria-label": "Without label" }}
               >
@@ -177,17 +186,17 @@ const Form = (props) => {
             >
               <strong>On-Boarding Date</strong>
             </Typography>
-            <FormControl style={{ width: "80%" }}>
+            <FormControl style={{ width: '80%' }}>
               <DatePicker
                 inputFormat="MM/dd/yyyy"
                 value={info.onBoardingDate}
-                onChange={(e) => handleChange(e, "onBoardingDate")}
+                onChange={(e) => handleChange(e, 'onBoardingDate')}
                 renderInput={(params) => (
                   <TextField
                     size="small"
                     sx={{
-                      "& legend": { display: "none" },
-                      "& fieldset": { top: 0 },
+                      '& legend': { display: 'none' },
+                      '& fieldset': { top: 0 },
                     }}
                     {...params}
                   />
@@ -208,17 +217,17 @@ const Form = (props) => {
             >
               <strong>On-Boarding Activities Completion Date</strong>
             </Typography>
-            <FormControl style={{ width: "80%" }}>
+            <FormControl style={{ width: '80%' }}>
               <DatePicker
                 inputFormat="MM/dd/yyyy"
                 value={info.onBoardingCompletionDate}
-                onChange={(e) => handleChange(e, "onBoardingCompletionDate")}
+                onChange={(e) => handleChange(e, 'onBoardingCompletionDate')}
                 renderInput={(params) => (
                   <TextField
                     size="small"
                     sx={{
-                      "& legend": { display: "none" },
-                      "& fieldset": { top: 0 },
+                      '& legend': { display: 'none' },
+                      '& fieldset': { top: 0 },
                     }}
                     {...params}
                   />
