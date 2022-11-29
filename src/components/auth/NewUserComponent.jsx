@@ -202,7 +202,7 @@ const NewUserComponent = () => {
               console.log(associateResponse);
             }
             setSnackbarOpen(true);
-            dispatch(createNewUserDetails());
+            dispatch(resetCreateNewUserDetails());
           });
       }
     } else console.log('Error');
