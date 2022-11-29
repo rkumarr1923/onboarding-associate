@@ -11,66 +11,138 @@ import { useSelector, connect } from 'react-redux';
 import { associates } from '../../store';
 import '../styles/associate.css';
 
-
 class AddNewAssociate extends Component {
-  
   constructor(props) {
     super(props);
-    console.log(props);
   }
 
   state = {
-    firstName: '',
-    lastName: '',
-    ibmId: '',
-    ibmEmail: '',
-    location: '',
-    role: '',
-    engagementName: '',
-    primaryContact: '',
-    projectId: '',
-    majorFunction: '',
-    band: '',
-    clientManager: '',
-    clientEmail: '',
+    firstName: this.props?.associateData?.associateName
+      ? this.props?.associateData?.associateName.split(' ')[0]
+      : '',
+    lastName: this.props?.associateData?.associateName
+      ? this.props?.associateData?.associateName.split(' ')[1]
+      : '',
+    ibmId: this.props?.associateData?.ibmId
+      ? this.props?.associateData?.ibmId
+      : '',
+    ibmEmail: this.props?.associateData?.emailIbm
+      ? this.props?.associateData?.emailIbm
+      : '',
+    location: this.props?.associateData?.location
+      ? this.props?.associateData?.location
+      : '',
+    role: this.props?.associateData?.role
+      ? this.props?.associateData?.role
+      : '',
+    engagementName: this.props?.associateData?.engagementName
+      ? this.props?.associateData?.engagementName
+      : '',
+    primaryContact: this.props?.associateData?.primaryContact
+      ? this.props?.associateData?.primaryContact
+      : '',
+    projectId: this.props?.associateData?.projectId
+      ? this.props?.associateData?.projectId
+      : '',
+    majorFunction: this.props?.associateData?.majorFunction
+      ? this.props?.associateData?.majorFunction
+      : '',
+    band: this.props?.associateData?.band
+      ? this.props?.associateData?.band
+      : '',
+    clientManager: this.props?.associateData?.clientManager
+      ? this.props?.associateData?.clientManager
+      : '',
+    clientEmail: this.props?.associateData?.emailClient
+      ? this.props?.associateData?.emailClient
+      : '',
     email: '',
-    xid: '',
-    endDate: '',
-    city: '',
-    billType: '',
-    billCode: '',
-    asOnDate: '',
-    experienceIT: '',
+    xid: this.props?.associateData?.xid ? this.props?.associateData?.xid : '',
+    endDate: this.props?.associateData?.endDate
+      ? this.props?.associateData?.endDate
+      : '',
+    city: this.props?.associateData?.city
+      ? this.props?.associateData?.city
+      : '',
+    billType: this.props?.associateData?.billType
+      ? this.props?.associateData?.billType
+      : '',
+    billCode: this.props?.associateData?.billCode
+      ? this.props?.associateData?.billCode
+      : '',
+    asOnDate: this.props?.associateData?.asOnDate
+      ? this.props?.associateData?.asOnDate
+      : '',
+    experienceIT: this.props?.associateData?.itExpDate
+      ? this.props?.associateData?.itExpDate
+      : '',
     experienceClient: '',
-    experienceIBM: '',
-    experienceWithClient: '',
+    experienceIBM: this.props?.associateData?.experienceWithIbm
+      ? this.props?.associateData?.experienceWithIbm
+      : '',
+    experienceWithClient: this.props?.associateData?.experienceWithClient
+      ? this.props?.associateData?.experienceWithClient
+      : '',
     totalExperienceWithIBM: '',
     totalITExperience: '',
-    resourceCriticality: '',
-    atImmigrationVisaRisks: '',
-    backupSuccessorResource: '',
-    keyContingencyGroup: '',
-    additionalContingency: '',
-    visaType: '',
-    workPermitValidUntil: '',
-    extensionUpdates: '',
-    visaMaxOutDate: '',
-    timeLeftInUs: '',
+    resourceCriticality: this.props?.associateData?.resourceCriticality
+      ? this.props?.associateData?.resourceCriticality
+      : '',
+    atImmigrationVisaRisks: this.props?.associateData?.atImmigrationVisaRisks
+      ? this.props?.associateData?.atImmigrationVisaRisks
+      : '',
+    backupSuccessorResource: this.props?.associateData?.backupSuccessorResource
+      ? this.props?.associateData?.backupSuccessorResource
+      : '',
+    keyContingencyGroup: this.props?.associateData?.keyContingencyGroup
+      ? this.props?.associateData?.keyContingencyGroup
+      : '',
+    additionalContingency: this.props?.associateData?.additionalContingency
+      ? this.props?.associateData?.additionalContingency
+      : '',
+    visaType: this.props?.associateData?.visaType
+      ? this.props?.associateData?.visaType
+      : '',
+    workPermitValidUntil: this.props?.associateData?.workPermitValidUntil
+      ? this.props?.associateData?.workPermitValidUntil
+      : '',
+    extensionUpdates: this.props?.associateData?.extensionUpdates
+      ? this.props?.associateData?.extensionUpdates
+      : '',
+    visaMaxOutDate: this.props?.associateData?.visaMaxOutDate
+      ? this.props?.associateData?.visaMaxOutDate
+      : '',
+    timeLeftInUs: this.props?.associateData?.timeLeftInUs
+      ? this.props?.associateData?.timeLeftInUs
+      : '',
     visaNominations: '',
-    riskMitigationComments: '',
-    planInCaseOfExtensionAmendmentRejection: '',
-    h1bNominations: '',
+    riskMitigationComments: this.props?.associateData?.riskMitigationComments
+      ? this.props?.associateData?.riskMitigationComments
+      : '',
+    planInCaseOfExtensionAmendmentRejection: this.props?.associateData
+      ?.planInCaseOfExtensionAmendmentRejection
+      ? this.props?.associateData?.planInCaseOfExtensionAmendmentRejection
+      : '',
+    h1bNominations: this.props?.associateData?.h1bNominations
+      ? this.props?.associateData?.h1bNominations
+      : '',
     validationErrors: {},
     skillsSelected: [],
-    skills:[],
-    isAssociateExist: false
+    skills: [],
+    isAssociateExist: false,
   };
 
   validators = {
     firstName: (str) => (str === '' ? 'Firstname is required' : ''),
     lastName: (str) => (str === '' ? 'Lastname is required' : ''),
-    ibmId: (str) => (str === '' ? 'IBM id is required' : ( this.state.isAssociateExist ? 'Employee already exist' :'')),
-    ibmEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid ibm email address' : ''),
+    ibmId: (str) =>
+      str === ''
+        ? 'IBM id is required'
+        : this.state.isAssociateExist
+        ? 'Employee already exist'
+        : '',
+    ibmEmail: (str) =>
+      !/.+@.+\..+/.test(str) ? 'Invalid ibm email address' : '',
     location: (str) => (str === '' ? 'Location is required' : ''),
     role: (str) => (str === '' ? 'Role is required' : ''),
     engagementName: (str) => (str === '' ? 'Engagement name is required' : ''),
@@ -82,7 +154,8 @@ class AddNewAssociate extends Component {
     majorFunction: () => '',
     band: () => '',
     clientManager: () => '',
-    clientEmail: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid client email address' : ''),
+    clientEmail: (str) =>
+      !/.+@.+\..+/.test(str) ? 'Invalid client email address' : '',
     email: (str) => (!/.+@.+\..+/.test(str) ? 'Invalid email address' : ''),
     xid: () => '',
     endDate: () => '',
@@ -141,34 +214,35 @@ class AddNewAssociate extends Component {
   };
 
   handleIbmIdBlur = ({ event, fieldProps, fields, form }) => {
-    this.state.isAssociateExist = !!this.props.list.find(x => x.ibmId === this.state.ibmId);
+    this.state.isAssociateExist = !!this.props.list.find(
+      (x) => x.ibmId === this.state.ibmId
+    );
     this.validate('ibmId');
-  }
+  };
 
   setSkillSet = (value) => {
     let sk = [
       {
-          "associateSkillId":2,
-          "associateId":13,
-          "skillId":3,
-          "skillRating":"skillRating"
-      }
-  ]
+        associateSkillId: 2,
+        associateId: 13,
+        skillId: 3,
+        skillRating: 'skillRating',
+      },
+    ];
     console.log('skill set value ', sk);
     this.setState({ skillsSelected: sk });
   };
 
   componentDidMount() {
-    const response = axios.get('http://localhost:9091/pru-skill/get-skill-master',
-    {
-      headers: { Authorization: 'Bearer ' + this.props.token },
-    }).then(
-      (response) => {
+    const response = axios
+      .get('http://localhost:9091/pru-skill/get-skill-master', {
+        headers: { Authorization: 'Bearer ' + this.props.token },
+      })
+      .then((response) => {
         response.json().then((result) => {
           this.setState({ skills: result });
         });
-      }
-    );
+      });
   }
 
   onSubmit = (e) => {
@@ -185,6 +259,7 @@ class AddNewAssociate extends Component {
         primaryContact: associateInfo.primaryContact,
         emailIbm: associateInfo.ibmEmail,
         emailPru: associateInfo.emailPru,
+        emailClient: associateInfo.clientEmail,
         xid: associateInfo.xid,
         prudentialManager: associateInfo.prudentialManager,
         endDate: associateInfo.endDate,
@@ -214,19 +289,26 @@ class AddNewAssociate extends Component {
         riskMitigationComments: associateInfo.riskMitigationComments,
         planInCaseOfExtensionAmendmentRejection:
           associateInfo.planInCaseOfExtensionAmendmentRejection,
-          skillset: "Test"
+        skillset: 'Test',
       },
-      associateSkill: associateInfo.skillsSelected
+      associateSkill: associateInfo.skillsSelected,
     };
     const isValid = Object.keys(this.validators)
       .map(this.validate)
       .every((err) => !err);
     if (isValid) {
+      // update associate
+      if (this.props?.associateData) {
+        associatepostReq.associate.associateId =
+          this.props?.associateData?.associateId;
+        console.log('Updated ');
+      }
       // submit form
       console.log('submitted ');
       const response = axios.post(
         'http://localhost:9092/pru-associate/save-associate',
-        associatepostReq, {
+        associatepostReq,
+        {
           headers: { Authorization: 'Bearer ' + this.props.token },
         }
       );
@@ -237,7 +319,11 @@ class AddNewAssociate extends Component {
   render() {
     return (
       <Form noValidate onSubmit={this.onSubmit} className="associate-form">
-        <h2>Associate Information</h2>
+        <h2>
+          {this.props?.associateData
+            ? 'Update Associate Information'
+            : 'Associate Information'}
+        </h2>
         <hr />
         <div className="form-field-1">
           <Row>
@@ -654,7 +740,7 @@ class AddNewAssociate extends Component {
         <hr />
         <div className="d-flex center">
           <Button type="submit" className="submit-btn">
-            Submit
+            {this.props?.associateData ? 'Update' : 'Submit'}
           </Button>
           <CustomButton
             clickHandler={() => {
@@ -669,13 +755,12 @@ class AddNewAssociate extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  token: state.token
+  token: state.token,
 });
 
-const mapDispatchToProps = { };
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewAssociate);
-
 
 const getValidationState = (validationErrors, name) => {
   const err = validationErrors[name];
