@@ -32,7 +32,6 @@ import {
   roles,
   token,
 } from '../../store';
-import { authConstant } from './AuthConstant';
 import '../styles/login.css';
 
 const NewUserComponent = () => {
@@ -43,6 +42,12 @@ const NewUserComponent = () => {
   const userToken = useSelector(token);
   const newUserDetails = useSelector(createNewUser);
   const allRole = useSelector(allRoles);
+  const assosiateRoleId = allRole.find((data) => {
+    return data.name == 'ROLE_ASSOCIATE';
+  });
+  const reviewerRoleId = allRole.find((data) => {
+    return data.name == 'ROLE_ONBOARDING_REVIEWER';
+  });
   const allManager = useSelector(allManagers).filter(
     (item) => item.empId !== 'N/A'
   );
@@ -131,13 +136,13 @@ const NewUserComponent = () => {
       error = { ...error, errorEmployeeId: true };
     if (
       newUserDetails.reviewerName === '' &&
-      newUserDetails.role === authConstant.assosiateRoleId
+      newUserDetails.role === assosiateRoleId.id
     )
       error = { ...error, errorReviewerName: true };
     if (
       newUserDetails.managerName === '' &&
-      (newUserDetails.role === authConstant.assosiateRoleId ||
-        newUserDetails.role === authConstant.reviewerRoleId)
+      (newUserDetails.role === assosiateRoleId.id ||
+        newUserDetails.role === reviewerRoleId.id)
     )
       error = { ...error, errorManagerName: true };
     if (newUserDetails.role === '') error = { ...error, errorRole: true };
@@ -168,12 +173,12 @@ const NewUserComponent = () => {
           password: newUserDetails.password,
           roleId: newUserDetails.role,
           reviewerEmpId:
-            newUserDetails.role === authConstant.assosiateRoleId
+            newUserDetails.role === assosiateRoleId.id
               ? newUserDetails.reviewerName
               : 'N/A',
           managerEmpId:
-            newUserDetails.role === authConstant.assosiateRoleId ||
-            newUserDetails.role === authConstant.reviewerRoleId
+            newUserDetails.role === assosiateRoleId.id ||
+            newUserDetails.role === reviewerRoleId.id
               ? newUserDetails.managerName
               : 'N/A',
         };
@@ -379,51 +384,47 @@ const NewUserComponent = () => {
                   </Typography>
                 </>
               )}
-              {newUserDetails.role === authConstant.assosiateRoleId &&
-                allReviewer && (
-                  <>
-                    <Select
-                      margin="dense"
-                      displayEmpty
-                      id="reviewer"
-                      value={newUserDetails.reviewerName}
-                      error={newUserDetails.error.errorReviewerName}
-                      size="small"
-                      fullWidth
-                      onChange={handleChange(
-                        'reviewerName',
-                        'errorReviewerName'
-                      )}
-                      style={{ marginTop: '1.5rem' }}
-                      sx={{
-                        '& legend': { display: 'none' },
-                        '& fieldset': { top: 0 },
-                      }}
-                      //   inputProps={{ "aria-label": "Without label" }}
-                    >
-                      <MenuItem disabled value="">
-                        Reviewer Name
-                      </MenuItem>
-                      {allReviewer.map((data) => {
-                        return (
-                          <MenuItem value={data.empId} key={data.empId}>
-                            {data.reviewerName}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                    <Typography
-                      variant="caption"
-                      color={
-                        newUserDetails.error.errorReviewerName ? 'red' : 'black'
-                      }
-                    >
-                      Please select the Reviewer Name
-                    </Typography>
-                  </>
-                )}
-              {(newUserDetails.role === authConstant.assosiateRoleId ||
-                newUserDetails.role === authConstant.reviewerRoleId) &&
+              {newUserDetails.role === assosiateRoleId.id && allReviewer && (
+                <>
+                  <Select
+                    margin="dense"
+                    displayEmpty
+                    id="reviewer"
+                    value={newUserDetails.reviewerName}
+                    error={newUserDetails.error.errorReviewerName}
+                    size="small"
+                    fullWidth
+                    onChange={handleChange('reviewerName', 'errorReviewerName')}
+                    style={{ marginTop: '1.5rem' }}
+                    sx={{
+                      '& legend': { display: 'none' },
+                      '& fieldset': { top: 0 },
+                    }}
+                    //   inputProps={{ "aria-label": "Without label" }}
+                  >
+                    <MenuItem disabled value="">
+                      Reviewer Name
+                    </MenuItem>
+                    {allReviewer.map((data) => {
+                      return (
+                        <MenuItem value={data.empId} key={data.empId}>
+                          {data.reviewerName}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <Typography
+                    variant="caption"
+                    color={
+                      newUserDetails.error.errorReviewerName ? 'red' : 'black'
+                    }
+                  >
+                    Please select the Reviewer Name
+                  </Typography>
+                </>
+              )}
+              {(newUserDetails.role === assosiateRoleId.id ||
+                newUserDetails.role === reviewerRoleId.id) &&
                 allManager && (
                   <>
                     <Select
