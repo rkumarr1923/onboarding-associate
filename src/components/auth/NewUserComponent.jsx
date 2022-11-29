@@ -30,6 +30,7 @@ import {
   resetCreateNewUserDetails,
   reviewers,
   roles,
+  token,
 } from '../../store';
 import { authConstant } from './AuthConstant';
 import '../styles/login.css';
@@ -39,6 +40,7 @@ const NewUserComponent = () => {
   const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
   const matchesXL = useMediaQuery(theme.breakpoints.down('xl'));
   const dispatch = useDispatch();
+  const userToken = useSelector(token);
   const newUserDetails = useSelector(createNewUser);
   const allRole = useSelector(allRoles);
   const allManager = useSelector(allManagers).filter(
@@ -178,7 +180,22 @@ const NewUserComponent = () => {
         axios
           .post('http://localhost:9099/user_add', requestData)
           .then((response) => {
-            console.log(response.data);
+            if (response.data.role.name === 'ROLE_ASSOCIATE') {
+              const saveAssociateReq = {
+                associateName: response.data.userName,
+                ibmId: response.data.employeeId,
+                emailIbm: response.data.email,
+                activeInactive: 'Yet to be started',
+              };
+              const associateResponse = axios.post(
+                'http://localhost:9092/pru-associate/new-associate',
+                saveAssociateReq,
+                {
+                  headers: { Authorization: 'Bearer ' + userToken },
+                }
+              );
+              console.log(associateResponse);
+            }
             setSnackbarOpen(true);
             dispatch(createNewUserDetails());
           });

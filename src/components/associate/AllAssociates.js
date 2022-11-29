@@ -8,13 +8,16 @@ import '../styles/associate.css';
 import { Link } from 'react-router-dom';
 import { useFetchAssociate } from '../../services/hooks/useFetchAssociate';
 import { useDispatch } from 'react-redux';
-import { associateList } from '../../store';
+import { associateList, associates } from '../../store';
+import { useSelector } from 'react-redux';
 
 const AllAssociates = () => {
   const [isFormVisible, setFormVisiblity] = useState(null);
+  const [associateData, setAssociateData] = useState(null);
   const [gridApi, setGridApi] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
   const { data, error, loading } = useFetchAssociate();
+  const associateListDetails = useSelector(associates);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,10 +44,12 @@ const AllAssociates = () => {
     gridApi.setFilterModel(null);
   };
 
-  const editAssociate = () => {
-    console.log('bfr frm ' + isFormVisible);
+  const editAssociate = (data) => {
+    const assoDetail = associateListDetails.find(
+      (associate) => associate.ibmId == data.ibmId
+    );
     setFormVisiblity(true);
-    console.log('aftr frm ' + isFormVisible);
+    setAssociateData(assoDetail);
   };
 
   const cols = [
@@ -171,7 +176,9 @@ const AllAssociates = () => {
             type="submit"
             variant="contained"
             className="reset-filter"
-            onClick={editAssociate}
+            onClick={() => {
+              editAssociate(params.data);
+            }}
           >
             Edit
           </Button>
@@ -217,7 +224,10 @@ const AllAssociates = () => {
   return (
     <>
       {isFormVisible ? (
-        <AddNewAssociate setFormVisiblity={setFormVisiblity}></AddNewAssociate>
+        <AddNewAssociate
+          setFormVisiblity={setFormVisiblity}
+          associateData={associateData}
+        ></AddNewAssociate>
       ) : (
         <div className="associate-table-container">
           <div className="associate-table-header">

@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { token,userDetails } from '../../store';
+import { token, userDetails } from '../../store';
 import { useSelector } from 'react-redux';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
@@ -45,9 +45,9 @@ const SampleDocuments = () => {
     fetchDocumentTypes();
   }, []);
 
-  const fetchDocuments = () => {    
+  const fetchDocuments = () => {
     axios
-      .get(BASE_URL+'files/sampledoc', {
+      .get(BASE_URL + 'files/sampledoc', {
         headers: { Authorization: 'Bearer ' + userToken },
       })
       .then((res) => {
@@ -56,17 +56,18 @@ const SampleDocuments = () => {
       })
       .catch((err) => {
         console.log(err);
+        setLoader(false);
       });
   };
 
   const fetchDocumentTypes = () => {
     axios
-      .get(BASE_URL+'document/sample', {
+      .get(BASE_URL + 'document/sample', {
         headers: { Authorization: 'Bearer ' + userToken },
       })
       .then((res) => {
         setOptions([...res.data]);
-        setOption(res.data.filter(obj=> obj.id===0)[0]);
+        setOption(res.data.filter((obj) => obj.id === 0)[0]);
         setOptionselect('0');
       })
       .catch((err) => {
@@ -131,10 +132,10 @@ const SampleDocuments = () => {
       redirect: 'follow',
     };
     axios
-      .post(BASE_URL+'files', formdata, {
+      .post(BASE_URL + 'files', formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization':'Bearer '+userToken
+          Authorization: 'Bearer ' + userToken,
         },
       })
       .then((result) => {
@@ -164,7 +165,10 @@ const SampleDocuments = () => {
 
   const download = (id, name) => {
     axios
-      .get(`http://localhost:9003/files/${id}`, { headers: { Authorization: 'Bearer ' + userToken }, responseType: 'blob' })
+      .get(`http://localhost:9003/files/${id}`, {
+        headers: { Authorization: 'Bearer ' + userToken },
+        responseType: 'blob',
+      })
       .then((result) => {
         //console.log(result);
         if (result) {
@@ -193,7 +197,9 @@ const SampleDocuments = () => {
 
   const deleteDocs = (id) => {
     axios
-      .delete(`http://localhost:9003/files/delete/${id}`,{headers: { Authorization: 'Bearer ' + userToken },})
+      .delete(`http://localhost:9003/files/delete/${id}`, {
+        headers: { Authorization: 'Bearer ' + userToken },
+      })
       .then((result) => {
         setDialogStatus(false);
         //console.log(result);
@@ -220,7 +226,13 @@ const SampleDocuments = () => {
                 optionselect={optionselect}
               /> */}
               <label htmlFor="documenttype">
-                  <input id="documenttype" name="documenttype" value={option.name} type="text" disabled={true} />
+                <input
+                  id="documenttype"
+                  name="documenttype"
+                  value={option.name}
+                  type="text"
+                  disabled={true}
+                />
               </label>
             </div>{' '}
             &nbsp;
