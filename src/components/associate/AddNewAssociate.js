@@ -56,7 +56,9 @@ class AddNewAssociate extends Component {
     clientEmail: this.props?.associateData?.emailClient
       ? this.props?.associateData?.emailClient
       : '',
-    email: '',
+    email: this.props?.associateData?.email
+      ? this.props?.associateData?.email
+      : '',
     xid: this.props?.associateData?.xid ? this.props?.associateData?.xid : '',
     endDate: this.props?.associateData?.endDate
       ? this.props?.associateData?.endDate
@@ -76,15 +78,21 @@ class AddNewAssociate extends Component {
     experienceIT: this.props?.associateData?.itExpDate
       ? this.props?.associateData?.itExpDate
       : '',
-    experienceClient: '',
+    experienceClient: this.props?.associateData?.experienceClient
+      ? this.props?.associateData?.experienceClient
+      : '',
     experienceIBM: this.props?.associateData?.experienceWithIbm
       ? this.props?.associateData?.experienceWithIbm
       : '',
     experienceWithClient: this.props?.associateData?.experienceWithClient
       ? this.props?.associateData?.experienceWithClient
       : '',
-    totalExperienceWithIBM: '',
-    totalITExperience: '',
+    totalExperienceWithIBM: this.props?.associateData?.totalExperienceWithIBM
+      ? this.props?.associateData?.totalExperienceWithIBM
+      : '',
+    totalITExperience: this.props?.associateData?.totalITExperience
+      ? this.props?.associateData?.totalITExperience
+      : '',
     resourceCriticality: this.props?.associateData?.resourceCriticality
       ? this.props?.associateData?.resourceCriticality
       : '',
@@ -115,7 +123,9 @@ class AddNewAssociate extends Component {
     timeLeftInUs: this.props?.associateData?.timeLeftInUs
       ? this.props?.associateData?.timeLeftInUs
       : '',
-    visaNominations: '',
+    visaNominations: this.props?.associateData?.visaNominations
+      ? this.props?.associateData?.visaNominations
+      : '',
     riskMitigationComments: this.props?.associateData?.riskMitigationComments
       ? this.props?.associateData?.riskMitigationComments
       : '',
@@ -290,6 +300,13 @@ class AddNewAssociate extends Component {
         planInCaseOfExtensionAmendmentRejection:
           associateInfo.planInCaseOfExtensionAmendmentRejection,
         skillset: 'Test',
+        clientManager: associateInfo.clientManager,
+        email: associateInfo.email,
+        experienceClient: associateInfo.experienceClient,
+        totalITExperience: associateInfo.totalITExperience,
+        experienceWithClient: associateInfo.experienceWithClient,
+        totalExperienceWithIBM: associateInfo.totalExperienceWithIBM,
+        visaNominations: associateInfo.visaNominations,
       },
       associateSkill: associateInfo.skillsSelected,
     };
@@ -301,6 +318,7 @@ class AddNewAssociate extends Component {
       if (this.props?.associateData) {
         associatepostReq.associate.associateId =
           this.props?.associateData?.associateId;
+        console.log(associatepostReq);
         console.log('Updated ');
       }
       // submit form
