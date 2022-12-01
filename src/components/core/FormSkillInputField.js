@@ -13,18 +13,10 @@ function FormSkillInputField(props) {
   const handleInputChange = (e, index) => {    
     const list = [...inputList];
     const { name, value } = e.target;
-    console.log("name "+name+" , value "+value+" , index "+index);
     list[index][name] = value;
     setInputList(list);
   };
 
-  const handleInputChangeTxt = (e, index) => {
-    const list = [...inputList];
-    const { name, value } = e.target;
-    console.log("lname "+name+" , lvalue "+value+" , lindex "+index);
-    list[index][name] = value;
-    setInputList(list);
-  };
 
   // handle click event of the Remove button
   const handleRemoveClick = (index) => {
@@ -77,7 +69,7 @@ function FormSkillInputField(props) {
                   name="skillRating"
                   placeholder="Enter rating"
                   value={x.skillRating}
-                  onChange={(e) => handleInputChangeTxt(e, i)}
+                  onChange={(e) => handleInputChange(e, i)}
                 />
               </Form.Group>
               <div className="d-flex">
