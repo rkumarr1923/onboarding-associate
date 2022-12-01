@@ -2,12 +2,11 @@ import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
 import { tabSelected, appStore } from "../store";
-//import { Tab, Tabs } from "@material-ui/core";
 import { Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Tabs, Tab, Row, Button, Stack, Col, Container } from "react-bootstrap";
-//import "./styles.css";
+
 
 export default function Onboarding() {
   const dispatch = useDispatch();
@@ -24,52 +23,64 @@ export default function Onboarding() {
             user.role === 'ROLE_ONBOARDING_MANAGER') && (
  	    <>
          
-         <Tabs  variant='scrollable'>
+         <Tabs activeKey={currentTab} id="controlled-tab-example" variant='scrollable'>
  
                 <Tab
+                  eventKey={0}              
+                  title="New User"
                   value={routes[0]}
-                  eventKey={0}
-                  label="New User"
                   component={Link}
                   to={routes[0]}
                   disabled={currentTab !== 0}
                 />
 
               <Tab
+                  eventKey={1}
+                  title="All Associates"
                   value={routes[1]}
-                  label="All Associates"
                   component={Link}
                   to={routes[1]}
+                  disabled={currentTab !== 1}
                 />
               <Tab
+                  eventKey={2}
+                  title="Training Links"
                   value={routes[2]}
-                  label="Training Links"
                   component={Link}
                   to={routes[2]}
+                  disabled={currentTab !== 2}
                 />
               <Tab
+                  eventKey={3}
+                  title="Comment"
+                  component={Link}
                   value={routes[3]}
-                  label="Comment"
-                  component={Link}
                   to={routes[3]}
+                  disabled={currentTab !== 3}
                 />
               <Tab
-                  value={routes[4]}
-                  label="Recordings"
+                  eventKey={4}
+                  title="Recordings"
                   component={Link}
+                  value={routes[4]}
                   to={routes[4]}
+                  disabled={currentTab !== 4}
                 />
               <Tab
+                  eventKey={5}
+                  title="Sample Documents"
                   value={routes[5]}
-                  label="Sample Documents"
                   component={Link}
                   to={routes[5]}
+                  disabled={currentTab !== 5}
                 />
               <Tab
+                  eventKey={6}
+                  title="Background Check"
                   value={routes[6]}
-                  label="Background Check"
                   component={Link}
                   to={routes[6]}
+                  disabled={currentTab !== 6}
                 />
           </Tabs>
          
@@ -90,8 +101,6 @@ export default function Onboarding() {
           Next
         </Button>
       </Stack>
-      <p>Current tab index is {currentTab}</p>
-        
       </>
           )}
         {user && user.role === 'ROLE_ASSOCIATE' && (
@@ -99,21 +108,21 @@ export default function Onboarding() {
             
                  <Tab
                   value={routes[2]}
-                  label="OnBoardingCheckList"
+                  title="OnBoardingCheckList"
                   component={Link}
                   to={routes[2]}
                 />
               
               <Tab
                   value={routes[3]}
-                  label="UploadDocument"
+                  title="UploadDocument"
                   component={Link}
                   to={routes[3]}
                 />
              
               <Tab
                   value={routes[4]}
-                  label="Comment"
+                  title="Comment"
                   component={Link}
                   to={routes[4]}
                 />
