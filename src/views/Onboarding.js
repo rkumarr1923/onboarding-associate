@@ -6,13 +6,16 @@ import { Route} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Tabs, Tab, Row, Button, Stack, Col, Container } from "react-bootstrap";
-
+import AllAssociates from '../components/associate/AllAssociates';
+import { useNavigate } from 'react-router-dom';
 
 export default function Onboarding() {
   const dispatch = useDispatch();
   const store = useSelector(appStore);
   const { activeTab, userDetails: user } = store || {};
   const [currentTab, setCurrentTab] = React.useState(0); 
+  const navigate = useNavigate();
+
  
   const routes = ["auth/register","/allAssociates","/trainingLinks","/comment","/recording","/sampleDocuments","/bgCheck"]
   const loginFormRender = () => {
@@ -26,8 +29,9 @@ export default function Onboarding() {
          <Tabs activeKey={currentTab} id="controlled-tab-example" variant='scrollable'>
  
                 <Tab
-                  eventKey={0}              
+                  eventKey={0}            
                   title="New User"
+                  href={routes[0]}
                   value={routes[0]}
                   component={Link}
                   to={routes[0]}
@@ -89,14 +93,24 @@ export default function Onboarding() {
         <Button
           className="success"
           disabled={currentTab === 0}
-          onClick={() => setCurrentTab((prev) => prev - 1)}
+          onClick={(event) => setCurrentTab((prev) => {
+            let tabIndex = prev-1;
+            navigate(routes[tabIndex]);
+            return tabIndex;
+          })
+          }
         >
           Prev
         </Button>
         <Button
           className="success"
           disabled={currentTab === 6}
-          onClick={() => setCurrentTab((prev) => prev + 1)}
+          onClick={(event) => setCurrentTab((prev) => {
+            let tabIndex = prev+1;
+            navigate(routes[tabIndex]);
+            return tabIndex;
+          })
+          }
         >
           Next
         </Button>
@@ -130,14 +144,22 @@ export default function Onboarding() {
         <Button
           className="success"
           disabled={currentTab === 0}
-          onClick={() => setCurrentTab((prev) => prev - 1)}
+          onClick={() => setCurrentTab((prev) => {
+            let tabIndex = prev-1;
+            navigate(routes[tabIndex]);
+            return tabIndex;
+          })}
         >
           Prev
         </Button>
         <Button
           className="success"
           disabled={currentTab === 2}
-          onClick={() => setCurrentTab((prev) => prev + 1)}
+          onClick={() => setCurrentTab((prev) => {
+            let tabIndex = prev+1;
+            navigate(routes[tabIndex]);
+            return tabIndex;
+          })}
         >
           Next
         </Button>
