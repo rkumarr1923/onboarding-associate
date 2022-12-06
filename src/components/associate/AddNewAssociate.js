@@ -239,19 +239,16 @@ class AddNewAssociate extends Component {
         skillRating: 'skillRating',
       },
     ];
-    console.log('skill set value ', sk);
-    this.setState({ skillsSelected: sk });
+    console.log('skill set value13 ', value);
+    this.setState({ skillsSelected: value });
   };
 
   componentDidMount() {
-    const response = axios
-      .get('http://localhost:9091/pru-skill/get-skill-master', {
+    console.log("in then pru-skill");
+    axios.get('http://localhost:9091/pru-skill/get-skill-master', {
         headers: { Authorization: 'Bearer ' + this.props.token },
-      })
-      .then((response) => {
-        response.json().then((result) => {
-          this.setState({ skills: result });
-        });
+      }).then((response) => {
+        this.setState({ skills: response.data });
       });
   }
 
