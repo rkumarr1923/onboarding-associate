@@ -22,7 +22,8 @@ const AllAssociates = () => {
 
   useEffect(() => {
     if (!loading && data) {
-      let formattedData = data.map((associate) => {
+      let formattedData = data.map((data) => {
+        let associate = data.associate;
         return {
           associateName: associate.associateName,
           ibmId: associate.ibmId,
