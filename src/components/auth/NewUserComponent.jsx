@@ -136,13 +136,13 @@ const NewUserComponent = () => {
       error = { ...error, errorEmployeeId: true };
     if (
       newUserDetails.reviewerName === '' &&
-      newUserDetails.role === assosiateRoleId.id
+      newUserDetails.role === assosiateRoleId?.id
     )
       error = { ...error, errorReviewerName: true };
     if (
       newUserDetails.managerName === '' &&
-      (newUserDetails.role === assosiateRoleId.id ||
-        newUserDetails.role === reviewerRoleId.id)
+      (newUserDetails.role === assosiateRoleId?.id ||
+        newUserDetails.role === reviewerRoleId?.id)
     )
       error = { ...error, errorManagerName: true };
     if (newUserDetails.role === '') error = { ...error, errorRole: true };
@@ -173,12 +173,12 @@ const NewUserComponent = () => {
           password: newUserDetails.password,
           roleId: newUserDetails.role,
           reviewerEmpId:
-            newUserDetails.role === assosiateRoleId.id
+            newUserDetails.role === assosiateRoleId?.id
               ? newUserDetails.reviewerName
               : 'N/A',
           managerEmpId:
-            newUserDetails.role === assosiateRoleId.id ||
-            newUserDetails.role === reviewerRoleId.id
+            newUserDetails.role === assosiateRoleId?.id ||
+            newUserDetails.role === reviewerRoleId?.id
               ? newUserDetails.managerName
               : 'N/A',
         };
@@ -370,8 +370,8 @@ const NewUserComponent = () => {
                     </MenuItem>
                     {allRole.map((data) => {
                       return (
-                        <MenuItem value={data.id} key={data.id}>
-                          {data.name}
+                        <MenuItem value={data?.id} key={data?.id}>
+                          {data?.name}
                         </MenuItem>
                       );
                     })}
@@ -384,7 +384,7 @@ const NewUserComponent = () => {
                   </Typography>
                 </>
               )}
-              {newUserDetails.role === assosiateRoleId.id && allReviewer && (
+              {newUserDetails.role === assosiateRoleId?.id && allReviewer && (
                 <>
                   <Select
                     margin="dense"
@@ -423,8 +423,8 @@ const NewUserComponent = () => {
                   </Typography>
                 </>
               )}
-              {(newUserDetails.role === assosiateRoleId.id ||
-                newUserDetails.role === reviewerRoleId.id) &&
+              {(newUserDetails.role === assosiateRoleId?.id ||
+                newUserDetails.role === reviewerRoleId?.id) &&
                 allManager && (
                   <>
                     <Select
