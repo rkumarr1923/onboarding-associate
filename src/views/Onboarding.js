@@ -1,35 +1,50 @@
 import React from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
-import { tabSelected, appStore } from "../store";
-import { Route} from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Link, Outlet } from 'react-router-dom';
+import { appStore } from '../store';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Tabs, Tab, Row, Button, Stack, Col, Container } from "react-bootstrap";
-import AllAssociates from '../components/associate/AllAssociates';
+import { Tabs, Tab, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export default function Onboarding() {
-  const dispatch = useDispatch();
   const store = useSelector(appStore);
-  const { activeTab, userDetails: user } = store || {};
-  const [currentTab, setCurrentTab] = React.useState(0); 
+  const { userDetails: user, currentTabState: tabState } = store || {};
+  const [currentTab, setCurrentTab] = React.useState(0);
   const navigate = useNavigate();
 
- 
-  const routes = ["auth/register","/allAssociates","/trainingLinks","/comment","/recording","/sampleDocuments","/bgCheck"]
+  const routes = [
+    'auth/register',
+    '/allAssociates',
+    '/recording',
+    '/sampleDocuments',
+    '/trainingLinks',
+    '/bgCheck',
+    '/comment',
+  ];
+
+  const associateRoutes = [
+    '/recording',
+    '/sampleDocuments',
+    '/trainingLinks',
+    '/bgCheck',
+    '/comment',
+  ];
+
   const loginFormRender = () => {
     return (
       <ul className="nav-links">
         {user &&
           (user.role === 'ROLE_ONBOARDING_REVIEWER' ||
             user.role === 'ROLE_ONBOARDING_MANAGER') && (
- 	    <>
-         
-         <Tabs activeKey={currentTab} id="controlled-tab-example" variant='scrollable'>
- 
+            <>
+              <Tabs
+                activeKey={currentTab}
+                id="controlled-tab-example"
+                variant="scrollable"
+              >
                 <Tab
-                  eventKey={0}            
+                  eventKey={0}
                   title="New User"
                   href={routes[0]}
                   value={routes[0]}
@@ -37,8 +52,7 @@ export default function Onboarding() {
                   to={routes[0]}
                   disabled={currentTab !== 0}
                 />
-
-              <Tab
+                <Tab
                   eventKey={1}
                   title="All Associates"
                   value={routes[1]}
@@ -46,125 +60,97 @@ export default function Onboarding() {
                   to={routes[1]}
                   disabled={currentTab !== 1}
                 />
-              <Tab
+                <Tab
                   eventKey={2}
-                  title="Training Links"
-                  value={routes[2]}
+                  title="Recordings"
                   component={Link}
+                  value={routes[2]}
                   to={routes[2]}
                   disabled={currentTab !== 2}
                 />
-              <Tab
+                <Tab
                   eventKey={3}
-                  title="Comment"
-                  component={Link}
+                  title="Sample Documents"
                   value={routes[3]}
+                  component={Link}
                   to={routes[3]}
                   disabled={currentTab !== 3}
                 />
-              <Tab
+                <Tab
                   eventKey={4}
-                  title="Recordings"
-                  component={Link}
+                  title="Training Links"
                   value={routes[4]}
+                  component={Link}
                   to={routes[4]}
                   disabled={currentTab !== 4}
                 />
-              <Tab
+                <Tab
                   eventKey={5}
-                  title="Sample Documents"
+                  title="Background Check"
                   value={routes[5]}
                   component={Link}
                   to={routes[5]}
                   disabled={currentTab !== 5}
                 />
-              <Tab
+                <Tab
                   eventKey={6}
-                  title="Background Check"
-                  value={routes[6]}
+                  title="Comment"
                   component={Link}
+                  value={routes[6]}
                   to={routes[6]}
                   disabled={currentTab !== 6}
                 />
-          </Tabs>
-         
-	
-          <Stack gap={6} direction="horizontal" className="mt-3">
-        <Button
-          className="success"
-          disabled={currentTab === 0}
-          onClick={(event) => setCurrentTab((prev) => {
-            let tabIndex = prev-1;
-            navigate(routes[tabIndex]);
-            return tabIndex;
-          })
-          }
-        >
-          Prev
-        </Button>
-        <Button
-          className="success"
-          disabled={currentTab === 6}
-          onClick={(event) => setCurrentTab((prev) => {
-            let tabIndex = prev+1;
-            navigate(routes[tabIndex]);
-            return tabIndex;
-          })
-          }
-        >
-          Next
-        </Button>
-      </Stack>
-      </>
+              </Tabs>
+            </>
           )}
         {user && user.role === 'ROLE_ASSOCIATE' && (
           <>
-            
-                 <Tab
-                  value={routes[2]}
-                  title="OnBoardingCheckList"
-                  component={Link}
-                  to={routes[2]}
-                />
-              
+            <Tabs
+              activeKey={currentTab}
+              id="controlled-tab-example"
+              variant="scrollable"
+            >
               <Tab
-                  value={routes[3]}
-                  title="UploadDocument"
-                  component={Link}
-                  to={routes[3]}
-                />
-             
+                eventKey={0}
+                title="Recordings"
+                component={Link}
+                value={associateRoutes[0]}
+                to={associateRoutes[0]}
+                disabled={currentTab !== 0}
+              />
               <Tab
-                  value={routes[4]}
-                  title="Comment"
-                  component={Link}
-                  to={routes[4]}
-                />
-             <Stack gap={3} direction="horizontal" className="mt-3">
-        <Button
-          className="success"
-          disabled={currentTab === 0}
-          onClick={() => setCurrentTab((prev) => {
-            let tabIndex = prev-1;
-            navigate(routes[tabIndex]);
-            return tabIndex;
-          })}
-        >
-          Prev
-        </Button>
-        <Button
-          className="success"
-          disabled={currentTab === 2}
-          onClick={() => setCurrentTab((prev) => {
-            let tabIndex = prev+1;
-            navigate(routes[tabIndex]);
-            return tabIndex;
-          })}
-        >
-          Next
-        </Button>
-      </Stack>
-      <p>Current tab index is {currentTab}</p>
+                eventKey={1}
+                title="Sample Documents"
+                value={associateRoutes[1]}
+                component={Link}
+                to={associateRoutes[1]}
+                disabled={currentTab !== 1}
+              />
+              <Tab
+                eventKey={2}
+                title="Training Links"
+                value={associateRoutes[2]}
+                component={Link}
+                to={associateRoutes[2]}
+                disabled={currentTab !== 2}
+              />
+              <Tab
+                eventKey={3}
+                title="Background Check"
+                value={associateRoutes[3]}
+                component={Link}
+                to={associateRoutes[3]}
+                disabled={currentTab !== 3}
+              />
+              <Tab
+                eventKey={4}
+                title="Comment"
+                component={Link}
+                value={associateRoutes[4]}
+                to={associateRoutes[4]}
+                disabled={currentTab !== 4}
+              />
+            </Tabs>
           </>
         )}
       </ul>
@@ -176,9 +162,50 @@ export default function Onboarding() {
       <div className="onboarding-wrapper">
         <div className="onboarding-container">
           {user && loginFormRender()}
-          <div className="onboarding-body">
-            <Outlet />
-          </div>
+          {user && (
+            <div className="onboarding-body-nav">
+              <Outlet />
+            </div>
+          )}
+          {!user && (
+            <div className="onboarding-body">
+              <Outlet />
+            </div>
+          )}
+          {user && (
+            <div className="next-prev-navigation">
+              <Button
+                className="success"
+                disabled={currentTab === 0}
+                onClick={(event) =>
+                  setCurrentTab((prev) => {
+                    let tabIndex = prev - 1;
+                    navigate(routes[tabIndex]);
+                    return tabIndex;
+                  })
+                }
+              >
+                Prev
+              </Button>
+              <Button
+                className="success"
+                disabled={
+                  user && user.role === 'ROLE_ASSOCIATE'
+                    ? currentTab === 4
+                    : currentTab === 6
+                }
+                onClick={(event) =>
+                  setCurrentTab((prev) => {
+                    let tabIndex = prev + 1;
+                    navigate(routes[tabIndex]);
+                    return tabIndex;
+                  })
+                }
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

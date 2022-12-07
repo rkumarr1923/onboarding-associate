@@ -1,8 +1,8 @@
-import { Grid, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { logout, userDetails, tabSelected } from "../../store";
-import "../styles/header.css";
+import { Grid, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { logout, userDetails, tabSelected, currentState } from '../../store';
+import '../styles/header.css';
 
 /**
  * application header code
@@ -13,26 +13,27 @@ const Header = () => {
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(tabSelected("Default"));
+    dispatch(currentState(0));
+    dispatch(tabSelected('Default'));
   };
 
-  const handleRefresh = () => {
-    dispatch(tabSelected("Default"));
-  };
+  // const handleRefresh = () => {
+  //   dispatch(tabSelected('Default'));
+  // };
 
   return (
     <header className="app-header">
       <div>
-        <Link to="/" onClick={handleRefresh}>
-          <span className="app-title">Onboarding Associate</span>
-        </Link>
+        {/* <Link to="/" onClick={handleRefresh}> */}
+        <span className="app-title">Onboarding Associate</span>
+        {/* </Link> */}
       </div>
       {user ? (
         <>
           <div>
             <Grid container>
               <Grid item>
-                <Typography variant="span" style={{ paddingRight: "10px" }}>
+                <Typography variant="span" style={{ paddingRight: '10px' }}>
                   Hi, {user.name}
                 </Typography>
               </Grid>

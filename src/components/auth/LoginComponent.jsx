@@ -27,6 +27,14 @@ const LoginComponent = () => {
     else if (type === "pswd") setPswd(e.target.value);
   };
 
+  const loginOnLoad = (data) => {
+    if (data && data.role !== 'ROLE_ASSOCIATE') {
+      navigate('/auth/register');
+    } else {
+      navigate('/recording');
+    }
+  };
+
   const handleLogin = () => {
     const requestBody = {
       empId: empId,
@@ -48,7 +56,7 @@ const LoginComponent = () => {
               },
             })
           );
-          navigate("/");
+          loginOnLoad(result.data);
         } else setError(true);
       });
   };

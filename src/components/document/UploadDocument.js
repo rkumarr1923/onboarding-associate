@@ -20,7 +20,7 @@ const UploadDocument = () => {
   const BASE_URL = 'http://localhost:9003/';
   const userToken = useSelector(token);
   const location = useLocation();
-  const { forAssociate } = location.state;
+  const { forAssociate } = location?.state;
   const [documents, setDocuments] = useState([]);
   const [openSnakBar, setSnakBarOpen] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(false);

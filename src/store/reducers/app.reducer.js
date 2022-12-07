@@ -80,6 +80,9 @@ const slice = createSlice({
     recordings: (state, action) => {
       state.recordings = action.payload.recordings;
     },
+    currentTabState: (state, action) => {
+      state.currentState = action.payload.currentState;
+    },
   },
 });
 
@@ -98,6 +101,7 @@ export const {
   roles,
   associateList,
   recordings,
+  currentTabState,
 } = slice.actions;
 export const selectedTab = (state) => state.activeTab;
 export const userDetails = (state) => state.userDetails;
@@ -109,4 +113,5 @@ export const allRoles = (state) => state.roles;
 export const allManagers = (state) => state.managers;
 export const allReviewers = (state) => state.reviewers;
 export const allRecordings = (state) => state.recordings;
+export const currentState = (state) => state.currentState;
 export const { reducer } = slice;
