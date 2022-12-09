@@ -88,6 +88,7 @@ const DocumentTable = forwardRef((props, ref) => {
         setLoader(false);
       })
       .catch((err) => {
+        setLoader(false);
         console.log(err);
       });
   };
@@ -117,7 +118,7 @@ const DocumentTable = forwardRef((props, ref) => {
 
   const deleteDocs = (id) => {
     const url = props.deleteURL
-      ? props.deleteURL
+      ? props.deleteURL + `/delete/${id}`
       : `http://localhost:9003/files/delete/${id}`;
     axios
       .delete(url,{headers: { Authorization: 'Bearer ' + userToken },})
@@ -135,7 +136,7 @@ const DocumentTable = forwardRef((props, ref) => {
       user.role === 'ROLE_ASSOCIATE' ? user.empId : props.forAssociate.empId;
     const reviewerId = user.role === 'ROLE_ASSOCIATE' ? '' : user.empId;
     axios
-      .put(`http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}`,{headers: { Authorization: 'Bearer ' + userToken },})
+      .put(`http://localhost:9003/files/reviewer/${reviewerId}/employee/${id}`, {}, {headers: { Authorization: 'Bearer ' + userToken },})
       .then((result) => {
         setDialogStatus(false);
         fetchDocuments();
@@ -239,7 +240,10 @@ const DocumentTable = forwardRef((props, ref) => {
                           (user.role === 'ROLE_ASSOCIATE' &&
                             props.type === 'NOTREVIEWED')) && (
                           <TableCell>
-                            <Button
+                            <Button 
+                              disabled={
+                                isReviewed
+                              }
                               color="secondary"
                               onClick={() => openDialog(doc)}
                             >

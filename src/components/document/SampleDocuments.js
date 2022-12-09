@@ -197,7 +197,7 @@ const SampleDocuments = () => {
 
   const deleteDocs = (id) => {
     axios
-      .delete(`http://localhost:9003/files/delete/${id}`, {
+      .delete(`http://localhost:9003/files/employee/delete/${id}`, {
         headers: { Authorization: 'Bearer ' + userToken },
       })
       .then((result) => {
@@ -207,6 +207,28 @@ const SampleDocuments = () => {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const downloadSampleDocs = () => {
+    const url = `http://localhost:9003/files/sampledoc/zip`;
+    axios
+      .get(url, { headers: { Authorization: 'Bearer ' + userToken },responseType: 'blob' })
+      .then((result) => {
+        console.log("Download Success");
+        console.log(result);
+        if (result) {
+          const file = new Blob([result.data], { type: 'application/pdf' });
+          const fileURL = URL.createObjectURL(file);
+          var a = document.createElement('a');
+          a.href = fileURL;
+          a.download = 'SampleDocuments.ZIP';
+          document.body.appendChild(a);
+          a.click();
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
       });
   };
 
@@ -267,12 +289,20 @@ const SampleDocuments = () => {
         {documents.length > 0 && (
           <div className="content-right">
             <div className="download-icon">
+              <i
+                title="Download All"
+                className="fa fa-download"
+                onClick={() => downloadSampleDocs()}
+                aria-hidden="true"
+              ></i>
+            </div>
+            {/* <div className="download-icon">
               <a
                 href="http://localhost:9003/files/sampledoc/zip"
                 className="fa fa-download"
                 title="Download All"
               ></a>
-            </div>
+            </div> */}
             {/* <h3>
         <a href="http://localhost:9003/files/sampledoc/zip" className="btn btn-primary">Download All</a>
       </h3> */}
