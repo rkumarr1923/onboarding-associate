@@ -263,7 +263,8 @@ const UploadDocument = () => {
         ref={childRefNonReviewed}
         type="NOTREVIEWED"
         title="Documents:"
-        fetchDocumentURL="http://localhost:9003/files/employee"
+        deleteURL={BASE_URL+"files/employee"} 
+        fetchDocumentURL={BASE_URL+"files/employee"}
       />
 
       {user.role !== 'ROLE_ASSOCIATE' && (
@@ -274,7 +275,8 @@ const UploadDocument = () => {
           ref={childRefReviewed}
           type="REVIEWED"
           title="Reviewed Documents:"
-          fetchDocumentURL="http://localhost:9003/files/reviewer"
+          deleteURL={BASE_URL+"files/reviewer"} 
+          fetchDocumentURL={BASE_URL+"files/reviewer"}
         />
       )}
 
