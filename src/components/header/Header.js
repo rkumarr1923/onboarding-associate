@@ -13,7 +13,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(currentState(0));
+    // dispatch(currentState(0));
     dispatch(tabSelected('Default'));
   };
 

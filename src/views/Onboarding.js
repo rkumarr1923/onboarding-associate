@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 import { appStore } from '../store';
@@ -30,6 +30,10 @@ export default function Onboarding() {
     '/bgCheck',
     '/comment',
   ];
+
+  useEffect(() => {
+    setCurrentTab(0);
+  }, [user?.role]);
 
   const loginFormRender = () => {
     return (
