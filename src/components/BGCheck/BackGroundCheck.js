@@ -44,7 +44,7 @@ const BackgroundCheck = ({}) => {
         <li style={{ textAlign: 'center' }}>
           {' '}
           Please revert with the details by
-          <div className="d-flex-center">
+          <div className="d-flex justify-content-center">
             <FormDatePickerField md="2" label="Date" text-align="center" />
           </div>
           eod.
