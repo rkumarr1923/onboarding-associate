@@ -28,7 +28,9 @@ export default function Onboarding() {
     '/sampleDocuments',
     '/trainingLinks',
     '/bgCheck',
-    '/comment',
+    '/onBoardingCheckList',
+    '/uploadDocuments',
+    '/comment'
   ];
 
   useEffect(() => {
@@ -148,11 +150,27 @@ export default function Onboarding() {
               />
               <Tab
                 eventKey={4}
-                title="Comment"
-                component={Link}
+                title="Onboarding Checklist"
                 value={associateRoutes[4]}
+                component={Link}
                 to={associateRoutes[4]}
                 disabled={currentTab !== 4}
+              />
+              <Tab
+                eventKey={5}
+                title="Upload Documents"
+                value={associateRoutes[5]}
+                component={Link}
+                to={associateRoutes[5]}
+                disabled={currentTab !== 5}
+              />
+              <Tab
+                eventKey={6}
+                title="Comment"
+                component={Link}
+                value={associateRoutes[6]}
+                to={associateRoutes[6]}
+                disabled={currentTab !== 6}
               />
             </Tabs>
           </>
@@ -184,7 +202,11 @@ export default function Onboarding() {
                 onClick={(event) =>
                   setCurrentTab((prev) => {
                     let tabIndex = prev - 1;
-                    navigate(routes[tabIndex]);
+                    if(user.role === 'ROLE_ASSOCIATE' && tabIndex===5){
+                      navigate(associateRoutes[tabIndex], { state: { forAssociate: {} } });
+                    } else {
+                      navigate(user.role === 'ROLE_ASSOCIATE' ? associateRoutes[tabIndex] : routes[tabIndex]);
+                    }
                     return tabIndex;
                   })
                 }
@@ -195,13 +217,17 @@ export default function Onboarding() {
                 className="success"
                 disabled={
                   user && user.role === 'ROLE_ASSOCIATE'
-                    ? currentTab === 4
+                    ? currentTab === 7
                     : currentTab === 6
                 }
                 onClick={(event) =>
                   setCurrentTab((prev) => {
                     let tabIndex = prev + 1;
-                    navigate(routes[tabIndex]);
+                    if(user.role === 'ROLE_ASSOCIATE' && tabIndex===5){
+                      navigate(associateRoutes[tabIndex], { state: { forAssociate: {} } });
+                    } else {
+                      navigate(user.role === 'ROLE_ASSOCIATE' ? associateRoutes[tabIndex] : routes[tabIndex]);
+                    }
                     return tabIndex;
                   })
                 }
