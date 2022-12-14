@@ -93,7 +93,6 @@ const SampleDocuments = () => {
       0,
       updateFileName.lastIndexOf('.')
     );
-    console.log("Option select : "+optionselect);
     if (optionselect === '0') {
       const filteredObj = documents.filter(
         (obj) =>
@@ -220,8 +219,6 @@ const SampleDocuments = () => {
     axios
       .get(url, { headers: { Authorization: 'Bearer ' + userToken },responseType: 'blob' })
       .then((result) => {
-        console.log("Download Success");
-        console.log(result);
         if (result) {
           const file = new Blob([result.data], { type: 'application/pdf' });
           const fileURL = URL.createObjectURL(file);

@@ -110,7 +110,7 @@ const UploadDocument = () => {
         headers: { Authorization: 'Bearer ' + userToken },
       })
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setOptions([...res.data]);
         setOptionselect('1');
         setLoader(false);
