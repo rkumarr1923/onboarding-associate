@@ -1,7 +1,8 @@
 import { Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout, userDetails, tabSelected, currentState } from '../../store';
+import { logout, userDetails, token, tabSelected, currentState } from '../../store';
+import axios from 'axios';
 import '../styles/header.css';
 
 /**
@@ -10,8 +11,12 @@ import '../styles/header.css';
 
 const Header = () => {
   const user = useSelector(userDetails);
+  const userToken = useSelector(token);
   const dispatch = useDispatch();
   const handleLogout = () => {
+   axios.post('http://localhost:9099/logout/token?token='+userToken).then((response) => {
+    console.log("logout rsopn "+response);
+  });
     dispatch(logout());
     // dispatch(currentState(0));
     dispatch(tabSelected('Default'));
