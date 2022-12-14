@@ -36,7 +36,7 @@ const AllAssociates = () => {
         };
       });
       console.log('formatted data ', formattedData);
-      dispatch(associateList({ associateList: data }));
+      dispatch(associateList({ associateList: formattedData }));
       setFormattedData(formattedData);
     }
   }, [loading]);
