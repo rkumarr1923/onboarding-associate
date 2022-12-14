@@ -89,11 +89,16 @@ const SampleDocuments = () => {
 
   const openUpdateDialog = () => {
     const updateFileName = document.getElementById('myfile').files[0].name;
+    const fileName = updateFileName.substring(
+      0,
+      updateFileName.lastIndexOf('.')
+    );
+    console.log("Option select : "+optionselect);
     if (optionselect === '0') {
       const filteredObj = documents.filter(
         (obj) =>
           obj.documentType.id === parseInt(optionselect) &&
-          obj.name === updateFileName
+          obj.name.substring(0, obj.name.lastIndexOf('.')) === fileName
       );
       if (filteredObj && filteredObj.length > 0) {
         setDocTobeUpdate(filteredObj[0]);
