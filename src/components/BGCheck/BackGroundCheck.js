@@ -1,13 +1,36 @@
 import React from 'react';
 import FormDatePickerField from '../core/FormDatePickerField';
 import { useState, useEffect } from 'react';
+import axios from "axios";
+import { token, userDetails } from '../../store';
+import { useSelector } from 'react-redux';
+
+
 
 const BackgroundCheck = ({}) => {
-  const sendEmail = () => {
-    window.open('mailto:sanaru53@in.ibm.com?subject=SendMail&body=Description');
-    //mailtoHref = "mailto:sanaru53@in.ibm.com?subject=SendMail&body=Description";
-    //window.open('https://outlook.office.com/mail?subject=SUBJECT&body=BODY&to=sanaru53@in.ibm.com')
+  const userToken = useSelector(token);
+  const [data, setdata] = useState(null);
+  const [formattedData, setFormattedData] = useState([]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    const response = await axios.get(
+      "http://localhost:8084/users", {
+        headers: { Authorization: 'Bearer ' + userToken },
+      });
+    const { data, error } = response;
+    setdata(data);
+    console.log('email data', data)
   };
+  fetchData();
+}, []);
+
+const sendEmail = () => {
+  window.open("mailto:"+data+'?subject=SendMail&body=Description');
+  //mailtoHref = "mailto:sanaru53@in.ibm.com?subject=SendMail&body=Description";
+  //window.open('https://outlook.office.com/mail?subject=SUBJECT&body=BODY&to=sanaru53@in.ibm.com')
+};
+
 
   return (
     <div>
