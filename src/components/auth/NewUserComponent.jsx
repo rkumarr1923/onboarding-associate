@@ -472,7 +472,7 @@ const NewUserComponent = () => {
                 disabled={newUserDetails.isLoginButonDisabled}
                 onClick={handleNewUser}
               >
-                Login
+                Add
               </Button>
             </CardActions>
           </Card>
